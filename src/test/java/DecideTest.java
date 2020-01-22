@@ -88,4 +88,46 @@ class DecideTest {
         point2.setLocation(0.0, 1.0);
         assertEquals(1.0, decide.dist(point1, point2));
     }
+
+    /**
+     * Tests that lic0 returns true if there exists at least one set of two data points separated by exactly kPts
+     * consecutive intervening points that are a distance greater than the length,LENGTH1, apart.
+     * The condition is not met when numPoints < 3.
+     *
+     * Test case 1:
+     * points = (0, 0), (0, 0), (0, 2), (0, 1)
+     * length1 = 1
+     * Expected value: false
+     *
+     * Test case 2:
+     * points = (0, 0), (0, 0), (0, 0), (0, 2)
+     * length1 = 1
+     * Expected value: true
+     */
+    @Test
+    void testLic7() {
+        Decide decide = new Decide();
+        Parameters parameters = new Parameters();
+        decide.parameters = parameters;
+        parameters.kPts = 2;
+        parameters.length1 = 1.0;
+
+        ArrayList<Point> points1 = new ArrayList<>();
+        points1.add(new Point(0, 0));
+        points1.add(new Point(0, 0));
+        points1.add(new Point(0, 2));
+        points1.add(new Point(0, 1));
+
+        ArrayList<Point> points2 = new ArrayList<>();
+        points2.add(new Point(0, 0));
+        points2.add(new Point(0, 0));
+        points2.add(new Point(0, 0));
+        points2.add(new Point(0, 2));
+
+        decide.points = points1;
+        assertFalse(decide.lic7());
+
+        decide.points = points2;
+        assertTrue(decide.lic7());
+    }
 }

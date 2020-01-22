@@ -31,4 +31,22 @@ public class Decide {
     double dist(Point point1, Point point2) {
         return Math.sqrt(Math.pow(point1.getX() - point2.getX(), 2) + Math.pow(point1.getY() - point2.getY(), 2));
     }
+
+    /**
+     * Launch Interceptor Condition 7
+     * @return true if there exists at least one set of two data points separated by exactly kPts consecutive
+     * intervening points that are a distance greater than the length,LENGTH1, apart.
+     * The condition is not met when numPoints < 3.
+     */
+    boolean lic7() {
+        for (int i = parameters.kPts + 1; i < points.size(); i++) {
+            if (points.size() < 3) {
+                return false;
+            }
+            if (dist(points.get(i - parameters.kPts - 1), points.get(i)) > parameters.length1) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
