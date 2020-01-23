@@ -5,7 +5,10 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+
 class DecideTest {
+
     /**
      * Tests that lic0 returns true if there exists at least one set of two consecutive data points that are a distance
      * greater than the length, length1, apart, else false.
@@ -87,6 +90,99 @@ class DecideTest {
         point1.setLocation(0.0, 0.0);
         point2.setLocation(0.0, 1.0);
         assertEquals(1.0, decide.dist(point1, point2));
+
+    }
+
+    /**
+     * Tests that lic4 returns true when it exists qpts points that is located in more the quad quadrants.
+     *
+     * test 1:
+     * qpts = 3
+     * input (0 0)(-1 0)(0 -1)(0 1)(1 0)
+     * (0 0) = quadrant 1, (-1 0) = quadrant 2, (0 -1) = quadrant 3, (0 1) = quadrant 1, (1 0)= quadrant 1
+     * test for quads 3, 2, 1 with expected output false true true
+     *
+     * test 2:
+     * input (1 1)(-1 1)(-1 -1)(1 -1)
+     * qpts = 4
+     * (1 1) = quadrant 1, (-1 1) = quadrant 2, (-1 -1) = quadrant 3, (1 -1) = quadrant 4
+     * test for quads 3, 2, 1 with expected output true true true true
+     *
+     * test 3:
+     * input (1 1)(1 1)(1 1)(-1 1)(1 1)(1 1)(-1 -1)(1 -1)
+     * (1 1) = quadrant 1, (-1 1) = quadrant 2, (-1 -1) = quadrant 3, (1 -1) = quadrant 4
+     * test for quads 2, qpts 2, 3, 4, 5, 6, 7, 8 with expected output false true true true true true true true true
+     */
+    @Test
+    void testLic4() {
+        Decide decide = new Decide();
+        decide.parameters = new Parameters();
+
+        //Test 1
+        ArrayList<Point> test1 = new ArrayList();
+        test1.add(new Point(0, 0));
+        test1.add(new Point(-1, 0));
+        test1.add(new Point(0, -1));
+        test1.add(new Point(0, 1));
+        test1.add(new Point(1, 0));
+
+        decide.parameters.qPts = 3;
+        decide.numPoints = test1.size();
+        decide.points = test1;
+
+        //checks if it exist 3 consecutive points in more then 3 quadrants
+        decide.parameters.quads = 3;
+        assertFalse(decide.lic4());
+
+        //checks if it exist 3 consecutive points in more then i quadrants
+        for (int i = 2; i >= 1; i--) {
+            decide.parameters.quads = i;
+            assertTrue(decide.lic4());
+        }
+
+        //Test 2
+        ArrayList<Point> test2 = new ArrayList();
+
+        test2.add(new Point(1, 1));
+        test2.add(new Point(-1, 1));
+        test2.add(new Point(-1, -1));
+        test2.add(new Point(1, -1));
+
+        decide.numPoints = test2.size();
+        decide.points = test2;
+        decide.parameters.qPts = 4;
+        //checks if it exist 4 consecutive points in more then i quadrants
+        for (int i = 3; i >= 1; i--) {
+            decide.parameters.quads = i;
+            assertTrue(decide.lic4());
+        }
+
+        //Test 3
+        ArrayList<Point> test3 = new ArrayList();
+
+        test3.add(new Point(1, 1));
+        test3.add(new Point(1, 1));
+        test3.add(new Point(1, 1));
+        test3.add(new Point(-1, 1));
+        test3.add(new Point(1, 1));
+        test3.add(new Point(1, 1));
+        test3.add(new Point(-1, -1));
+        test3.add(new Point(1, -1));
+
+        decide.numPoints = test3.size();
+        decide.points = test3;
+        decide.parameters.quads = 2;
+
+        //checks if it exist 2 consecutive points
+        decide.parameters.qPts = 2;
+        assertFalse(decide.lic4());
+
+        //checks if it exist i consecutive points
+        for (int i = 3; i <=8; i++) {
+            decide.parameters.qPts = i;
+            assertTrue(decide.lic4());
+        }
+
     }
 
     /**
