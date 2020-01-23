@@ -23,11 +23,11 @@ public class Decide {
         return false;
     }
     /**
-     * lcm4 checks if it exists data points in more then QUADS unique quadrants, where , the data point (0,0)
+     * lic4 checks if it exists QPTS consecutive data points in more then QUADS unique quadrants, where , the data point (0,0)
      * is in quadrant I, the point (-l,0) is in quadrant II, the point (0,-l) is in quadrant III, the point
      * (0,1) is in quadrant I and the point (1,0) is in quadrant I     *
      *
-     * @return the function returns true if it exists data points in more then QUADS unique quadrants
+     * @return the function returns true if it exists QPTS consecutive data points in more then QUADS unique quadrants
      */
     public boolean lic4() {
         //checks if qPts or quads is in a undefined area for this function
@@ -41,36 +41,45 @@ public class Decide {
             return false;
         }
 
-        boolean[] foundQuads = new boolean[4];
-        //Loop through the data points and translate coordinates to a quadrant and set that quadrant to true.
-        for (Point point : points) {
-            //Is the point in quadrant 1
-            if (point.x >= 0 && point.y >= 0) {
-                foundQuads[0] = true;
-            }
-            //Is the point in quadrant 2
-            else if (point.y >= 0) {
-                foundQuads[1] = true;
-            }
-            //Is the point in quadrant 3
-            else if (point.x <= 0) {
-                foundQuads[2] = true;
-            }
-            //The point is in quadrant 4
-            else {
-                foundQuads[3] = true;
-            }
-        }
+        //check if there exists a qpts consecutive set of data points
+        for(int i = 0; i + parameters.qPts-1 < numPoints; i++) {
 
-        int numberOfquadrants = 0;
-        //count number of unique quadrants
-        for (int i = 0; i < foundQuads.length; i++) {
-            if (foundQuads[i]) {
-                numberOfquadrants++;
+            //check if the data set contains more then quad quads
+            boolean[] foundQuads = new boolean[4];
+            for(int j = 0; j < parameters.qPts; j++){
+
+                Point point = points.get(i+j);
+
+                //Is the point in quadrant 1
+                if (point.x >= 0 && point.y >= 0) {
+                    foundQuads[0] = true;
+                }
+                //Is the point in quadrant 2
+                else if (point.y >= 0) {
+                    foundQuads[1] = true;
+                }
+                //Is the point in quadrant 3
+                else if (point.x <= 0) {
+                    foundQuads[2] = true;
+                }
+                //The point is in quadrant 4
+                else {
+                    foundQuads[3] = true;
+                }
+            }
+            int numberOfquadrants = 0;
+            //count number of unique quadrants for this data set
+            for (int z = 0; z < foundQuads.length; z++) {
+                if (foundQuads[z]) {
+                    numberOfquadrants++;
+                }
+            }
+            //if we have point in more the quads quadrants return true
+            if(numberOfquadrants > parameters.quads){
+                return true;
             }
         }
-        //if we have point in more the quads quadrants return true
-        return numberOfquadrants > parameters.quads;
+        return false;
     }
     /**
      * Calculates the distance between two points in euclidian space.
