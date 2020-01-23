@@ -21,7 +21,18 @@ public class Decide {
         }
         return false;
     }
-
+    /**
+     * Launch Interceptor Condition 5
+     * @return true if there exists one set of two consecutive data points such that X[j]-X[j-1] < 0
+     */
+    boolean lic5(){
+        for(int j = 1; j < points.size(); j++){
+            if((points.get(j).x - points.get(j-1).x) < 0){
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * Calculates the distance between two points in euclidian space.
      * @param point1 the first point
