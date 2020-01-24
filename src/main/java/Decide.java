@@ -1,9 +1,9 @@
-import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class Decide {
     int numPoints;
-    ArrayList<Point> points;
+    ArrayList<Point2D.Double> points;
     Parameters parameters;
     LCM lcm;
     PUV puv;
@@ -48,7 +48,7 @@ public class Decide {
             boolean[] foundQuads = new boolean[4];
             for(int j = 0; j < parameters.qPts; j++){
 
-                Point point = points.get(i+j);
+                Point2D.Double point = points.get(i+j);
 
                 //Is the point in quadrant 1
                 if (point.x >= 0 && point.y >= 0) {
@@ -88,7 +88,7 @@ public class Decide {
      * @param point2 the second point
      * @return the euclidian distance between two points
      */
-    double dist(Point point1, Point point2) {
+    double dist(Point2D.Double point1, Point2D point2) {
         return Math.sqrt(Math.pow(point1.getX() - point2.getX(), 2) + Math.pow(point1.getY() - point2.getY(), 2));
 
     }
