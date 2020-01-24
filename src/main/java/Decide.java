@@ -145,4 +145,35 @@ public class Decide {
         }
         return false;
     }
+
+    /**
+     * Launch Interceptor Condition 10
+     * @return true if There exists at least one set of three data points separated by exactly E_PTS and F_PTS
+     * consecutive intervening points, respectively, that are the vertices of a triangle with area greater than AREA1
+     */
+    boolean lic10(){
+        if(numPoints < 5)
+            return false;
+        for(int i = 0; i + parameters.ePts + parameters.fPts + 2 < points.size(); i++){
+            if(triangleArea(points.get(i),points.get(i+parameters.ePts+1),points.get(i+parameters.ePts+parameters.fPts+2))> parameters.area1 ||
+                    triangleArea(points.get(i),points.get(i+parameters.fPts+1),points.get(i+parameters.fPts+parameters.ePts+2))> parameters.area1){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * trianlgeArea calculates the area formed by 3 data points
+     * @param point0
+     * @param point1
+     * @param point2
+     * @return the area of the tringle formed by point0, point1 and point2
+     */
+    double triangleArea(Point2D.Double point0, Point2D.Double point1, Point2D.Double point2){
+        return Math.abs((
+                        point0.getX() * (point1.getY() - point2.getY()) +
+                        point1.getX() * (point2.getY() - point0.getY()) +
+                        point2.getX() * (point0.getY() - point1.getY()) ) / 2.0 );
+    }
 }

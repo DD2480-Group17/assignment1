@@ -152,7 +152,7 @@ class DecideTest {
         decide.parameters = new Parameters();
 
         //Test 1
-        ArrayList<Point2D.Double> test1 = new ArrayList();
+        ArrayList<Point2D.Double> test1 = new ArrayList<>();
         test1.add(new Point2D.Double(0, 0));
         test1.add(new Point2D.Double(-1, 0));
         test1.add(new Point2D.Double(0, -1));
@@ -174,7 +174,7 @@ class DecideTest {
         }
 
         //Test 2
-        ArrayList<Point2D.Double> test2 = new ArrayList();
+        ArrayList<Point2D.Double> test2 = new ArrayList<>();
 
         test2.add(new Point2D.Double(1, 1));
         test2.add(new Point2D.Double(-1, 1));
@@ -191,7 +191,7 @@ class DecideTest {
         }
 
         //Test 3
-        ArrayList<Point2D.Double> test3 = new ArrayList();
+        ArrayList<Point2D.Double> test3 = new ArrayList<>();
 
         test3.add(new Point2D.Double(1, 1));
         test3.add(new Point2D.Double(1, 1));
@@ -258,5 +258,90 @@ class DecideTest {
 
         decide.points = points2;
         assertTrue(decide.lic7());
+    }
+    /**
+     * Tests that lic10 returns true if if there exists at least one set of three data points separated by exactly E_PTS and F_PTS
+     * consecutive intervening points, respectively, that are the vertices of a triangle with area greater than AREA1
+     *
+     * Test case 1:
+     * intput:
+     * points = (-1, 0), (1, 0), (0, 5), (1, 1), (1, 0.5), (2, 0), (0.5, 0), (-0.5, 1)
+     * epts = 2, fpts = 1, area1 = 6
+     * Expected value: True
+     *
+     * Test case 2:
+     * intput:
+     * points = (-1, 0), (1, 0), (0, 5), (1, 1), (1, 0.5), (2, 0), (0.5, 0), (-0.5, 1)
+     * epts = 2, fpts = 1, area1 = 6
+     * Expected value: False
+     *
+     * Test case 3:
+     * points = (-1, 0), (1, 0), (1, 1), (0, 5), (1, 0.5), (2, 0), (0.5, 0), (-0.5, 1)
+     * epts = 2, fpts = 1, area1 = 6
+     * Expected value: True
+     */
+    @Test
+    void testLic10(){
+        Decide decide = new Decide();
+        Parameters parameters = new Parameters();
+
+        //Test 1
+        ArrayList<Point2D.Double> test1 = new ArrayList<>();
+        test1.add(new Point2D.Double(-1,0));
+        test1.add(new Point2D.Double(1,0));
+        test1.add(new Point2D.Double(0,5));
+        test1.add(new Point2D.Double(1,1));
+        test1.add(new Point2D.Double(1,0.5));
+        test1.add(new Point2D.Double(2,0));
+        test1.add(new Point2D.Double(0.5,0));
+        test1.add(new Point2D.Double(-0.5,1));
+
+        parameters.ePts = 2;
+        parameters.fPts = 1;
+        parameters.area1 = 6;
+        decide.numPoints = test1.size();
+        decide.points = test1;
+        decide.parameters = parameters;
+        assertTrue(decide.lic10());
+
+        //Test 2
+        parameters.area1 = 8;
+        assertFalse(decide.lic10());
+
+        //Test 3
+        ArrayList<Point2D.Double> test2 = new ArrayList<>();
+        test2.add(new Point2D.Double(-1,0));
+        test2.add(new Point2D.Double(1,0));
+        test2.add(new Point2D.Double(1,1));
+        test2.add(new Point2D.Double(0,5));
+        test2.add(new Point2D.Double(1,0.5));
+        test2.add(new Point2D.Double(2,0));
+        test2.add(new Point2D.Double(0.5,0));
+        test2.add(new Point2D.Double(-0.5,1));
+
+        decide.points = test2;
+        parameters.area1 = 6;
+        assertTrue(decide.lic10());
+
+    }
+
+    /**
+     * The test checks if the function returns the correct area for a triangle, by inputing the
+     * points in different order.
+     */
+    @Test
+    void testTriangelArea(){
+        Decide decide = new Decide();
+
+        Point2D.Double a = new Point2D.Double(-1,0);
+        Point2D.Double b = new Point2D.Double(2,0);
+        Point2D.Double c = new Point2D.Double(0,4);
+        Point2D.Double d = new Point2D.Double(0,-3);
+
+        assertEquals(6.0, decide.triangleArea(a,b,c));
+        assertEquals(6.0, decide.triangleArea(b,a,c));
+        assertEquals(6.0, decide.triangleArea(c,a,b));
+
+        assertEquals(4.5, decide.triangleArea(a,b,d));
     }
 }
