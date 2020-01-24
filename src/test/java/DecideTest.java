@@ -1,6 +1,6 @@
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,19 +30,19 @@ class DecideTest {
      */
     @Test
     void testLic0() {
-        ArrayList<Point> points1 = new ArrayList<>();
-        points1.add(new Point(0, 0));
-        points1.add(new Point(0, 1));
-        points1.add(new Point(0, 2));
+        ArrayList<Point2D.Double> points1 = new ArrayList<>();
+        points1.add(new Point2D.Double(0, 0));
+        points1.add(new Point2D.Double(0, 1));
+        points1.add(new Point2D.Double(0, 2));
 
-        ArrayList<Point> points2 = new ArrayList<>();
-        points2.add(new Point(0, 0));
-        points2.add(new Point(0, 2));
-        points2.add(new Point(0, 1));
+        ArrayList<Point2D.Double> points2 = new ArrayList<>();
+        points2.add(new Point2D.Double(0, 0));
+        points2.add(new Point2D.Double(0, 2));
+        points2.add(new Point2D.Double(0, 1));
 
-        ArrayList<Point> points3 = new ArrayList<>();
-        points3.add(new Point(0, 0));
-        points3.add(new Point(1, 1));
+        ArrayList<Point2D.Double> points3 = new ArrayList<>();
+        points3.add(new Point2D.Double(0, 0));
+        points3.add(new Point2D.Double(1, 1));
 
         Decide decide = new Decide();
         decide.parameters = new Parameters();
@@ -76,8 +76,8 @@ class DecideTest {
     @Test
     void testDist() {
         Decide decide = new Decide();
-        Point point1 = new Point();
-        Point point2 = new Point();
+        Point2D.Double point1 = new Point2D.Double();
+        Point2D.Double point2 = new Point2D.Double();
 
         point1.setLocation(0.0, 0.0);
         point2.setLocation(1.0, 1.0);
@@ -104,10 +104,10 @@ class DecideTest {
     	// expected value of true.
     	Decide d = new Decide();
     	
-    	ArrayList<Point> points = new ArrayList<>();
-    	points.add(new Point(0, 0));
-    	points.add(new Point(0, 4));
-    	points.add(new Point(2, 0));
+    	ArrayList<Point2D.Double> points = new ArrayList<>();
+    	points.add(new Point2D.Double(0, 0));
+    	points.add(new Point2D.Double(0, 4));
+    	points.add(new Point2D.Double(2, 0));
     	
     	Parameters ps = new Parameters();
     	ps.area1 = 3.0;
@@ -152,12 +152,12 @@ class DecideTest {
         decide.parameters = new Parameters();
 
         //Test 1
-        ArrayList<Point> test1 = new ArrayList();
-        test1.add(new Point(0, 0));
-        test1.add(new Point(-1, 0));
-        test1.add(new Point(0, -1));
-        test1.add(new Point(0, 1));
-        test1.add(new Point(1, 0));
+        ArrayList<Point2D.Double> test1 = new ArrayList();
+        test1.add(new Point2D.Double(0, 0));
+        test1.add(new Point2D.Double(-1, 0));
+        test1.add(new Point2D.Double(0, -1));
+        test1.add(new Point2D.Double(0, 1));
+        test1.add(new Point2D.Double(1, 0));
 
         decide.parameters.qPts = 3;
         decide.numPoints = test1.size();
@@ -174,12 +174,12 @@ class DecideTest {
         }
 
         //Test 2
-        ArrayList<Point> test2 = new ArrayList();
+        ArrayList<Point2D.Double> test2 = new ArrayList();
 
-        test2.add(new Point(1, 1));
-        test2.add(new Point(-1, 1));
-        test2.add(new Point(-1, -1));
-        test2.add(new Point(1, -1));
+        test2.add(new Point2D.Double(1, 1));
+        test2.add(new Point2D.Double(-1, 1));
+        test2.add(new Point2D.Double(-1, -1));
+        test2.add(new Point2D.Double(1, -1));
 
         decide.numPoints = test2.size();
         decide.points = test2;
@@ -191,16 +191,16 @@ class DecideTest {
         }
 
         //Test 3
-        ArrayList<Point> test3 = new ArrayList();
+        ArrayList<Point2D.Double> test3 = new ArrayList();
 
-        test3.add(new Point(1, 1));
-        test3.add(new Point(1, 1));
-        test3.add(new Point(1, 1));
-        test3.add(new Point(-1, 1));
-        test3.add(new Point(1, 1));
-        test3.add(new Point(1, 1));
-        test3.add(new Point(-1, -1));
-        test3.add(new Point(1, -1));
+        test3.add(new Point2D.Double(1, 1));
+        test3.add(new Point2D.Double(1, 1));
+        test3.add(new Point2D.Double(1, 1));
+        test3.add(new Point2D.Double(-1, 1));
+        test3.add(new Point2D.Double(1, 1));
+        test3.add(new Point2D.Double(1, 1));
+        test3.add(new Point2D.Double(-1, -1));
+        test3.add(new Point2D.Double(1, -1));
 
         decide.numPoints = test3.size();
         decide.points = test3;
@@ -241,17 +241,17 @@ class DecideTest {
         parameters.kPts = 2;
         parameters.length1 = 1.0;
 
-        ArrayList<Point> points1 = new ArrayList<>();
-        points1.add(new Point(0, 0));
-        points1.add(new Point(0, 0));
-        points1.add(new Point(0, 2));
-        points1.add(new Point(0, 1));
+        ArrayList<Point2D.Double> points1 = new ArrayList<>();
+        points1.add(new Point2D.Double(0, 0));
+        points1.add(new Point2D.Double(0, 0));
+        points1.add(new Point2D.Double(0, 2));
+        points1.add(new Point2D.Double(0, 1));
 
-        ArrayList<Point> points2 = new ArrayList<>();
-        points2.add(new Point(0, 0));
-        points2.add(new Point(0, 0));
-        points2.add(new Point(0, 0));
-        points2.add(new Point(0, 2));
+        ArrayList<Point2D.Double> points2 = new ArrayList<>();
+        points2.add(new Point2D.Double(0, 0));
+        points2.add(new Point2D.Double(0, 0));
+        points2.add(new Point2D.Double(0, 0));
+        points2.add(new Point2D.Double(0, 2));
 
         decide.points = points1;
         assertFalse(decide.lic7());
