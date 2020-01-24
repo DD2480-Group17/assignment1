@@ -127,7 +127,6 @@ class DecideTest {
         test1.add(new Point(1, 0));
 
         decide.parameters.qPts = 3;
-        decide.numPoints = test1.size();
         decide.points = test1;
 
         //checks if it exist 3 consecutive points in more then 3 quadrants
@@ -148,7 +147,6 @@ class DecideTest {
         test2.add(new Point(-1, -1));
         test2.add(new Point(1, -1));
 
-        decide.numPoints = test2.size();
         decide.points = test2;
         decide.parameters.qPts = 4;
         //checks if it exist 4 consecutive points in more then i quadrants
@@ -169,7 +167,6 @@ class DecideTest {
         test3.add(new Point(-1, -1));
         test3.add(new Point(1, -1));
 
-        decide.numPoints = test3.size();
         decide.points = test3;
         decide.parameters.quads = 2;
 
