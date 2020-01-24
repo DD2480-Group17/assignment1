@@ -2,11 +2,38 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class Decide {
-    int numPoints;
+    enum BOOLEAN_OPERATOR {
+        ANDD,
+        ORR,
+        NOTUSED
+    }
+
     ArrayList<Point2D.Double> points;
     Parameters parameters;
-    LCM lcm;
-    PUV puv;
+    BOOLEAN_OPERATOR[][] lcm;
+    boolean[] puv;
+
+
+    /**
+     * Empty constructor
+     */
+    public Decide() {
+
+    }
+
+    /**
+     * Constructor
+     * @param points 2D planar point
+     * @param parameters 19 input parameters
+     * @param lcm logical connector matrix
+     * @param puv preliminary unlocking vector
+     */
+    public Decide(ArrayList<Point2D.Double> points, Parameters parameters, BOOLEAN_OPERATOR[][] lcm, boolean[] puv) {
+        this.points = points;
+        this.parameters = parameters;
+        this.lcm = lcm;
+        this.puv = puv;
+    }
 
     /**
      * Launch Interceptor Condition 0
@@ -66,7 +93,7 @@ public class Decide {
     boolean lic4() {
         //checks if qPts or quads is in a undefined area for this function
 
-        if (parameters.qPts < 2 || parameters.qPts > numPoints
+        if (parameters.qPts < 2 || parameters.qPts > points.size()
                 || parameters.quads < 1 || parameters.quads > 3) {
             return false;
         }
@@ -76,7 +103,7 @@ public class Decide {
         }
 
         //check if there exists a qpts consecutive set of data points
-        for(int i = 0; i + parameters.qPts-1 < numPoints; i++) {
+        for(int i = 0; i + parameters.qPts-1 < points.size(); i++) {
 
             //check if the data set contains more then quad quads
             boolean[] foundQuads = new boolean[4];
