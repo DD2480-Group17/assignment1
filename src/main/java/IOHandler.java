@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +28,7 @@ public class IOHandler {
         File file = new File(fileName);
         BufferedReader reader = new BufferedReader(new FileReader(file));
 
-        ArrayList<Point> points = new ArrayList<>();
+        ArrayList<Point2D.Double> points = new ArrayList<>();
         Parameters parameters = new Parameters();
         Decide.BOOLEAN_OPERATOR[][] LCM = new Decide.BOOLEAN_OPERATOR[15][15];
         boolean[] PUV = new boolean[15];
@@ -39,7 +40,7 @@ public class IOHandler {
             String[] coords = reader.readLine().split(" ");
             double x = Double.parseDouble(coords[0]);
             double y = Double.parseDouble(coords[1]);
-            Point point = new Point();
+            Point2D.Double point = new Point2D.Double();
             point.setLocation(x, y);
             points.add(point);
         }

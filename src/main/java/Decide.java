@@ -1,4 +1,4 @@
-import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class Decide {
@@ -8,7 +8,7 @@ public class Decide {
         NOTUSED
     }
 
-    ArrayList<Point> points;
+    ArrayList<Point2D.Double> points;
     Parameters parameters;
     BOOLEAN_OPERATOR[][] lcm;
     boolean[] puv;
@@ -28,7 +28,7 @@ public class Decide {
      * @param lcm logical connector matrix
      * @param puv preliminary unlocking vector
      */
-    public Decide(ArrayList<Point> points, Parameters parameters, BOOLEAN_OPERATOR[][] lcm, boolean[] puv) {
+    public Decide(ArrayList<Point2D.Double> points, Parameters parameters, BOOLEAN_OPERATOR[][] lcm, boolean[] puv) {
         this.points = points;
         this.parameters = parameters;
         this.lcm = lcm;
@@ -50,13 +50,47 @@ public class Decide {
         return false;
     }
     /**
+     * Returns true if there is at least one set of three consecutive data points
+     * in points Arraylist that are the vertices of a triangle with area > AREA1 (which is parameters.area1).
+     * Otherwise, return false.
+     * 
+     * @return true if there is at least one set of three consecutive data points
+     * in points Arraylist that are the vertices of a triangle with area > AREA1 (which is parameters.area1).
+     * Otherwise, false.
+     */
+    boolean lic3() {
+    	// The formula used to calculate the area of the triangle comes from
+    	// https://www.mathopenref.com/coordtrianglearea.html.
+    	
+    	double area1 = parameters.area1;
+    	// begin from index 2 (3rd position in points arraylist)
+    	// and check two steps backwards.
+    	for (int i = 2; i < points.size(); i++) {
+    		
+    		Point2D point0 = points.get(i-2);
+    		Point2D point1 = points.get(i-1);
+    		Point2D point2 = points.get(i);
+    		
+    		double triangleArea = Math.abs(	(
+    										point0.getX() * (point1.getY() - point2.getY()) + 
+    										point1.getX() * (point2.getY() - point0.getY()) +
+    										point2.getX() * (point0.getY() - point1.getY())
+    										) / 2.0 );
+    		
+    		if (triangleArea > area1)
+    			return true;
+    	}
+    	
+    	return false;
+    }
+    /**
      * lic4 checks if it exists QPTS consecutive data points in more then QUADS unique quadrants, where , the data point (0,0)
      * is in quadrant I, the point (-l,0) is in quadrant II, the point (0,-l) is in quadrant III, the point
      * (0,1) is in quadrant I and the point (1,0) is in quadrant I     *
      *
      * @return the function returns true if it exists QPTS consecutive data points in more then QUADS unique quadrants
      */
-    public boolean lic4() {
+    boolean lic4() {
         //checks if qPts or quads is in a undefined area for this function
 
         if (parameters.qPts < 2 || parameters.qPts > points.size()
@@ -75,7 +109,7 @@ public class Decide {
             boolean[] foundQuads = new boolean[4];
             for(int j = 0; j < parameters.qPts; j++){
 
-                Point point = points.get(i+j);
+                Point2D.Double point = points.get(i+j);
 
                 //Is the point in quadrant 1
                 if (point.x >= 0 && point.y >= 0) {
@@ -108,6 +142,20 @@ public class Decide {
         }
         return false;
     }
+
+    /**
+     * Launch Interceptor Condition 5
+     * @return true if there exists one set of two consecutive data points such that X[j]-X[j-1] < 0
+     */
+    boolean lic5(){
+        for(int j = 1; j < points.size(); j++){
+            if((points.get(j).x - points.get(j-1).x) < 0){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Calculates the distance between two points in euclidian space.
      *
@@ -115,7 +163,7 @@ public class Decide {
      * @param point2 the second point
      * @return the euclidian distance between two points
      */
-    double dist(Point point1, Point point2) {
+    double dist(Point2D.Double point1, Point2D point2) {
         return Math.sqrt(Math.pow(point1.getX() - point2.getX(), 2) + Math.pow(point1.getY() - point2.getY(), 2));
 
     }
