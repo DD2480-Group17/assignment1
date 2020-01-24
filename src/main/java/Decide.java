@@ -192,7 +192,7 @@ public class Decide {
      * consecutive intervening points, respectively, that are the vertices of a triangle with area greater than AREA1
      */
     boolean lic10(){
-        if(numPoints < 5)
+        if(points.size() < 5)
             return false;
         for(int i = 0; i + parameters.ePts + parameters.fPts + 2 < points.size(); i++){
             if(triangleArea(points.get(i),points.get(i+parameters.ePts+1),points.get(i+parameters.ePts+parameters.fPts+2))> parameters.area1 ||

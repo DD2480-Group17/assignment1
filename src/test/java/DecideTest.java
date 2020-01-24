@@ -349,7 +349,6 @@ class DecideTest {
         parameters.ePts = 2;
         parameters.fPts = 1;
         parameters.area1 = 6;
-        decide.numPoints = test1.size();
         decide.points = test1;
         decide.parameters = parameters;
         assertTrue(decide.lic10());
