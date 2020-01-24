@@ -22,6 +22,47 @@ public class Decide {
         }
         return false;
     }
+
+    /**
+     * Launch Interceptor Condition 1
+     *
+     * @return true if there exists at least one set of three consecutive data points that cannot all be contained
+     * within or on a circle of radius1
+     */
+    boolean lic1() {
+        for (int i = 0; i < (points.size() - 2); i++) {
+            if (outsideRadius(points.get(0), points.get(1), points.get(2), parameters.radius1) == true) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the radius between each of the points are larger than radius1.
+     * @param point1 the first point
+     * @param point2 the second point
+     * @param point3 the third point
+     * @return true if the radius between the three consecutive data points are larger than radius1.
+     */
+    boolean outsideRadius(Point2D point1, Point2D point2, Point2D point3, double radius){
+        int count = 0;
+
+        if( Math.pow(point1.getX()-point2.getX(),2) + Math.pow(point1.getY()-point2.getY(), 2) > Math.pow(radius,2)){
+            count++;
+        }
+        if( Math.pow(point1.getX()-point3.getX(),2) + Math.pow(point1.getY()-point3.getY(), 2) > Math.pow(radius,2)){
+            count++;
+        }
+        if( Math.pow(point3.getX()-point2.getX(),2) + Math.pow(point3.getY()-point2.getY(), 2) > Math.pow(radius,2)){
+            count++;
+        }
+
+        if (count == 3){
+            return true;
+        }
+        return false;
+    }
     
     /**
      * Returns true if there is at least one set of three consecutive data points
