@@ -92,7 +92,40 @@ class DecideTest {
         assertEquals(1.0, decide.dist(point1, point2));
 
     }
-
+    
+    /**
+     * Tests that LIC3 returns true given that there is at least one set of 3 consecutive
+     * points that constitute a triangle with area > area1. And that LIC3 returns false when
+     * there is no such set.
+     */
+    @Test
+    void testLIC3() {
+    	// test 1: (area of one triangle == 4.0) && (area1 == 3.0). This should lead to
+    	// expected value of true.
+    	Decide d = new Decide();
+    	
+    	ArrayList<Point> points = new ArrayList<>();
+    	points.add(new Point(0, 0));
+    	points.add(new Point(0, 4));
+    	points.add(new Point(2, 0));
+    	
+    	Parameters ps = new Parameters();
+    	ps.area1 = 3.0;
+    	
+    	d.points = points;
+    	d.parameters = ps;
+    	
+    	assertTrue(d.lic3());
+    	
+    	//-------------------------------------
+    	
+    	// test 1: (area of one triangle == 4.0) && (area1 == 4.0). This should lead to
+    	// expected value of false.
+    	ps.area1 = 4.0;
+    	
+    	assertFalse(d.lic3());
+    }
+    
     /**
      * Tests that lic4 returns true when it exists qpts points that is located in more the quad quadrants.
      *
