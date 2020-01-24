@@ -13,6 +13,28 @@ public class Decide {
     BOOLEAN_OPERATOR[][] lcm;
     boolean[] puv;
 
+
+    /**
+     * Empty constructor
+     */
+    public Decide() {
+
+    }
+
+    /**
+     * Constructor
+     * @param points 2D planar point
+     * @param parameters 19 input parameters
+     * @param lcm logical connector matrix
+     * @param puv preliminary unlocking vector
+     */
+    public Decide(ArrayList<Point> points, Parameters parameters, BOOLEAN_OPERATOR[][] lcm, boolean[] puv) {
+        this.points = points;
+        this.parameters = parameters;
+        this.lcm = lcm;
+        this.puv = puv;
+    }
+
     /**
      * Launch Interceptor Condition 0
      *
