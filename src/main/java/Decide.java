@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class Decide {
@@ -21,6 +22,41 @@ public class Decide {
             }
         }
         return false;
+    }
+    
+    /**
+     * Returns true if there is at least one set of three consecutive data points
+     * in points Arraylist that are the vertices of a triangle with area > AREA1 (which is parameters.area1).
+     * Otherwise, return false.
+     * 
+     * @return true if there is at least one set of three consecutive data points
+     * in points Arraylist that are the vertices of a triangle with area > AREA1 (which is parameters.area1).
+     * Otherwise, false.
+     */
+    public boolean lic3() {
+    	// The formula used to calculate the area of the triangle comes from
+    	// https://www.mathopenref.com/coordtrianglearea.html.
+    	
+    	double area1 = parameters.area1;
+    	// begin from index 2 (3rd position in points arraylist)
+    	// and check two steps backwards.
+    	for (int i = 2; i < points.size(); i++) {
+    		
+    		Point2D point0 = points.get(i-2);
+    		Point2D point1 = points.get(i-1);
+    		Point2D point2 = points.get(i);
+    		
+    		double triangleArea = Math.abs(	(
+    										point0.getX() * (point1.getY() - point2.getY()) + 
+    										point1.getX() * (point2.getY() - point0.getY()) +
+    										point2.getX() * (point0.getY() - point1.getY())
+    										) / 2.0 );
+    		
+    		if (triangleArea > area1)
+    			return true;
+    	}
+    	
+    	return false;
     }
     /**
      * lic4 checks if it exists QPTS consecutive data points in more then QUADS unique quadrants, where , the data point (0,0)
