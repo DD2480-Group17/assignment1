@@ -59,6 +59,59 @@ class DecideTest {
     }
 
     /**
+     * testLic5 checks if decide returns true if there exists two consecutive points such that X[j]-X[j-1] < 0, otherwise the function
+     * should return false
+     *
+     * test 1
+     * input: (1 1)(1 1)(1 1)(1 1)(2 1)
+     * expected output: false
+     *
+     * test 2
+     * input: (5 1)(4 1)(3 1)(2 1)(-1 1)
+     * expected output: true
+     *
+     * test 3
+     * input: (1 1)(1 1)(1 1)(1 1)(1 1)
+     * expected output: false
+     */
+    @Test
+    void testLic5(){
+        Decide decide = new Decide();
+
+        //Test 1
+        ArrayList<Point2D.Double> test1 = new ArrayList<>();
+        test1.add(new Point2D.Double(1,1));
+        test1.add(new Point2D.Double(1,1));
+        test1.add(new Point2D.Double(1,1));
+        test1.add(new Point2D.Double(1,1));
+        test1.add(new Point2D.Double(2,1));
+
+        decide.points = test1;
+        assertFalse(decide.lic5());
+
+        //Test 2
+        ArrayList<Point2D.Double> test2 = new ArrayList<>();
+        test2.add(new Point2D.Double(5,1));
+        test2.add(new Point2D.Double(4,1));
+        test2.add(new Point2D.Double(3,1));
+        test2.add(new Point2D.Double(2,1));
+        test2.add(new Point2D.Double(-1,1));
+
+        decide.points = test2;
+        assertTrue(decide.lic5());
+
+        //Test 3
+        ArrayList<Point2D.Double> test3 = new ArrayList<>();
+        test3.add(new Point2D.Double(1,1));
+        test3.add(new Point2D.Double(1,1));
+        test3.add(new Point2D.Double(1,1));
+        test3.add(new Point2D.Double(1,1));
+        test3.add(new Point2D.Double(1,1));
+
+        decide.points = test3;
+        assertFalse(decide.lic5());
+    }
+    /**
      * Tests that dist returns the euclidian distance between two points.
      *
      * Test case 1:
