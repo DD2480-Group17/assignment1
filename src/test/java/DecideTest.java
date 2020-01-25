@@ -309,4 +309,51 @@ class DecideTest {
         decide.points = points2;
         assertTrue(decide.lic7());
     }
+
+    @Test
+    void testLic1() {
+        ArrayList<Point2D.Double> points1 = new ArrayList<>();
+        points1.add(new Point2D.Double(1, 1));
+        points1.add(new Point2D.Double(-1, 1));
+        points1.add(new Point2D.Double(-1, -1));
+
+        Decide decide = new Decide();
+        decide.parameters = new Parameters();
+        decide.parameters.radius1 = 1.0;
+
+        decide.points = points1;
+        assertTrue(decide.lic1());
+    }
+
+    /**
+     * Tests that outsideRadius returns true if the radius between the three points are
+     * larger than radius1
+     *
+     * Test case 1:
+     * points = (1, 1), (-1, 1), (-1, -1)
+     * radius1 = 1.0
+     * Expected value: true
+     *
+     * Test case 2:
+     * points = (1, 1), (-1, 1), (-1, -1)
+     * radius1 = 4.0
+     * Expected value: false
+     **/
+    @Test
+    void testOutsideRadius() {
+        Point2D.Double point1 = new Point2D.Double(1, 1);
+        Point2D.Double point2 = new Point2D.Double(-1, 1);
+        Point2D.Double point3 = new Point2D.Double(-1, -1);
+        Decide decide = new Decide();
+        decide.parameters = new Parameters();
+        decide.parameters.radius1 = 1.0;
+
+        assertTrue(decide.outsideRadius(point1, point2, point3, decide.parameters.radius1));
+
+        Decide decide1 = new Decide();
+        decide1.parameters = new Parameters();
+        decide1.parameters.radius1 = 4.0;
+
+        assertFalse(decide.outsideRadius(point1, point2, point3, decide1.parameters.radius1));
+    }
 }
