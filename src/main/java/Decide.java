@@ -49,40 +49,40 @@ public class Decide {
         }
         return false;
     }
-    /**
-     * Returns true if there is at least one set of three consecutive data points
-     * in points Arraylist that are the vertices of a triangle with area > AREA1 (which is parameters.area1).
-     * Otherwise, return false.
-     * 
-     * @return true if there is at least one set of three consecutive data points
-     * in points Arraylist that are the vertices of a triangle with area > AREA1 (which is parameters.area1).
-     * Otherwise, false.
-     */
-    boolean lic3() {
-    	// The formula used to calculate the area of the triangle comes from
-    	// https://www.mathopenref.com/coordtrianglearea.html.
-    	
-    	double area1 = parameters.area1;
-    	// begin from index 2 (3rd position in points arraylist)
-    	// and check two steps backwards.
-    	for (int i = 2; i < points.size(); i++) {
-    		
-    		Point2D point0 = points.get(i-2);
-    		Point2D point1 = points.get(i-1);
-    		Point2D point2 = points.get(i);
-    		
-    		double triangleArea = Math.abs(	(
-    										point0.getX() * (point1.getY() - point2.getY()) + 
-    										point1.getX() * (point2.getY() - point0.getY()) +
-    										point2.getX() * (point0.getY() - point1.getY())
-    										) / 2.0 );
-    		
-    		if (triangleArea > area1)
-    			return true;
-    	}
-    	
-    	return false;
-    }
+
+	/**
+	 * Returns true if there is at least one set of three consecutive data points in
+	 * points Arraylist that are the vertices of a triangle with area > AREA1 (which
+	 * is parameters.area1). Otherwise, return false.
+	 * 
+	 * @return true if there is at least one set of three consecutive data points in
+	 *         points Arraylist that are the vertices of a triangle with area >
+	 *         AREA1 (which is parameters.area1). Otherwise, false.
+	 */
+	public boolean lic3() {
+		// The formula used to calculate the area of the triangle comes from
+		// https://www.mathopenref.com/coordtrianglearea.html.
+
+		double area1 = parameters.area1;
+		// begin from index 2 (3rd position in points arraylist)
+		// and check two steps backwards.
+		for (int i = 2; i < points.size(); i++) {
+
+			Point2D point0 = points.get(i - 2);
+			Point2D point1 = points.get(i - 1);
+			Point2D point2 = points.get(i);
+
+			double triangleArea = Math.abs(
+					(point0.getX() * (point1.getY() - point2.getY()) + point1.getX() * (point2.getY() - point0.getY())
+							+ point2.getX() * (point0.getY() - point1.getY())) / 2.0);
+
+			if (triangleArea > area1)
+				return true;
+		}
+
+		return false;
+	}
+
     /**
      * lic4 checks if it exists QPTS consecutive data points in more then QUADS unique quadrants, where , the data point (0,0)
      * is in quadrant I, the point (-l,0) is in quadrant II, the point (0,-l) is in quadrant III, the point
@@ -185,4 +185,81 @@ public class Decide {
         }
         return false;
     }
+
+	/**
+	 * Returns true if there exists at least one set of three data points separated
+	 * by exactly C_PTS and D_PTS consecutive intervening points, respectively, that
+	 * form an angle such that: angle < (PI-EPSILON) or angle > (PI+EPSILON) The
+	 * second point of the set of three points is always the vertex of the angle.
+	 * 
+	 * Otherwise, returns false if either the first point or the last point (or
+	 * both) coincide with the vertex.
+	 * 
+	 * Also, Lic9 returns false if NUMPOINTS < 5.
+	 * 
+	 * It is assumed that 1 <= C_PTS, 1 <= D_PTS, C_PTS+D_PTS <= NUMPOINTS-3.
+	 * 
+	 * @return true if there exists at least one set of three data points separated
+	 *         by exactly C_PTS and D_PTS consecutive intervening points,
+	 *         respectively, that form an angle such that: angle < (PI-EPSILON) or
+	 *         angle > (PI+EPSILON). The second point of the set of three points is
+	 *         always the vertex of the angle. Otherwise, false if either the first
+	 *         point or the last point (or both) coincide with the vertex, or if
+	 *         NUMPOINTS < 5.
+	 */
+	boolean lic9() {
+
+		if (points.size() < 5)
+			return false;
+
+		// ------------------------------------------
+
+		// INVARIANT: for some j,
+		// ..., points[j], ..., points[j+C_PTS+1] == vertex, ...,
+		// points[j+C_PTS+1+D_PTS+1] == points[j+C_PTS+D_PTS+2], ...
+
+		for (int i = parameters.cPts + parameters.dPts + 2; i < points.size(); i++) {
+			Point2D point0 = points.get(i - parameters.cPts - parameters.dPts - 2);
+			Point2D point1 = points.get(i - parameters.dPts - 1); // vertex
+			Point2D point2 = points.get(i);
+
+			if (!(point0.equals(point1) || point2.equals(point1))) {
+				double angle = calcAngle(point0, point1, point2);
+				if (angle < Math.PI - parameters.epsilon || angle > Math.PI + parameters.epsilon)
+					return true;
+			}
+
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns angle (in radians) that is formed between 3 points. 0 <= angle < 2pi.
+	 * Angle is calculated counter-clockwise from vector point1 -> point0 towards
+	 * vector point1 -> point2.
+	 * 
+	 * @param point0 one point
+	 * @param point1 vertex
+	 * @param point2 another point
+	 * @return angle (in radians) formed by point0, point1 and point2. 0 <= angle <
+	 *         2pi. Angle is calculated counter-clockwise from vector point1 ->
+	 *         point0 towards vector point1 -> point2.
+	 */
+	private double calcAngle(Point2D point0, Point2D point1, Point2D point2) {
+		// the code used here is inspired by
+		// https://medium.com/@manivannan_data/find-the-angle-between-three-points-from-2d-using-python-348c513e2cd
+
+		double point1To0_x = point0.getX() - point1.getX();
+		double point1To0_y = point0.getY() - point1.getY();
+		double point1To2_x = point2.getX() - point1.getX();
+		double point1To2_y = point2.getY() - point1.getY();
+
+		double angle = Math.atan2(point1To2_y, point1To2_x) - Math.atan2(point1To0_y, point1To0_x);
+		// if angle is negative, add 2pi to angle.
+		if (angle < 0)
+			angle = angle + 2 * Math.PI;
+
+		return angle;
+	}
 }
