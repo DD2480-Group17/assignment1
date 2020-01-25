@@ -2,11 +2,38 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class Decide {
-    int numPoints;
+    enum BOOLEAN_OPERATOR {
+        ANDD,
+        ORR,
+        NOTUSED
+    }
+
     ArrayList<Point2D.Double> points;
     Parameters parameters;
-    LCM lcm;
-    PUV puv;
+    BOOLEAN_OPERATOR[][] lcm;
+    boolean[] puv;
+
+
+    /**
+     * Empty constructor
+     */
+    public Decide() {
+
+    }
+
+    /**
+     * Constructor
+     * @param points 2D planar point
+     * @param parameters 19 input parameters
+     * @param lcm logical connector matrix
+     * @param puv preliminary unlocking vector
+     */
+    public Decide(ArrayList<Point2D.Double> points, Parameters parameters, BOOLEAN_OPERATOR[][] lcm, boolean[] puv) {
+        this.points = points;
+        this.parameters = parameters;
+        this.lcm = lcm;
+        this.puv = puv;
+    }
 
     /**
      * Launch Interceptor Condition 0
@@ -22,7 +49,7 @@ public class Decide {
         }
         return false;
     }
-    
+
 	/**
 	 * Returns true if there is at least one set of three consecutive data points in
 	 * points Arraylist that are the vertices of a triangle with area > AREA1 (which
@@ -55,6 +82,7 @@ public class Decide {
 
 		return false;
 	}
+
     /**
      * lic4 checks if it exists QPTS consecutive data points in more then QUADS unique quadrants, where , the data point (0,0)
      * is in quadrant I, the point (-l,0) is in quadrant II, the point (0,-l) is in quadrant III, the point
@@ -62,10 +90,10 @@ public class Decide {
      *
      * @return the function returns true if it exists QPTS consecutive data points in more then QUADS unique quadrants
      */
-    public boolean lic4() {
+    boolean lic4() {
         //checks if qPts or quads is in a undefined area for this function
 
-        if (parameters.qPts < 2 || parameters.qPts > numPoints
+        if (parameters.qPts < 2 || parameters.qPts > points.size()
                 || parameters.quads < 1 || parameters.quads > 3) {
             return false;
         }
@@ -75,7 +103,7 @@ public class Decide {
         }
 
         //check if there exists a qpts consecutive set of data points
-        for(int i = 0; i + parameters.qPts-1 < numPoints; i++) {
+        for(int i = 0; i + parameters.qPts-1 < points.size(); i++) {
 
             //check if the data set contains more then quad quads
             boolean[] foundQuads = new boolean[4];
@@ -114,6 +142,20 @@ public class Decide {
         }
         return false;
     }
+
+    /**
+     * Launch Interceptor Condition 5
+     * @return true if there exists one set of two consecutive data points such that X[j]-X[j-1] < 0
+     */
+    boolean lic5(){
+        for(int j = 1; j < points.size(); j++){
+            if((points.get(j).x - points.get(j-1).x) < 0){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Calculates the distance between two points in euclidian space.
      *
@@ -144,53 +186,53 @@ public class Decide {
         return false;
     }
 
-    /**
-     * Returns true if there exists at least one set of three data points separated
-     * by exactly C_PTS and D_PTS consecutive intervening points, respectively, that
-     * form an angle such that: angle < (PI-EPSILON) or angle > (PI+EPSILON) The
-     * second point of the set of three points is always the vertex of the angle.
-     * 
-     * Otherwise, returns false if either the first point or the last point (or
-     * both) coincide with the vertex.
-     * 
-     * Also, Lic9 returns false if NUMPOINTS < 5.
-     * 
-     * It is assumed that 1 <= C_PTS, 1 <= D_PTS, C_PTS+D_PTS <= NUMPOINTS-3.
-     * 
-     * @return true if there exists at least one set of three data points separated
-     *         by exactly C_PTS and D_PTS consecutive intervening points,
-     *         respectively, that form an angle such that: angle < (PI-EPSILON) or
-     *         angle > (PI+EPSILON). The second point of the set of three points is
-     *         always the vertex of the angle. Otherwise, false if either the first
-     *         point or the last point (or both) coincide with the vertex, or if
-     *         NUMPOINTS < 5.
-     */
-    boolean lic9() {
+	/**
+	 * Returns true if there exists at least one set of three data points separated
+	 * by exactly C_PTS and D_PTS consecutive intervening points, respectively, that
+	 * form an angle such that: angle < (PI-EPSILON) or angle > (PI+EPSILON) The
+	 * second point of the set of three points is always the vertex of the angle.
+	 * 
+	 * Otherwise, returns false if either the first point or the last point (or
+	 * both) coincide with the vertex.
+	 * 
+	 * Also, Lic9 returns false if NUMPOINTS < 5.
+	 * 
+	 * It is assumed that 1 <= C_PTS, 1 <= D_PTS, C_PTS+D_PTS <= NUMPOINTS-3.
+	 * 
+	 * @return true if there exists at least one set of three data points separated
+	 *         by exactly C_PTS and D_PTS consecutive intervening points,
+	 *         respectively, that form an angle such that: angle < (PI-EPSILON) or
+	 *         angle > (PI+EPSILON). The second point of the set of three points is
+	 *         always the vertex of the angle. Otherwise, false if either the first
+	 *         point or the last point (or both) coincide with the vertex, or if
+	 *         NUMPOINTS < 5.
+	 */
+	boolean lic9() {
 
-    	if (points.size() < 5)
-    		return false;
+		if (points.size() < 5)
+			return false;
 
-    	// ------------------------------------------
+		// ------------------------------------------
 
-    	// INVARIANT: for some j,
-    	// ..., points[j], ..., points[j+C_PTS+1] == vertex, ...,
-    	// points[j+C_PTS+1+D_PTS+1] == points[j+C_PTS+D_PTS+2], ...
+		// INVARIANT: for some j,
+		// ..., points[j], ..., points[j+C_PTS+1] == vertex, ...,
+		// points[j+C_PTS+1+D_PTS+1] == points[j+C_PTS+D_PTS+2], ...
 
-    	for (int i = parameters.cPts + parameters.dPts + 2; i < points.size(); i++) {
-    		Point2D point0 = points.get(i - parameters.cPts - parameters.dPts - 2);
-    		Point2D point1 = points.get(i - parameters.dPts - 1); // vertex
-    		Point2D point2 = points.get(i);
+		for (int i = parameters.cPts + parameters.dPts + 2; i < points.size(); i++) {
+			Point2D point0 = points.get(i - parameters.cPts - parameters.dPts - 2);
+			Point2D point1 = points.get(i - parameters.dPts - 1); // vertex
+			Point2D point2 = points.get(i);
 
 			if (!(point0.equals(point1) || point2.equals(point1))) {
 				double angle = calcAngle(point0, point1, point2);
 				if (angle < Math.PI - parameters.epsilon || angle > Math.PI + parameters.epsilon)
 					return true;
 			}
-    		
-    	}
 
-    	return false;
-    }
+		}
+
+		return false;
+	}
 
 	/**
 	 * Returns angle (in radians) that is formed between 3 points. 0 <= angle < 2pi.
