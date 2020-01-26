@@ -428,4 +428,66 @@ class DecideTest {
 
 		assertTrue(d.lic9());
 	}
+
+    /**
+     * Tests that lic6 returns true itrue if there exists at least one set of two data points,
+     * separated by exactly kPts consecutive intervening points, which are a distance greater than the length1,
+     * apart AND there exists at least one set of two data points, separated by exactly kPts consecutive
+     * intervening points, that are a distance less than the length2, apart.
+     * The condition is not met when numPoints < 3.
+     *
+     * Test case 1:
+     * points = (0, 1), (1, 0), (0, 2), (0, 0), (-1, 0), (1, 2), (2, 2)
+     * length1 = 1
+     * lenght2 = 1
+     * kPts = 1
+     * Expected value: false
+     *
+     * Test case 2:
+     * points = (0, 1), (1, 0), (0, 2), (0, 0), (-1, 0), (1, 2), (2, 2)
+     * length1 = 1
+     * lenght2 = 5
+     * kPts = 1
+     * Expected value: true
+     */
+    @Test
+    void lic12() {
+        ArrayList<Point2D.Double> points = new ArrayList<>();
+        Parameters parameters = new Parameters();
+        Decide decide1 = new Decide();
+        parameters.kPts = 1;
+        parameters.length1 = 1;
+        parameters.length2 = 1;
+
+        Point2D.Double p1 = new Point2D.Double(0, 1);
+        Point2D.Double p2 = new Point2D.Double(1, 0);
+        Point2D.Double p3 = new Point2D.Double(0, 2);
+        Point2D.Double p4 = new Point2D.Double(0, 0);
+        Point2D.Double p5 = new Point2D.Double(-1, 0);
+        Point2D.Double p6 = new Point2D.Double(1, 2);
+        Point2D.Double p7 = new Point2D.Double(2, 2);
+        points.add(p1);
+        points.add(p2);
+        points.add(p3);
+        points.add(p4);
+        points.add(p5);
+        points.add(p6);
+        points.add(p7);
+
+        decide1.parameters = parameters;
+        decide1.points = points;
+
+        assertFalse(decide1.lic12());
+
+        Decide decide2 = new Decide();
+        parameters.kPts = 1;
+        parameters.length1 = 1;
+        parameters.length2 = 5;
+
+        decide2.parameters = parameters;
+        decide2.points = points;
+
+        assertTrue(decide2.lic12());
+
+    }
 }
