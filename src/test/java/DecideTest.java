@@ -58,6 +58,17 @@ class DecideTest {
         assertTrue(decide.lic0());
     }
 
+    /**
+     * Tests that lic2 return true if there exists at least one set of three consecutive data points which form an angle such that:
+     * angle < (PI − EPSILON)
+     * or
+     * angle > (PI + EPSILON)
+     *
+     * Test case:
+     * Points: (1, 0), (0, 0), (cos(pi/4), sin(pi/4))
+     * Epsilon: pi/2
+     * Expected value: true
+     */
     @Test
     void testLic2() {
         ArrayList<Point2D.Double> points = new ArrayList<>();
@@ -443,4 +454,29 @@ class DecideTest {
 
 		assertTrue(d.lic9());
 	}
+
+
+    /**
+     * Tests Launch Interceptor Condition 11
+     * <p>
+     * Test case:
+     * Points: (2, 0), (0, 0), (0, 0), (1, 0)
+     * gPts: 2
+     * Expected value: true
+     */
+    @Test
+    void testLic11() {
+        ArrayList<Point2D.Double> points = new ArrayList<>();
+        points.add(new Point2D.Double(2, 0));
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(1, 0));
+
+        Decide decide = new Decide();
+        decide.parameters = new Parameters();
+        decide.parameters.gPts = 2;
+        decide.points = points;
+
+        assertTrue(decide.lic11());
+    }
 }

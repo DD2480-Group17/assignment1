@@ -259,6 +259,27 @@ public class Decide {
 		return false;
 	}
 
+    /**
+     * Launch Interceptor Condition 11
+     *
+     * @return ture if there exists at least one set of two data points, (X[i],Y[i]) and (X[j],Y[j]), separated by
+     * exactly G PTS consecutive intervening points, such that X[j] - X[i] < 0. (where i < j )
+     * The condition is not met when NUMPOINTS < 3.
+     */
+    boolean lic11() {
+        if (points.size() < 3) {
+            return false;
+        }
+
+        for (int j = parameters.gPts + 1; j < points.size(); j++) {
+            int i = j - parameters.gPts - 1;
+            if (points.get(j).getX() - points.get(i).getX() < 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 	/**
 	 * Returns angle (in radians) that is formed between 3 points. 0 <= angle < 2pi.
 	 * Angle is calculated counter-clockwise from vector point1 -> point0 towards
