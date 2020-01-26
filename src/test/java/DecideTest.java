@@ -6,23 +6,22 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-
 class DecideTest {
 
     /**
      * Tests that lic0 returns true if there exists at least one set of two consecutive data points that are a distance
      * greater than the length, length1, apart, else false.
-     *
+     * <p>
      * Test case 1:
      * points = (0, 0), (0, 1), (0, 2)
      * length1 = 1
      * Expected value: false
-     *
+     * <p>
      * Test case 2:
      * points = (0, 0), (0, 2), (0, 1)
      * length1 = 1
      * Expected value: true
-     *
+     * <p>
      * Test case 3:
      * points = (0, 0), (1, 1)
      * length1 = 1
@@ -61,67 +60,68 @@ class DecideTest {
     /**
      * testLic5 checks if decide returns true if there exists two consecutive points such that X[j]-X[j-1] < 0, otherwise the function
      * should return false
-     *
+     * <p>
      * test 1
      * input: (1 1)(1 1)(1 1)(1 1)(2 1)
      * expected output: false
-     *
+     * <p>
      * test 2
      * input: (5 1)(4 1)(3 1)(2 1)(-1 1)
      * expected output: true
-     *
+     * <p>
      * test 3
      * input: (1 1)(1 1)(1 1)(1 1)(1 1)
      * expected output: false
      */
     @Test
-    void testLic5(){
+    void testLic5() {
         Decide decide = new Decide();
 
         //Test 1
         ArrayList<Point2D.Double> test1 = new ArrayList<>();
-        test1.add(new Point2D.Double(1,1));
-        test1.add(new Point2D.Double(1,1));
-        test1.add(new Point2D.Double(1,1));
-        test1.add(new Point2D.Double(1,1));
-        test1.add(new Point2D.Double(2,1));
+        test1.add(new Point2D.Double(1, 1));
+        test1.add(new Point2D.Double(1, 1));
+        test1.add(new Point2D.Double(1, 1));
+        test1.add(new Point2D.Double(1, 1));
+        test1.add(new Point2D.Double(2, 1));
 
         decide.points = test1;
         assertFalse(decide.lic5());
 
         //Test 2
         ArrayList<Point2D.Double> test2 = new ArrayList<>();
-        test2.add(new Point2D.Double(5,1));
-        test2.add(new Point2D.Double(4,1));
-        test2.add(new Point2D.Double(3,1));
-        test2.add(new Point2D.Double(2,1));
-        test2.add(new Point2D.Double(-1,1));
+        test2.add(new Point2D.Double(5, 1));
+        test2.add(new Point2D.Double(4, 1));
+        test2.add(new Point2D.Double(3, 1));
+        test2.add(new Point2D.Double(2, 1));
+        test2.add(new Point2D.Double(-1, 1));
 
         decide.points = test2;
         assertTrue(decide.lic5());
 
         //Test 3
         ArrayList<Point2D.Double> test3 = new ArrayList<>();
-        test3.add(new Point2D.Double(1,1));
-        test3.add(new Point2D.Double(1,1));
-        test3.add(new Point2D.Double(1,1));
-        test3.add(new Point2D.Double(1,1));
-        test3.add(new Point2D.Double(1,1));
+        test3.add(new Point2D.Double(1, 1));
+        test3.add(new Point2D.Double(1, 1));
+        test3.add(new Point2D.Double(1, 1));
+        test3.add(new Point2D.Double(1, 1));
+        test3.add(new Point2D.Double(1, 1));
 
         decide.points = test3;
         assertFalse(decide.lic5());
     }
+
     /**
      * Tests that dist returns the euclidian distance between two points.
-     *
+     * <p>
      * Test case 1:
      * points: (0, 0), (1, 1)
      * Expected value: 1.414213562373095048801688724209698078569671875376948073176679
-     *
+     * <p>
      * Test case 2:
      * points: (0, 0), (0, 0)
      * Expected value: 0
-     *
+     * <p>
      * Test case 3:
      * points: (0, 0), (0, 1)
      * Expected value: 1
@@ -145,7 +145,7 @@ class DecideTest {
         assertEquals(1.0, decide.dist(point1, point2));
 
     }
-    
+
     /**
      * Tests that LIC3 returns true given that there is at least one set of 3 consecutive
      * points that constitute a triangle with area > area1. And that LIC3 returns false when
@@ -153,47 +153,47 @@ class DecideTest {
      */
     @Test
     void testLIC3() {
-    	// test 1: (area of one triangle == 4.0) && (area1 == 3.0). This should lead to
-    	// expected value of true.
-    	Decide d = new Decide();
-    	
-    	ArrayList<Point2D.Double> points = new ArrayList<>();
-    	points.add(new Point2D.Double(0, 0));
-    	points.add(new Point2D.Double(0, 4));
-    	points.add(new Point2D.Double(2, 0));
-    	
-    	Parameters ps = new Parameters();
-    	ps.area1 = 3.0;
-    	
-    	d.points = points;
-    	d.parameters = ps;
-    	
-    	assertTrue(d.lic3());
-    	
-    	//-------------------------------------
-    	
-    	// test 1: (area of one triangle == 4.0) && (area1 == 4.0). This should lead to
-    	// expected value of false.
-    	ps.area1 = 4.0;
-    	
-    	assertFalse(d.lic3());
+        // test 1: (area of one triangle == 4.0) && (area1 == 3.0). This should lead to
+        // expected value of true.
+        Decide d = new Decide();
+
+        ArrayList<Point2D.Double> points = new ArrayList<>();
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(0, 4));
+        points.add(new Point2D.Double(2, 0));
+
+        Parameters ps = new Parameters();
+        ps.area1 = 3.0;
+
+        d.points = points;
+        d.parameters = ps;
+
+        assertTrue(d.lic3());
+
+        //-------------------------------------
+
+        // test 1: (area of one triangle == 4.0) && (area1 == 4.0). This should lead to
+        // expected value of false.
+        ps.area1 = 4.0;
+
+        assertFalse(d.lic3());
     }
-    
+
     /**
      * Tests that lic4 returns true when it exists qpts points that is located in more the quad quadrants.
-     *
+     * <p>
      * test 1:
      * qpts = 3
      * input (0 0)(-1 0)(0 -1)(0 1)(1 0)
      * (0 0) = quadrant 1, (-1 0) = quadrant 2, (0 -1) = quadrant 3, (0 1) = quadrant 1, (1 0)= quadrant 1
      * test for quads 3, 2, 1 with expected output false true true
-     *
+     * <p>
      * test 2:
      * input (1 1)(-1 1)(-1 -1)(1 -1)
      * qpts = 4
      * (1 1) = quadrant 1, (-1 1) = quadrant 2, (-1 -1) = quadrant 3, (1 -1) = quadrant 4
      * test for quads 3, 2, 1 with expected output true true true true
-     *
+     * <p>
      * test 3:
      * input (1 1)(1 1)(1 1)(-1 1)(1 1)(1 1)(-1 -1)(1 -1)
      * (1 1) = quadrant 1, (-1 1) = quadrant 2, (-1 -1) = quadrant 3, (1 -1) = quadrant 4
@@ -261,7 +261,7 @@ class DecideTest {
         assertFalse(decide.lic4());
 
         //checks if it exist i consecutive points
-        for (int i = 3; i <=8; i++) {
+        for (int i = 3; i <= 8; i++) {
             decide.parameters.qPts = i;
             assertTrue(decide.lic4());
         }
@@ -272,12 +272,12 @@ class DecideTest {
      * Tests that lic0 returns true if there exists at least one set of two data points separated by exactly kPts
      * consecutive intervening points that are a distance greater than the length,LENGTH1, apart.
      * The condition is not met when numPoints < 3.
-     *
+     * <p>
      * Test case 1:
      * points = (0, 0), (0, 0), (0, 2), (0, 1)
      * length1 = 1
      * Expected value: false
-     *
+     * <p>
      * Test case 2:
      * points = (0, 0), (0, 0), (0, 0), (0, 2)
      * length1 = 1
@@ -309,42 +309,43 @@ class DecideTest {
         decide.points = points2;
         assertTrue(decide.lic7());
     }
+
     /**
      * Tests that lic10 returns true if if there exists at least one set of three data points separated by exactly E_PTS and F_PTS
      * consecutive intervening points, respectively, that are the vertices of a triangle with area greater than AREA1
-     *
+     * <p>
      * Test case 1:
      * intput:
      * points = (-1, 0), (1, 0), (0, 5), (1, 1), (1, 0.5), (2, 0), (0.5, 0), (-0.5, 1)
      * epts = 2, fpts = 1, area1 = 6
      * Expected value: True
-     *
+     * <p>
      * Test case 2:
      * intput:
      * points = (-1, 0), (1, 0), (0, 5), (1, 1), (1, 0.5), (2, 0), (0.5, 0), (-0.5, 1)
      * epts = 2, fpts = 1, area1 = 6
      * Expected value: False
-     *
+     * <p>
      * Test case 3:
      * points = (-1, 0), (1, 0), (1, 1), (0, 5), (1, 0.5), (2, 0), (0.5, 0), (-0.5, 1)
      * epts = 2, fpts = 1, area1 = 6
      * Expected value: True
      */
     @Test
-    void testLic10(){
+    void testLic10() {
         Decide decide = new Decide();
         Parameters parameters = new Parameters();
 
         //Test 1
         ArrayList<Point2D.Double> test1 = new ArrayList<>();
-        test1.add(new Point2D.Double(-1,0));
-        test1.add(new Point2D.Double(1,0));
-        test1.add(new Point2D.Double(0,5));
-        test1.add(new Point2D.Double(1,1));
-        test1.add(new Point2D.Double(1,0.5));
-        test1.add(new Point2D.Double(2,0));
-        test1.add(new Point2D.Double(0.5,0));
-        test1.add(new Point2D.Double(-0.5,1));
+        test1.add(new Point2D.Double(-1, 0));
+        test1.add(new Point2D.Double(1, 0));
+        test1.add(new Point2D.Double(0, 5));
+        test1.add(new Point2D.Double(1, 1));
+        test1.add(new Point2D.Double(1, 0.5));
+        test1.add(new Point2D.Double(2, 0));
+        test1.add(new Point2D.Double(0.5, 0));
+        test1.add(new Point2D.Double(-0.5, 1));
 
         parameters.ePts = 2;
         parameters.fPts = 1;
@@ -359,14 +360,14 @@ class DecideTest {
 
         //Test 3
         ArrayList<Point2D.Double> test2 = new ArrayList<>();
-        test2.add(new Point2D.Double(-1,0));
-        test2.add(new Point2D.Double(1,0));
-        test2.add(new Point2D.Double(1,1));
-        test2.add(new Point2D.Double(0,5));
-        test2.add(new Point2D.Double(1,0.5));
-        test2.add(new Point2D.Double(2,0));
-        test2.add(new Point2D.Double(0.5,0));
-        test2.add(new Point2D.Double(-0.5,1));
+        test2.add(new Point2D.Double(-1, 0));
+        test2.add(new Point2D.Double(1, 0));
+        test2.add(new Point2D.Double(1, 1));
+        test2.add(new Point2D.Double(0, 5));
+        test2.add(new Point2D.Double(1, 0.5));
+        test2.add(new Point2D.Double(2, 0));
+        test2.add(new Point2D.Double(0.5, 0));
+        test2.add(new Point2D.Double(-0.5, 1));
 
         decide.points = test2;
         parameters.area1 = 6;
@@ -379,18 +380,18 @@ class DecideTest {
      * points in different order.
      */
     @Test
-    void testTriangelArea(){
+    void testTriangelArea() {
         Decide decide = new Decide();
 
-        Point2D.Double a = new Point2D.Double(-1,0);
-        Point2D.Double b = new Point2D.Double(2,0);
-        Point2D.Double c = new Point2D.Double(0,4);
-        Point2D.Double d = new Point2D.Double(0,-3);
+        Point2D.Double a = new Point2D.Double(-1, 0);
+        Point2D.Double b = new Point2D.Double(2, 0);
+        Point2D.Double c = new Point2D.Double(0, 4);
+        Point2D.Double d = new Point2D.Double(0, -3);
 
-        assertEquals(6.0, decide.triangleArea(a,b,c));
-        assertEquals(6.0, decide.triangleArea(b,a,c));
-        assertEquals(6.0, decide.triangleArea(c,a,b));
+        assertEquals(6.0, decide.triangleArea(a, b, c));
+        assertEquals(6.0, decide.triangleArea(b, a, c));
+        assertEquals(6.0, decide.triangleArea(c, a, b));
 
-        assertEquals(4.5, decide.triangleArea(a,b,d));
+        assertEquals(4.5, decide.triangleArea(a, b, d));
     }
 }

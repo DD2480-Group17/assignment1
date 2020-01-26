@@ -23,10 +23,11 @@ public class Decide {
 
     /**
      * Constructor
-     * @param points 2D planar point
+     *
+     * @param points     2D planar point
      * @param parameters 19 input parameters
-     * @param lcm logical connector matrix
-     * @param puv preliminary unlocking vector
+     * @param lcm        logical connector matrix
+     * @param puv        preliminary unlocking vector
      */
     public Decide(ArrayList<Point2D.Double> points, Parameters parameters, BOOLEAN_OPERATOR[][] lcm, boolean[] puv) {
         this.points = points;
@@ -49,40 +50,42 @@ public class Decide {
         }
         return false;
     }
+
     /**
      * Returns true if there is at least one set of three consecutive data points
      * in points Arraylist that are the vertices of a triangle with area > AREA1 (which is parameters.area1).
      * Otherwise, return false.
-     * 
+     *
      * @return true if there is at least one set of three consecutive data points
      * in points Arraylist that are the vertices of a triangle with area > AREA1 (which is parameters.area1).
      * Otherwise, false.
      */
     boolean lic3() {
-    	// The formula used to calculate the area of the triangle comes from
-    	// https://www.mathopenref.com/coordtrianglearea.html.
-    	
-    	double area1 = parameters.area1;
-    	// begin from index 2 (3rd position in points arraylist)
-    	// and check two steps backwards.
-    	for (int i = 2; i < points.size(); i++) {
-    		
-    		Point2D point0 = points.get(i-2);
-    		Point2D point1 = points.get(i-1);
-    		Point2D point2 = points.get(i);
-    		
-    		double triangleArea = Math.abs(	(
-    										point0.getX() * (point1.getY() - point2.getY()) + 
-    										point1.getX() * (point2.getY() - point0.getY()) +
-    										point2.getX() * (point0.getY() - point1.getY())
-    										) / 2.0 );
-    		
-    		if (triangleArea > area1)
-    			return true;
-    	}
-    	
-    	return false;
+        // The formula used to calculate the area of the triangle comes from
+        // https://www.mathopenref.com/coordtrianglearea.html.
+
+        double area1 = parameters.area1;
+        // begin from index 2 (3rd position in points arraylist)
+        // and check two steps backwards.
+        for (int i = 2; i < points.size(); i++) {
+
+            Point2D point0 = points.get(i - 2);
+            Point2D point1 = points.get(i - 1);
+            Point2D point2 = points.get(i);
+
+            double triangleArea = Math.abs((
+                    point0.getX() * (point1.getY() - point2.getY()) +
+                            point1.getX() * (point2.getY() - point0.getY()) +
+                            point2.getX() * (point0.getY() - point1.getY())
+            ) / 2.0);
+
+            if (triangleArea > area1)
+                return true;
+        }
+
+        return false;
     }
+
     /**
      * lic4 checks if it exists QPTS consecutive data points in more then QUADS unique quadrants, where , the data point (0,0)
      * is in quadrant I, the point (-l,0) is in quadrant II, the point (0,-l) is in quadrant III, the point
@@ -103,13 +106,13 @@ public class Decide {
         }
 
         //check if there exists a qpts consecutive set of data points
-        for(int i = 0; i + parameters.qPts-1 < points.size(); i++) {
+        for (int i = 0; i + parameters.qPts - 1 < points.size(); i++) {
 
             //check if the data set contains more then quad quads
             boolean[] foundQuads = new boolean[4];
-            for(int j = 0; j < parameters.qPts; j++){
+            for (int j = 0; j < parameters.qPts; j++) {
 
-                Point2D.Double point = points.get(i+j);
+                Point2D.Double point = points.get(i + j);
 
                 //Is the point in quadrant 1
                 if (point.x >= 0 && point.y >= 0) {
@@ -136,7 +139,7 @@ public class Decide {
                 }
             }
             //if we have point in more the quads quadrants return true
-            if(numberOfquadrants > parameters.quads){
+            if (numberOfquadrants > parameters.quads) {
                 return true;
             }
         }
@@ -145,11 +148,12 @@ public class Decide {
 
     /**
      * Launch Interceptor Condition 5
+     *
      * @return true if there exists one set of two consecutive data points such that X[j]-X[j-1] < 0
      */
-    boolean lic5(){
-        for(int j = 1; j < points.size(); j++){
-            if((points.get(j).x - points.get(j-1).x) < 0){
+    boolean lic5() {
+        for (int j = 1; j < points.size(); j++) {
+            if ((points.get(j).x - points.get(j - 1).x) < 0) {
                 return true;
             }
         }
@@ -170,6 +174,7 @@ public class Decide {
 
     /**
      * Launch Interceptor Condition 7
+     *
      * @return true if there exists at least one set of two data points separated by exactly kPts consecutive
      * intervening points that are a distance greater than the length,LENGTH1, apart.
      * The condition is not met when numPoints < 3.
@@ -188,15 +193,16 @@ public class Decide {
 
     /**
      * Launch Interceptor Condition 10
+     *
      * @return true if There exists at least one set of three data points separated by exactly E_PTS and F_PTS
      * consecutive intervening points, respectively, that are the vertices of a triangle with area greater than AREA1
      */
-    boolean lic10(){
-        if(points.size() < 5)
+    boolean lic10() {
+        if (points.size() < 5)
             return false;
-        for(int i = 0; i + parameters.ePts + parameters.fPts + 2 < points.size(); i++){
-            if(triangleArea(points.get(i),points.get(i+parameters.ePts+1),points.get(i+parameters.ePts+parameters.fPts+2))> parameters.area1 ||
-                    triangleArea(points.get(i),points.get(i+parameters.fPts+1),points.get(i+parameters.fPts+parameters.ePts+2))> parameters.area1){
+        for (int i = 0; i + parameters.ePts + parameters.fPts + 2 < points.size(); i++) {
+            if (triangleArea(points.get(i), points.get(i + parameters.ePts + 1), points.get(i + parameters.ePts + parameters.fPts + 2)) > parameters.area1 ||
+                    triangleArea(points.get(i), points.get(i + parameters.fPts + 1), points.get(i + parameters.fPts + parameters.ePts + 2)) > parameters.area1) {
                 return true;
             }
         }
@@ -205,15 +211,16 @@ public class Decide {
 
     /**
      * trianlgeArea calculates the area formed by 3 data points
+     *
      * @param point0
      * @param point1
      * @param point2
      * @return the area of the tringle formed by point0, point1 and point2
      */
-    double triangleArea(Point2D.Double point0, Point2D.Double point1, Point2D.Double point2){
+    double triangleArea(Point2D.Double point0, Point2D.Double point1, Point2D.Double point2) {
         return Math.abs((
-                        point0.getX() * (point1.getY() - point2.getY()) +
+                point0.getX() * (point1.getY() - point2.getY()) +
                         point1.getX() * (point2.getY() - point0.getY()) +
-                        point2.getX() * (point0.getY() - point1.getY()) ) / 2.0 );
+                        point2.getX() * (point0.getY() - point1.getY())) / 2.0);
     }
 }
