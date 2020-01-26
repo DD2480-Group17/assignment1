@@ -428,4 +428,47 @@ class DecideTest {
 
 		assertTrue(d.lic9());
 	}
+
+    /**
+     * Tests that lic1 returns at least one set of three consecutive data points that cannot all be contained
+     * within or on a circle of radius1
+     * The condition is not met when numPoints < 3.
+     **/
+    @Test
+    void testLic1() {
+        ArrayList<Point2D.Double> points1 = new ArrayList<>();
+        points1.add(new Point2D.Double(1, 1));
+        points1.add(new Point2D.Double(-1, 1));
+        points1.add(new Point2D.Double(-1, -1));
+
+        Decide decide = new Decide();
+        Parameters parameters = new Parameters();
+        parameters.radius1 = 1.0;
+
+        decide.points = points1;
+        decide.parameters = parameters;
+        assertTrue(decide.lic1());
+    }
+
+    /**
+     * Tests that outsideRadius returns true if the radius between the three points are
+     * larger than radius1
+     *
+     * Test case 1:
+     * points = (1, 1), (-1, 1), (-1, -1)
+     * radius1 = 1.0
+     * Expected value: tru
+     **/
+    @Test
+    void testOutsideRadius() {
+        Point2D.Double point1 = new Point2D.Double(1, 1);
+        Point2D.Double point2 = new Point2D.Double(-1, 1);
+        Point2D.Double point3 = new Point2D.Double(-1, -1);
+        Decide decide = new Decide();
+        Parameters parameters = new Parameters();
+        parameters.radius1 = 1.0;
+        decide.parameters = parameters;
+
+        assertTrue(decide.outsideRadius(point1, point2, point3, parameters.radius1));
+    }
 }
