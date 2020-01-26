@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class IOHandlerTest {
 
+    /**
+     * Tests that parseDecideInput correctly parses a String into a Decide object
+     */
     @Test
     void parseDecideInputTest() {
         IOHandler ioHandler = new IOHandler();
