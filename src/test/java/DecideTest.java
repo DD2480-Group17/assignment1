@@ -58,6 +58,21 @@ class DecideTest {
         assertTrue(decide.lic0());
     }
 
+    @Test
+    void testLic2() {
+        ArrayList<Point2D.Double> points = new ArrayList<>();
+        points.add(new Point2D.Double(1, 0));
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), Math.sin(Math.PI / 4.0)));
+
+        Decide decide = new Decide();
+        decide.points = points;
+        decide.parameters = new Parameters();
+        decide.parameters.epsilon = Math.PI / 2.0;
+
+        assertTrue(decide.lic2());
+    }
+
     /**
      * testLic5 checks if decide returns true if there exists two consecutive points such that X[j]-X[j-1] < 0, otherwise the function
      * should return false

@@ -50,11 +50,36 @@ public class Decide {
         return false;
     }
 
-	/**
+    /**
+     * Launch Interceptor Condition 2
+     *
+     * @return true if there exists at least one set of three consecutive data points which form an angle such that:
+     * angle < (PI − EPSILON)
+     * or
+     * angle > (PI + EPSILON)
+     * The second of the three consecutive points is always the vertex of the angle. If either the first
+     * point or the last point (or both) coincides with the vertex, the angle is undefined and false is returned
+     */
+    boolean lic2() {
+        for (int i = 2; i < points.size(); i++) {
+            Point2D point0 = points.get(i - 2);
+            Point2D point1 = points.get(i - 1);
+            Point2D point2 = points.get(i);
+
+            if (!(point0.equals(point1) || point2.equals(point1))) {
+                double angle = calcAngle(point0, point1, point2);
+                if (angle < Math.PI - parameters.epsilon || angle > Math.PI + parameters.epsilon)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    /**
 	 * Returns true if there is at least one set of three consecutive data points in
 	 * points Arraylist that are the vertices of a triangle with area > AREA1 (which
 	 * is parameters.area1). Otherwise, return false.
-	 * 
+	 *
 	 * @return true if there is at least one set of three consecutive data points in
 	 *         points Arraylist that are the vertices of a triangle with area >
 	 *         AREA1 (which is parameters.area1). Otherwise, false.
@@ -191,14 +216,14 @@ public class Decide {
 	 * by exactly C_PTS and D_PTS consecutive intervening points, respectively, that
 	 * form an angle such that: angle < (PI-EPSILON) or angle > (PI+EPSILON) The
 	 * second point of the set of three points is always the vertex of the angle.
-	 * 
+	 *
 	 * Otherwise, returns false if either the first point or the last point (or
 	 * both) coincide with the vertex.
-	 * 
+	 *
 	 * Also, Lic9 returns false if NUMPOINTS < 5.
-	 * 
+	 *
 	 * It is assumed that 1 <= C_PTS, 1 <= D_PTS, C_PTS+D_PTS <= NUMPOINTS-3.
-	 * 
+	 *
 	 * @return true if there exists at least one set of three data points separated
 	 *         by exactly C_PTS and D_PTS consecutive intervening points,
 	 *         respectively, that form an angle such that: angle < (PI-EPSILON) or
@@ -238,7 +263,7 @@ public class Decide {
 	 * Returns angle (in radians) that is formed between 3 points. 0 <= angle < 2pi.
 	 * Angle is calculated counter-clockwise from vector point1 -> point0 towards
 	 * vector point1 -> point2.
-	 * 
+	 *
 	 * @param point0 one point
 	 * @param point1 vertex
 	 * @param point2 another point
