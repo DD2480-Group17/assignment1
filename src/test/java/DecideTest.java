@@ -58,6 +58,32 @@ class DecideTest {
     }
 
     /**
+     * Tests that lic2 return true if there exists at least one set of three consecutive data points which form an angle such that:
+     * angle < (PI − EPSILON)
+     * or
+     * angle > (PI + EPSILON)
+     *
+     * Test case:
+     * Points: (1, 0), (0, 0), (cos(pi/4), sin(pi/4))
+     * Epsilon: pi/2
+     * Expected value: true
+     */
+    @Test
+    void testLic2() {
+        ArrayList<Point2D.Double> points = new ArrayList<>();
+        points.add(new Point2D.Double(1, 0));
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), Math.sin(Math.PI / 4.0)));
+
+        Decide decide = new Decide();
+        decide.points = points;
+        decide.parameters = new Parameters();
+        decide.parameters.epsilon = Math.PI / 2.0;
+
+        assertTrue(decide.lic2());
+    }
+
+    /**
      * testLic5 checks if decide returns true if there exists two consecutive points such that X[j]-X[j-1] < 0, otherwise the function
      * should return false
      * <p>
@@ -310,124 +336,148 @@ class DecideTest {
         assertTrue(decide.lic7());
     }
 
+	/**
+	 * Tests that Lic9 returns true if there exists at least one set of three data
+	 * points separated by exactly C_PTS and D_PTS consecutive intervening points,
+	 * respectively, that form an angle such that: angle < (PI-EPSILON) or angle >
+	 * (PI+EPSILON). The second point of the set of three points is always the vertex
+	 * of the angle.
+	 *
+	 * It also tests that Lic9 returns false if either the first point or the last
+	 * point (or both) coincide with the vertex.
+	 *
+	 * It also tests that Lic9 returns false if NUMPOINTS < 5.
+	 *
+	 * It is assumed that 1 <= C_PTS, 1 <= D_PTS, C_PTS+D_PTS <= NUMPOINTS-3.
+	 */
+	@Test
+	void testLic9() {
+
+		// test: Numpoints < 5
+		// && C_PTS == 1 && D_PTS == 2
+		// => lic9 returns false
+		Decide d = new Decide();
+		Parameters ps = new Parameters();
+
+		ps.cPts = 1;
+		ps.dPts = 2;
+		ps.epsilon = Math.PI / 2.0;
+
+		ArrayList<Point2D.Double> points = new ArrayList<>();
+		points.add(new Point2D.Double(1, 0)); // first point
+		points.add(new Point2D.Double(0, 0)); // second point
+		points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), Math.sin(Math.PI / 4.0))); // third point
+
+		d.points = points;
+		d.parameters = ps;
+
+		assertFalse(d.lic9());
+
+		// --------------------------------------------
+		// test: Numpoints >= 5 && two non-vertex points coincide
+		// && C_PTS == 1 && D_PTS == 2
+		// => lic9 returns false
+		d = new Decide();
+		ps = new Parameters();
+
+		ps.cPts = 1;
+		ps.dPts = 2;
+		ps.epsilon = Math.PI / 2.0;
+
+		points = new ArrayList<>();
+		points.add(new Point2D.Double(0, 0));
+		points.add(new Point2D.Double(0, 0)); // first point
+		points.add(new Point2D.Double(0, 0));
+		points.add(new Point2D.Double(0, 0)); // second point
+		points.add(new Point2D.Double(0, 0));
+		points.add(new Point2D.Double(0, 0));
+		points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), Math.sin(Math.PI / 4.0))); // third point
+		points.add(new Point2D.Double(0, 0));
+
+		d.points = points;
+		d.parameters = ps;
+
+		assertFalse(d.lic9());
+
+		// --------------------------------------------
+		// test: Numpoints >= 5 && no two non-vertex points coincide && angle == pi/4 &&
+		// epsilon == pi/2
+		// && C_PTS == 1 && D_PTS == 2
+		// => angle < pi - epsilon => lic9 returns true
+		d = new Decide();
+		ps = new Parameters();
+
+		ps.cPts = 1;
+		ps.dPts = 2;
+		ps.epsilon = Math.PI / 2.0;
+
+		points = new ArrayList<>();
+		points.add(new Point2D.Double(0, 0));
+		points.add(new Point2D.Double(1, 0)); // first point
+		points.add(new Point2D.Double(0, 0));
+		points.add(new Point2D.Double(0, 0)); // second point
+		points.add(new Point2D.Double(0, 0));
+		points.add(new Point2D.Double(0, 0));
+		points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), Math.sin(Math.PI / 4.0))); // third point
+		points.add(new Point2D.Double(0, 0));
+
+		d.points = points;
+		d.parameters = ps;
+
+		assertTrue(d.lic9());
+
+		// ---------------------------------------
+		// test: Numpoints >= 5 && no two points non-vertex coincide && angle == 7pi/4
+		// && epsilon == pi/2 (which means that angle + epsilon == 3pi/2)
+		// && C_PTS == 1 && D_PTS == 2
+		// => angle > pi + epsilon => lic9 returns true
+
+		d = new Decide();
+		ps = new Parameters();
+
+		ps.cPts = 1;
+		ps.dPts = 2;
+		ps.epsilon = Math.PI / 2.0;
+
+		points = new ArrayList<>();
+		points.add(new Point2D.Double(0, 0));
+		points.add(new Point2D.Double(1, 0)); // first point
+		points.add(new Point2D.Double(0, 0));
+		points.add(new Point2D.Double(0, 0)); // second point
+		points.add(new Point2D.Double(0, 0));
+		points.add(new Point2D.Double(0, 0));
+		points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), -Math.sin(Math.PI / 4.0))); // third point
+		points.add(new Point2D.Double(0, 0));
+
+		d.points = points;
+		d.parameters = ps;
+
+		assertTrue(d.lic9());
+	}
+
 
     /**
-     * Tests that Lic9 returns true if there exists at least one set of three data
-     * points separated by exactly C_PTS and D_PTS consecutive intervening points,
-     * respectively, that form an angle such that: angle < (PI-EPSILON) or angle >
-     * (PI+EPSILON). The second point of the set of three points is always the vertex
-     * of the angle.
+     * Tests Launch Interceptor Condition 11
      * <p>
-     * It also tests that Lic9 returns false if either the first point or the last
-     * point (or both) coincide with the vertex.
-     * <p>
-     * It also tests that Lic9 returns false if NUMPOINTS < 5.
-     * <p>
-     * It is assumed that 1 <= C_PTS, 1 <= D_PTS, C_PTS+D_PTS <= NUMPOINTS-3.
+     * Test case:
+     * Points: (2, 0), (0, 0), (0, 0), (1, 0)
+     * gPts: 2
+     * Expected value: true
      */
     @Test
-    void testLic9() {
-
-        // test: Numpoints < 5
-        // && C_PTS == 1 && D_PTS == 2
-        // => lic9 returns false
-        Decide d = new Decide();
-        Parameters ps = new Parameters();
-
-        ps.cPts = 1;
-        ps.dPts = 2;
-        ps.epsilon = Math.PI / 2.0;
-
+    void testLic11() {
         ArrayList<Point2D.Double> points = new ArrayList<>();
-        points.add(new Point2D.Double(1, 0)); // first point
-        points.add(new Point2D.Double(0, 0)); // second point
-        points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), Math.sin(Math.PI / 4.0))); // third point
-
-        d.points = points;
-        d.parameters = ps;
-
-        assertFalse(d.lic9());
-
-        // --------------------------------------------
-        // test: Numpoints >= 5 && two non-vertex points coincide
-        // && C_PTS == 1 && D_PTS == 2
-        // => lic9 returns false
-        d = new Decide();
-        ps = new Parameters();
-
-        ps.cPts = 1;
-        ps.dPts = 2;
-        ps.epsilon = Math.PI / 2.0;
-
-        points = new ArrayList<>();
-        points.add(new Point2D.Double(0, 0));
-        points.add(new Point2D.Double(0, 0)); // first point
-        points.add(new Point2D.Double(0, 0));
-        points.add(new Point2D.Double(0, 0)); // second point
+        points.add(new Point2D.Double(2, 0));
         points.add(new Point2D.Double(0, 0));
         points.add(new Point2D.Double(0, 0));
-        points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), Math.sin(Math.PI / 4.0))); // third point
-        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(1, 0));
 
-        d.points = points;
-        d.parameters = ps;
+        Decide decide = new Decide();
+        decide.parameters = new Parameters();
+        decide.parameters.gPts = 2;
+        decide.points = points;
 
-        assertFalse(d.lic9());
-
-        // --------------------------------------------
-        // test: Numpoints >= 5 && no two non-vertex points coincide && angle == pi/4 &&
-        // epsilon == pi/2
-        // && C_PTS == 1 && D_PTS == 2
-        // => angle < pi - epsilon => lic9 returns true
-        d = new Decide();
-        ps = new Parameters();
-
-        ps.cPts = 1;
-        ps.dPts = 2;
-        ps.epsilon = Math.PI / 2.0;
-
-        points = new ArrayList<>();
-        points.add(new Point2D.Double(0, 0));
-        points.add(new Point2D.Double(1, 0)); // first point
-        points.add(new Point2D.Double(0, 0));
-        points.add(new Point2D.Double(0, 0)); // second point
-        points.add(new Point2D.Double(0, 0));
-        points.add(new Point2D.Double(0, 0));
-        points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), Math.sin(Math.PI / 4.0))); // third point
-        points.add(new Point2D.Double(0, 0));
-
-        d.points = points;
-        d.parameters = ps;
-
-        assertTrue(d.lic9());
-
-        // ---------------------------------------
-        // test: Numpoints >= 5 && no two points non-vertex coincide && angle == 7pi/4
-        // && epsilon == pi/2 (which means that angle + epsilon == 3pi/2)
-        // && C_PTS == 1 && D_PTS == 2
-        // => angle > pi + epsilon => lic9 returns true
-
-        d = new Decide();
-        ps = new Parameters();
-
-        ps.cPts = 1;
-        ps.dPts = 2;
-        ps.epsilon = Math.PI / 2.0;
-
-        points = new ArrayList<>();
-        points.add(new Point2D.Double(0, 0));
-        points.add(new Point2D.Double(1, 0)); // first point
-        points.add(new Point2D.Double(0, 0));
-        points.add(new Point2D.Double(0, 0)); // second point
-        points.add(new Point2D.Double(0, 0));
-        points.add(new Point2D.Double(0, 0));
-        points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), -Math.sin(Math.PI / 4.0))); // third point
-        points.add(new Point2D.Double(0, 0));
-
-        d.points = points;
-        d.parameters = ps;
-
-        assertTrue(d.lic9());
+        assertTrue(decide.lic11());
     }
 
     /**
@@ -514,5 +564,4 @@ class DecideTest {
 
         assertEquals(4.5, decide.triangleArea(a, b, d));
     }
-
 }
