@@ -85,6 +85,7 @@ class UtilityTest {
         assertEquals(4.5, Utility.triangleArea(a, b, d));
     }
 
+
     /**
      * Tests that distPointLine returns the distance between a point and a line.
      * Test case 1:
@@ -96,8 +97,7 @@ class UtilityTest {
      * Expected value: 4.0
      */
     @Test
-    void distPointLine() {
-
+    void testDistPointLine() {
         Point2D.Double point1 = new Point2D.Double(2, -1);
         Point2D.Double point2 = new Point2D.Double(-2, 2);
         Point2D.Double point3 = new Point2D.Double(-2, -1);

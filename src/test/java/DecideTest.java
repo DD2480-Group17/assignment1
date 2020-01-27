@@ -144,7 +144,7 @@ class DecideTest {
      * there is no such set.
      */
     @Test
-    void testLIC3() {
+    void testLic3() {
         // test 1: (area of one triangle == 4.0) && (area1 == 3.0). This should lead to
         // expected value of true.
         Decide d = new Decide();
@@ -650,7 +650,7 @@ class DecideTest {
     }
 
     /**
-     * Tests that lic6 returns true itrue if there exists at least one set of two data points,
+     * Tests that lic6 returns true if there exists at least one set of two data points,
      * separated by exactly kPts consecutive intervening points, which are a distance greater than the length1,
      * apart AND there exists at least one set of two data points, separated by exactly kPts consecutive
      * intervening points, that are a distance less than the length2, apart.
@@ -671,7 +671,7 @@ class DecideTest {
      * Expected value: true
      */
     @Test
-    void lic12() {
+    void testLic12() {
         ArrayList<Point2D.Double> points = new ArrayList<>();
         Parameters parameters = new Parameters();
         Decide decide1 = new Decide();
@@ -871,7 +871,7 @@ class DecideTest {
      * Expected value: false
      **/
     @Test
-    void lic6() {
+    void testLic6() {
         ArrayList<Point2D.Double> points = new ArrayList<>();
         Point2D.Double point1 = new Point2D.Double(-2, 0);
         Point2D.Double point2 = new Point2D.Double(0, 4);
@@ -926,4 +926,37 @@ class DecideTest {
     }
 
 
+    /**
+     * Tests that lic1 returns true if there exists three consecutive
+     * data points that cannot be contained in a circle with radius1.
+     * cannot be contained witih
+     * <p>
+     * Test case 1:
+     * points = (0, 2), (0, 0), (-1, -1)
+     * Expected value: true
+     * <p>
+     * Test case 2:
+     * points = (0, 2), (0, 0), (-1, -1)
+     * Expected value: false
+     */
+    @Test
+    void testLic1() {
+        Decide decide = new Decide();
+        decide.parameters = new Parameters();
+
+        ArrayList<Point2D.Double> points = new ArrayList<>();
+        points.add(new Point2D.Double(0, 2));
+        points.add(new Point2D.Double(2, 0));
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(-1, -1));
+
+        decide.points = points;
+
+
+        decide.parameters.radius1 = 1;
+        assertTrue(decide.lic1());
+
+        decide.parameters.radius1 = 5;
+        assertFalse(decide.lic1());
+    }
 }
