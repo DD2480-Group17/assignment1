@@ -17,7 +17,8 @@ public class Decide {
     //Intermediate results
     boolean[] cmv = new boolean[15];
     boolean[][] pum = new boolean[15][15];
-
+    boolean[] fuv = new boolean[15];
+    
     /**
      * Empty constructor
      */
@@ -480,5 +481,30 @@ public class Decide {
         // INVARIANT: the second part of the condition is not satisfied.
         return false;
     }
+    
+    /**
+     * Calculates entries in FUV vector.for all i, FUV[i] is set to true if PUV[i] is false 
+     * (indicating that the associated LIC should not hold back launch) 
+     * or if for all elements i,j, i!=j, in PUM row i are true.
+     */
+	void calcFUV() {
+
+		for (int i = 0; i < fuv.length; i++) {
+			fuv[i] = false;
+		}
+
+		for (int i = 0; i < fuv.length; i++) {
+			if (!puv[i])
+				fuv[i] = true;
+			else {
+				for (int j = 0; j < pum[i].length; j++) {
+					if (i != j && pum[i][j]) {
+						fuv[i] = true;
+						break;
+					}
+				}
+			}
+		}
+	}
 
 }

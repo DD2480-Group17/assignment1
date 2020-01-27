@@ -732,6 +732,49 @@ class DecideTest {
         decide2.points = points;
 
         assertTrue(decide2.lic12());
+    }
+    
+    /**
+     * Tests that calcFUV works correctly. i.e. for all i, FUV[i] is set to true if PUV[i] is false 
+     * or if for all elements i,j, i!=j, in PUM row i are true.
+     */
+    @Test
+    void testFUV() {
+    	Decide d = new Decide();
+    	boolean[] puv = new boolean[15];
+    	boolean[][] pum = d.pum;
+    	
+    	d.puv = puv;
+    	
+    	// test case: puv[1] == false && for all i, pum[1][i] == false => fuv[1] = true; 
+    	puv[1] = false;
+    	d.calcFUV();
+    	assertTrue(d.fuv[1]);
+    	
+    	// test case: puv[1] == true && for all i, pum[1][i] == false => fuv[1] = false; 
+    	puv[1] = true;
+    	d.calcFUV();
+    	assertFalse(d.fuv[1]);
 
+    	// test case: puv[1] == false && for all i, pum[1][i] == true => fuv[1] = true; 
+    	puv[1] = false;
+    	pum[1][0] = true;
+    	pum[1][1] = true;
+    	pum[1][2] = true;
+    	pum[1][3] = true;
+    	pum[1][4] = true;
+    	pum[1][5] = true;
+    	pum[1][6] = true;
+    	pum[1][7] = true;
+    	pum[1][8] = true;
+    	pum[1][9] = true;
+    	pum[1][10] = true;
+    	pum[1][11] = true;
+    	pum[1][12] = true;
+    	pum[1][13] = true;
+    	pum[1][14] = true;
+    	
+    	d.calcFUV();
+    	assertTrue(d.fuv[1]);
     }
 }
