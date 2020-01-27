@@ -1060,4 +1060,72 @@ class DecideTest {
         decide.parameters.radius1 = 5;
         assertFalse(decide.lic1());
     }
+    
+	/**
+	 * Tests that cmv calculates lic0 to lic14 in a correct way.
+	 */
+	void calcCmv() {
+		// test 1: (area of one triangle == 4.0) && (area1 == 3.0). This should lead to
+		// expected value of true of lic3.
+		Decide d = new Decide();
+
+		ArrayList<Point2D.Double> points = new ArrayList<>();
+		points.add(new Point2D.Double(0, 0));
+		points.add(new Point2D.Double(0, 4));
+		points.add(new Point2D.Double(2, 0));
+
+		Parameters ps = new Parameters();
+		ps.area1 = 3.0;
+
+		d.points = points;
+		d.parameters = ps;
+
+		assertTrue(d.lic3());
+		d.calcCmv();
+
+		assertFalse(d.cmv[0]);
+		assertFalse(d.cmv[1]);
+		assertFalse(d.cmv[2]);
+
+		assertTrue(d.cmv[3]);
+
+		assertFalse(d.cmv[4]);
+		assertFalse(d.cmv[5]);
+		assertFalse(d.cmv[6]);
+		assertFalse(d.cmv[7]);
+		assertFalse(d.cmv[8]);
+		assertFalse(d.cmv[9]);
+		assertFalse(d.cmv[10]);
+		assertFalse(d.cmv[11]);
+		assertFalse(d.cmv[12]);
+		assertFalse(d.cmv[13]);
+		assertFalse(d.cmv[14]);
+
+		// -------------------------------------
+
+		// test 1: (area of one triangle == 4.0) && (area1 == 4.0). This should lead to
+		// expected value of false of lic3.
+		ps.area1 = 4.0;
+
+		assertFalse(d.lic3());
+
+		assertFalse(d.cmv[0]);
+		assertFalse(d.cmv[1]);
+		assertFalse(d.cmv[2]);
+
+		assertFalse(d.cmv[3]);
+
+		assertFalse(d.cmv[4]);
+		assertFalse(d.cmv[5]);
+		assertFalse(d.cmv[6]);
+		assertFalse(d.cmv[7]);
+		assertFalse(d.cmv[8]);
+		assertFalse(d.cmv[9]);
+		assertFalse(d.cmv[10]);
+		assertFalse(d.cmv[11]);
+		assertFalse(d.cmv[12]);
+		assertFalse(d.cmv[13]);
+		assertFalse(d.cmv[14]);
+
+	}
 }
