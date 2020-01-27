@@ -384,10 +384,10 @@ class DecideTest {
         decide.parameters = new Parameters();
 
         decide.parameters.radius1 = Math.sqrt(2);
-        assertFalse(decide.canContainPoints(point1, point2, point3));
+        assertFalse(decide.canContainPoints(point1, point2, point3, decide.parameters.radius1));
 
         decide.parameters.radius1 = 1.4;
-        assertTrue(decide.canContainPoints(point1, point2, point3));
+        assertTrue(decide.canContainPoints(point1, point2, point3, decide.parameters.radius1));
     }
 
 	/**
