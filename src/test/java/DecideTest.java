@@ -831,6 +831,96 @@ class DecideTest {
     	d.calcFUV();
     	assertTrue(d.fuv[1]);
     }
+    
+	/**
+	 * Tests if true if There exists at least one set of three data points,
+	 * separated by exactly A_PTS and B_PTS consecutive intervening points,
+	 * respectively, that cannot be contained within or on a circle of radius
+	 * RADIUS1. In addition, there exists at least one set of three data points
+	 * (which can be the same or different from the three data points just
+	 * mentioned) separated by exactly A_PTS and B_PTS consecutive intervening
+	 * points, respectively, that can be contained in or on a circle of radius
+	 * RADIUS2. Both parts must be true for the LIC to be true. Otherwise, return
+	 * false. Also, return false when NUMPOINTS < 5.
+	 */
+    void testLic13() {
+        // test: Numpoints < 5
+        // && A_PTS == 1 && B_PTS == 2
+        // => lic13 returns false
+        Decide d = new Decide();
+        Parameters ps = new Parameters();
+        
+        ps.radius1 = 2;
+        ps.radius2 = 1;
+        ps.aPts = 1;
+        ps.bPts = 2;
+        
+        ArrayList<Point2D.Double> points = new ArrayList<>();
+        points.add(new Point2D.Double(1, 0)); // first point
+        points.add(new Point2D.Double(0, 0)); // second point
+        points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), Math.sin(Math.PI / 4.0))); // third point
+
+        d.points = points;
+        d.parameters = ps;
+
+        assertFalse(d.lic13());
+
+        // --------------------------------------------
+        // test: Numpoints >= 5 && radius1 == 3 && radius2 == 0
+        // && A_PTS == 1 && B_PTS == 2 && circle1 radius > 2 && no circle radius < 0 
+        // => lic13 returns false
+        d = new Decide();
+        ps = new Parameters();
+
+        ps.radius1 = 2;
+        ps.radius2 = 0;
+        ps.aPts = 1;
+        ps.bPts = 2;
+        
+        points = new ArrayList<>();
+        
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(3, 0)); // first point
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(0, 0)); // second point
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(0, 3)); // third point
+        points.add(new Point2D.Double(0, 0));
+
+        d.points = points;
+        d.parameters = ps;
+
+        assertFalse(d.lic13());
+
+        // --------------------------------------------
+        // test: Numpoints >= 5 && radius1 == 2 && radius2 == 1
+        // && A_PTS == 1 && B_PTS == 2 && circle1 radius  > 2 && circle2 radius < 1 
+        // => lic13 returns true
+        d = new Decide();
+        ps = new Parameters();
+
+        ps.radius1 = 2;
+        ps.radius2 = 1;
+        ps.aPts = 1;
+        ps.bPts = 2;
+        
+        points = new ArrayList<>();
+        
+        points.add(new Point2D.Double(1, 0)); // first point - less than (circle), radius == 1.0
+        points.add(new Point2D.Double(3, 0)); // first point - large than (circle), radius == 3.0
+        points.add(new Point2D.Double(0, 0)); // second point - less than (circle), radius == 1.0
+        points.add(new Point2D.Double(0, 0)); // second point - large than (circle), radius == 3.0
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(0, 1)); // third point - less than (circle), radius == 1.0
+        points.add(new Point2D.Double(0, 3)); // third point - large than (circle), radius == 3.0
+        points.add(new Point2D.Double(0, 0));
+
+        d.points = points;
+        d.parameters = ps;
+
+        assertTrue(d.lic13());
+    }
 
     /**
      * Tests that lic6 returns true if there exists at least one set of nPts consecutive data points such that
@@ -937,4 +1027,5 @@ class DecideTest {
 
         assertEquals(4.0, decide.distPointLine(point4, point5, point6));
     }
+
 }
