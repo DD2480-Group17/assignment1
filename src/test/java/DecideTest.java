@@ -384,10 +384,10 @@ class DecideTest {
         decide.parameters = new Parameters();
 
         decide.parameters.radius1 = Math.sqrt(2);
-        assertFalse(decide.canContainPoints(point1, point2, point3));
+        assertFalse(decide.canContainPoints(point1, point2, point3, decide.parameters.radius1));
 
         decide.parameters.radius1 = 1.4;
-        assertTrue(decide.canContainPoints(point1, point2, point3));
+        assertTrue(decide.canContainPoints(point1, point2, point3, decide.parameters.radius1));
     }
 
 	/**
@@ -851,11 +851,11 @@ class DecideTest {
      * dist = 5.0
      * Expected value: false
      *
-     * Test case 3:
+     * Test case 3 - Identical points:
      * points = (-2, 0), (5, 3), (0, 0), (-2, 0)
      * nPts = 4
      * dist = 1.0
-     * Expected value: true
+     * Expected value: false
      **/
     @Test
     void lic6() {
@@ -894,7 +894,7 @@ class DecideTest {
 
         ArrayList<Point2D.Double> points3 = new ArrayList<>();
         Point2D.Double point7 = new Point2D.Double(-2, 0);
-        Point2D.Double point8 = new Point2D.Double(5, 3);
+        Point2D.Double point8 = new Point2D.Double(-2, 2);
         Point2D.Double point9 = new Point2D.Double(0,0);
         Point2D.Double point10 = new Point2D.Double(-2,0);
         points3.add(point7);
@@ -904,12 +904,12 @@ class DecideTest {
 
         Decide decide3 = new Decide();
         Parameters parameters3 = new Parameters();
-        parameters3.dist = 1.0;
+        parameters3.dist = 3.0;
         parameters3.nPts = 4;
         decide3.parameters = parameters3;
         decide3.points = points3;
 
-        assertTrue(decide1.lic6());
+        assertFalse(decide3.lic6());
     }
 
     /**

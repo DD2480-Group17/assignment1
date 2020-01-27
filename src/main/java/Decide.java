@@ -99,13 +99,11 @@ public class Decide {
         // and check two steps backwards.
         for (int i = 2; i < points.size(); i++) {
 
-            Point2D point0 = points.get(i - 2);
-            Point2D point1 = points.get(i - 1);
-            Point2D point2 = points.get(i);
+			Point2D.Double point0 = points.get(i - 2);
+			Point2D.Double point1 = points.get(i - 1);
+			Point2D.Double point2 = points.get(i);
 
-            double triangleArea = Math.abs(
-                    (point0.getX() * (point1.getY() - point2.getY()) + point1.getX() * (point2.getY() - point0.getY())
-                            + point2.getX() * (point0.getY() - point1.getY())) / 2.0);
+			double triangleArea = triangleArea(point0, point1, point2);
 
             if (triangleArea > area1)
                 return true;
@@ -235,7 +233,7 @@ public class Decide {
             Point2D point1 = points.get(i - parameters.aPts - parameters.bPts - 2);
             Point2D point2 = points.get(i - parameters.bPts - 1);
             Point2D point3 = points.get(i);
-            if (canContainPoints(point1, point2, point3)) {
+            if (canContainPoints(point1, point2, point3, parameters.radius1)) {
                 return true;
             }
         }
@@ -247,15 +245,16 @@ public class Decide {
      * @param point1 point 1 used in smallest enclosing circle
      * @param point2 point 2 used in smallest enclosing circle
      * @param point3 point 3 used in smallest enclosing circle
-     * @return true, if the three points can not be contained in a circle of radius1
+     * @param r		 wanted radius of the smallest enclosing circle.
+     * @return true, if the three points can not be contained in a circle of radius r
      */
-    public boolean canContainPoints(Point2D point1, Point2D point2, Point2D point3) {
+    public boolean canContainPoints(Point2D point1, Point2D point2, Point2D point3, double r) {
         ArrayList<Point> tempPoints = new ArrayList<>();
         tempPoints.add(new Point(point1));
         tempPoints.add(new Point(point2));
         tempPoints.add(new Point(point3));
         double radius = SmallestEnclosingCircle.makeCircle(tempPoints).r;
-        return radius > parameters.radius1;
+        return radius > r;
     }
 
 	/**
@@ -565,15 +564,13 @@ public class Decide {
             //the points in the
             if ((points.get(i).getX() == points.get(parameters.nPts - 1).getX()) && (points.get(i).getY() == points.get(parameters.nPts - 1).getY()) && i != parameters.nPts - 1) {
 
-                double sumDist = 0;
                 for (int j = 0; j < parameters.nPts - 2; j++) {
-                    double dist = dist(points.get(0), points.get(j + 1));
-                    sumDist += dist;
+                    if (dist(points.get(0), points.get(j + 1)) > parameters.dist) {
+                        return true;
+                    }
                 }
+                return false;
 
-                if (sumDist > parameters.dist) {
-                    return true;
-                }
             } else {
                 for (int j = 1; j < parameters.nPts - 1; j++) {
 
