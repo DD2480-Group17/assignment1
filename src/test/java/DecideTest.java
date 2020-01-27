@@ -560,8 +560,8 @@ class DecideTest {
      * Test case 1:
      * intput:
      * points = (-1, 0), (1, 0), (0, 5), (1, 1), (1, 0.5), (2, 0), (0.5, 0), (-0.5, 1)
-     * epts = 2, fpts = 1, area1 = 6
-     * Expected value: True
+     * epts = 2, fpts = 1, area1 = 10
+     * Expected value: False
      * <p>
      * Test case 2:
      * intput:
@@ -592,10 +592,10 @@ class DecideTest {
 
         parameters.ePts = 2;
         parameters.fPts = 1;
-        parameters.area1 = 6;
+        parameters.area1 = 10;
         decide.points = test1;
         decide.parameters = parameters;
-        assertTrue(decide.lic10());
+        assertFalse(decide.lic10());
 
         //Test 2
         parameters.area1 = 8;
