@@ -409,4 +409,76 @@ public class Decide {
 
         return false;
     }
+    
+    /**
+     * Returns true if there exists at least one set of three data points, 
+     * separated by exactly E_PTS and F_PTS consecutive
+     * intervening points, respectively, that are the vertices of a triangle with area greater
+     * than AREA1. In addition, there exist three data points (which can be the same or different
+     * from the three data points just mentioned) separated by exactly E PTS and F PTS consecutive
+     * intervening points, respectively, that are the vertices of a triangle with area less than
+     * AREA2. Both parts must be true for the LIC to be true. Otherwise, return false.
+     * Also, return false when NUMPOINTS < 5. 
+     * 
+     * Assumed: 0 <= AREA2 and 0 <= AREA1
+     *
+     * @return true if if there exists at least one set of three data points, 
+     * separated by exactly E_PTS and F_PTS consecutive
+     * intervening points, respectively, that are the vertices of a triangle with area greater
+     * than AREA1. In addition, there exist three data points (which can be the same or different
+     * from the three data points just mentioned) separated by exactly E PTS and F PTS consecutive
+     * intervening points, respectively, that are the vertices of a triangle with area less than
+     * AREA2. Both parts must be true for the LIC to be true. Otherwise, return false.
+     * Also, return false when NUMPOINTS < 5.
+     */
+    boolean lic14() {
+
+        if (points.size() < 5)
+            return false;
+
+        // ------------------------------------------
+
+        // INVARIANT: for some j,
+        // ..., points[j], ..., points[j+E_PTS+1], ...,
+        // points[j+E_PTS+1+F_PTS+1] == points[j+E_PTS+F_PTS+2], ...
+
+        boolean result = false;
+        
+        for (int i = parameters.ePts + parameters.fPts + 2; i < points.size(); i++) {
+            Point2D.Double point0 = points.get(i - parameters.ePts - parameters.fPts - 2);
+            Point2D.Double point1 = points.get(i - parameters.fPts - 1);
+            Point2D.Double point2 = points.get(i);
+
+            double triangleArea = triangleArea(point0, point1, point2);
+
+            if (triangleArea > parameters.area1) {
+            	result = true;
+            	break;
+            }
+        }
+
+        if (!result) {
+        	// INVARIANT: first part of the condition is not satisfied.
+        	return false;
+        }
+        	
+        // INVARIANT: First part is satisfied.
+        
+        for (int i = parameters.ePts + parameters.fPts + 2; i < points.size(); i++) {
+        	Point2D.Double point0 = points.get(i - parameters.ePts - parameters.fPts - 2);
+            Point2D.Double point1 = points.get(i - parameters.fPts - 1);
+            Point2D.Double point2 = points.get(i);
+
+            double triangleArea = triangleArea(point0, point1, point2);
+
+            if (triangleArea < parameters.area2) {
+            	// INVARIANT: both parts of the condition are satisfied. 
+            	return true;
+            }
+        }
+        
+        // INVARIANT: the second part of the condition is not satisfied.
+        return false;
+    }
+
 }

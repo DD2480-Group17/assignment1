@@ -583,6 +583,96 @@ class DecideTest {
 
         assertEquals(4.5, decide.triangleArea(a, b, d));
     }
+    
+    /**
+     * Tests if lic14 returns true if there exists at least one set of three data points, 
+     * separated by exactly E_PTS and F_PTS consecutive
+     * intervening points, respectively, that are the vertices of a triangle with area greater
+     * than AREA1. In addition, there exist three data points (which can be the same or different
+     * from the three data points just mentioned) separated by exactly E PTS and F PTS consecutive
+     * intervening points, respectively, that are the vertices of a triangle with area less than
+     * AREA2. Both parts must be true for the LIC to be true. Otherwise, return false.
+     * Also, return false when NUMPOINTS < 5.
+     */
+    void testLic14() {
+        // test: Numpoints < 5
+        // && E_PTS == 1 && F_PTS == 2
+        // => lic14 returns false
+        Decide d = new Decide();
+        Parameters ps = new Parameters();
+        
+        ps.area1 = 2;
+        ps.area2 = 1;
+        ps.ePts = 1;
+        ps.fPts = 2;
+        
+        ArrayList<Point2D.Double> points = new ArrayList<>();
+        points.add(new Point2D.Double(1, 0)); // first point
+        points.add(new Point2D.Double(0, 0)); // second point
+        points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), Math.sin(Math.PI / 4.0))); // third point
+
+        d.points = points;
+        d.parameters = ps;
+
+        assertFalse(d.lic14());
+
+        // --------------------------------------------
+        // test: Numpoints >= 5 && area1 == 2 && area2 == 0
+        // && E_PTS == 1 && F_PTS == 2 && area of one triangle > 2 && no triangle area < 0 
+        // => lic14 returns false
+        d = new Decide();
+        ps = new Parameters();
+
+        ps.area1 = 2;
+        ps.area2 = 0;
+        ps.ePts = 1;
+        ps.fPts = 2;
+        
+        points = new ArrayList<>();
+        
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(6, 0)); // first point
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(0, 0)); // second point
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(0, 1)); // third point
+        points.add(new Point2D.Double(0, 0));
+
+        d.points = points;
+        d.parameters = ps;
+
+        assertFalse(d.lic14());
+
+        // --------------------------------------------
+        // test: Numpoints >= 5 && area1 == 2 && area2 == 1
+        // && E_PTS == 1 && F_PTS == 2 && area of one triangle > 2 && another triangle area < 1 
+        // => lic14 returns true
+        d = new Decide();
+        ps = new Parameters();
+
+        ps.area1 = 2;
+        ps.area2 = 1;
+        ps.ePts = 1;
+        ps.fPts = 2;
+        
+        points = new ArrayList<>();
+        
+        points.add(new Point2D.Double(1, 0)); // first point - less than (triangle), area == 0.5
+        points.add(new Point2D.Double(6, 0)); // first point - large than (triangle), area == 3.0
+        points.add(new Point2D.Double(0, 0)); // second point - less than (triangle), area == 0.5
+        points.add(new Point2D.Double(0, 0)); // second point - large than (triangle), area == 3.0
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(0, 1)); // third point - less than (triangle), area == 0.5
+        points.add(new Point2D.Double(0, 1)); // third point - large than (triangle), area == 3.0
+        points.add(new Point2D.Double(0, 0));
+
+        d.points = points;
+        d.parameters = ps;
+
+        assertTrue(d.lic14());
+    }
+
     /**
      * Tests that lic6 returns true itrue if there exists at least one set of two data points,
      * separated by exactly kPts consecutive intervening points, which are a distance greater than the length1,
