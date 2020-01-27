@@ -455,6 +455,25 @@ class DecideTest {
 		assertTrue(d.lic9());
 	}
 
+    /**
+     * Preliminary Unlocking Matrix calculation test
+     *
+     * Tests that pum[0][0] and pum[0][1] are calculated correctly, given that
+     * cmv[0] is true, lcm[0][0] is ANDD and lcm[0][1] is ORR
+     */
+	@Test
+    void calcPumTest() {
+        IOHandler ioHandler = new IOHandler();
+        Decide decide = ioHandler.parseDecideInput(TestCases.test2);
+
+        decide.calcPum();
+        assertFalse(decide.pum[0][0]);
+
+        decide.cmv[0] = true;
+        decide.calcPum();
+        assertTrue(decide.pum[0][0]);
+        assertTrue(decide.pum[0][1]);
+    }
 
     /**
      * Tests Launch Interceptor Condition 11

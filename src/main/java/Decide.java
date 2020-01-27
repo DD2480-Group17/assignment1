@@ -8,11 +8,15 @@ public class Decide {
         NOTUSED
     }
 
+    //Input parameters
     ArrayList<Point2D.Double> points;
     Parameters parameters;
     BOOLEAN_OPERATOR[][] lcm;
     boolean[] puv;
 
+    //Intermediate results
+    boolean[] cmv = new boolean[15];
+    boolean[][] pum = new boolean[15][15];
 
     /**
      * Empty constructor
@@ -289,7 +293,33 @@ public class Decide {
         if (angle < 0)
             angle = angle + 2 * Math.PI;
 
-        return angle;
+		return angle;
+	}
+
+    /**
+     * Calculates the Preliminary Unlocking Matrix (PUM)
+     * LCM[i,j] represents the boolean operator to be applied to CMV[i] and CMV[j].
+     * PUM[i,j] is set according to the result of this operation. If LCM[i,j] is NOTUSED, then PUM[i,j]
+     * should be set to true. If LCM[i,j] is ANDD, PUM[i,j] should be set to true only if (CMV[i] AND
+     * CMV[j]) is true. If LCM[i,j] is ORR, PUM[i,j] should be set to true if (CMV[i] OR CMV[j]) is
+     * true.
+     */
+    void calcPum() {
+        for (int i = 0; i < lcm.length; i++) {
+            for (int j = 0; j < lcm[0].length; j++) {
+                switch (lcm[i][j]) {
+                    case ORR:
+                        pum[i][j] = cmv[i] || cmv[j];
+                        break;
+                    case ANDD:
+                        pum[i][j] = cmv[i] && cmv[j];
+                        break;
+                    case NOTUSED:
+                        pum[i][j] = true;
+                        break;
+                }
+            }
+        }
     }
 
     /**
