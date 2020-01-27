@@ -178,7 +178,7 @@ class DecideTest {
      * there is no such set.
      */
     @Test
-    void testLIC3() {
+    void testLic3() {
         // test 1: (area of one triangle == 4.0) && (area1 == 3.0). This should lead to
         // expected value of true.
         Decide d = new Decide();
@@ -728,7 +728,7 @@ class DecideTest {
     }
 
     /**
-     * Tests that lic6 returns true itrue if there exists at least one set of two data points,
+     * Tests that lic6 returns true if there exists at least one set of two data points,
      * separated by exactly kPts consecutive intervening points, which are a distance greater than the length1,
      * apart AND there exists at least one set of two data points, separated by exactly kPts consecutive
      * intervening points, that are a distance less than the length2, apart.
@@ -749,7 +749,7 @@ class DecideTest {
      * Expected value: true
      */
     @Test
-    void lic12() {
+    void testLic12() {
         ArrayList<Point2D.Double> points = new ArrayList<>();
         Parameters parameters = new Parameters();
         Decide decide1 = new Decide();
@@ -830,5 +830,144 @@ class DecideTest {
     	
     	d.calcFUV();
     	assertTrue(d.fuv[1]);
+    }
+
+    /**
+     * Tests that lic6 returns true if there exists at least one set of nPts consecutive data points such that
+     * least one of the points lies a distance greater than DIST from the line between the first of these nPts points and the last.
+     * If the first and last points of these nPts are identical, then we compare the distance from that point to all
+     * the other nPts points.
+     * The condition is not met when numPoints < 3.
+     *
+     * Test case 1:
+     * points = (-2, 2), (0, 4), (2, 0)
+     * nPts = 3
+     * dist = 1.0
+     * Expected value: true
+     *
+     * Test case 2:
+     * points = (-2, 2), (-2, 2), (2, 0)
+     * nPts = 3
+     * dist = 5.0
+     * Expected value: false
+     *
+     * Test case 3 - Identical points:
+     * points = (-2, 0), (5, 3), (0, 0), (-2, 0)
+     * nPts = 4
+     * dist = 1.0
+     * Expected value: false
+     **/
+    @Test
+    void testLic6() {
+        ArrayList<Point2D.Double> points = new ArrayList<>();
+        Point2D.Double point1 = new Point2D.Double(-2, 0);
+        Point2D.Double point2 = new Point2D.Double(0, 4);
+        Point2D.Double point3 = new Point2D.Double(2,0);
+        Decide decide1 = new Decide();
+        Parameters parameters1 = new Parameters();
+        parameters1.nPts = 3;
+        parameters1.dist = 1.0;
+        decide1.parameters = parameters1;
+        decide1.points = points;
+
+        points.add(point1);
+        points.add(point2);
+        points.add(point3);
+
+        assertTrue(decide1.lic6());
+
+        ArrayList<Point2D.Double> points2 = new ArrayList<>();
+        Point2D.Double point4 = new Point2D.Double(-2,2);
+        Point2D.Double point5 = new Point2D.Double(-2,2);
+        Point2D.Double point6 = new Point2D.Double(2,0);
+        points2.add(point4);
+        points2.add(point5);
+        points2.add(point6);
+        Decide decide2 = new Decide();
+        Parameters parameters2 = new Parameters();
+        parameters2.nPts = 3;
+        parameters2.dist = 5.0;
+        decide2.parameters = parameters2;
+        decide2.points = points2;
+
+        assertFalse(decide2.lic6());
+
+        ArrayList<Point2D.Double> points3 = new ArrayList<>();
+        Point2D.Double point7 = new Point2D.Double(-2, 0);
+        Point2D.Double point8 = new Point2D.Double(-2, 2);
+        Point2D.Double point9 = new Point2D.Double(0,0);
+        Point2D.Double point10 = new Point2D.Double(-2,0);
+        points3.add(point7);
+        points3.add(point8);
+        points3.add(point9);
+        points3.add(point10);
+
+        Decide decide3 = new Decide();
+        Parameters parameters3 = new Parameters();
+        parameters3.dist = 3.0;
+        parameters3.nPts = 4;
+        decide3.parameters = parameters3;
+        decide3.points = points3;
+
+        assertFalse(decide3.lic6());
+    }
+
+    /**
+     * Tests that distPointLine returns the distance between a point and a line.
+     * Test case 1:
+     * points = (2, -1), (-2, 2), (-2, -1)
+     * Expected value: 3.0
+     *
+     * Test case 2:
+     * points = (-2, 0), (0, 4), (2, 0)
+     * Expected value: 4.0
+     */
+    @Test
+    void testDistPointLine() {
+        Decide decide = new Decide();
+        Point2D.Double point1 = new Point2D.Double(2, -1);
+        Point2D.Double point2 = new Point2D.Double(-2, 2);
+        Point2D.Double point3 = new Point2D.Double(-2,-1);
+
+        assertEquals(3.0, decide.distPointLine(point1, point2, point3));
+
+        Point2D.Double point4 = new Point2D.Double(-2, 0);
+        Point2D.Double point5 = new Point2D.Double(0, 4);
+        Point2D.Double point6 = new Point2D.Double(2,0);
+
+        assertEquals(4.0, decide.distPointLine(point4, point5, point6));
+    }
+
+    /**
+     * Tests that lic1 returns true if there exists three consecutive
+     * data points that cannot be contained in a circle with radius1.
+     * cannot be contained witih
+     *
+     * Test case 1:
+     * points = (0, 2), (0, 0), (-1, -1)
+     * Expected value: true
+     *
+     * Test case 2:
+     * points = (0, 2), (0, 0), (-1, -1)
+     * Expected value: false
+     */
+    @Test
+    void testLic1() {
+        Decide decide = new Decide();
+        decide.parameters = new Parameters();
+
+        ArrayList<Point2D.Double> points = new ArrayList<>();
+        points.add(new Point2D.Double(0, 2));
+        points.add(new Point2D.Double(2, 0));
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(-1, -1));
+
+        decide.points = points;
+
+        decide.parameters.radius1 = 1;
+        assertTrue(decide.lic1());
+
+        decide.parameters.radius1 = 5;
+        assertFalse(decide.lic1());
     }
 }
