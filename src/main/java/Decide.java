@@ -371,8 +371,7 @@ public class Decide {
         if (points.size() < 5)
             return false;
         for (int i = 0; i + parameters.ePts + parameters.fPts + 2 < points.size(); i++) {
-            if (triangleArea(points.get(i), points.get(i + parameters.ePts + 1), points.get(i + parameters.ePts + parameters.fPts + 2)) > parameters.area1 ||
-                    triangleArea(points.get(i), points.get(i + parameters.fPts + 1), points.get(i + parameters.fPts + parameters.ePts + 2)) > parameters.area1) {
+            if (triangleArea(points.get(i), points.get(i + parameters.ePts + 1), points.get(i + parameters.ePts + parameters.fPts + 2)) > parameters.area1) {
                 return true;
             }
         }
