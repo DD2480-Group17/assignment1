@@ -626,7 +626,7 @@ public class Decide {
 
         for (int i = 0; i <= (points.size() - parameters.nPts); i++) {
             //if the first and last points are identical, check the distance from the point to the rest of
-            //the points in the
+            //the points in the set of nPts consecutive data points
             if ((points.get(i).getX() == points.get(parameters.nPts - 1).getX()) && (points.get(i).getY() == points.get(parameters.nPts - 1).getY()) && i != parameters.nPts - 1) {
 
                 for (int j = 0; j < parameters.nPts - 2; j++) {
@@ -680,4 +680,17 @@ public class Decide {
         }
     }
 
+    /**
+     * Launch Interceptor Condition 1
+     * @return true if there exists at least one set of three consecutive data points that cannot all be contained
+     * within or on a circle of radius1
+     */
+    boolean lic1() {
+        for (int i = 0; i < (points.size()-2); i++) {
+            if (canContainPoints(points.get(i), points.get(i+1), points.get(i+2), parameters.radius1)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
