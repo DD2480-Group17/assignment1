@@ -235,7 +235,7 @@ public class Decide {
             Point2D point1 = points.get(i - parameters.aPts - parameters.bPts - 2);
             Point2D point2 = points.get(i - parameters.bPts - 1);
             Point2D point3 = points.get(i);
-            if (canContainPoints(point1, point2, point3)) {
+            if (canContainPoints(point1, point2, point3, parameters.radius1)) {
                 return true;
             }
         }
@@ -247,15 +247,16 @@ public class Decide {
      * @param point1 point 1 used in smallest enclosing circle
      * @param point2 point 2 used in smallest enclosing circle
      * @param point3 point 3 used in smallest enclosing circle
-     * @return true, if the three points can not be contained in a circle of radius1
+     * @param r		 wanted radius of the smallest enclosing circle.
+     * @return true, if the three points can not be contained in a circle of radius r
      */
-    public boolean canContainPoints(Point2D point1, Point2D point2, Point2D point3) {
+    public boolean canContainPoints(Point2D point1, Point2D point2, Point2D point3, double r) {
         ArrayList<Point> tempPoints = new ArrayList<>();
         tempPoints.add(new Point(point1));
         tempPoints.add(new Point(point2));
         tempPoints.add(new Point(point3));
         double radius = SmallestEnclosingCircle.makeCircle(tempPoints).r;
-        return radius > parameters.radius1;
+        return radius > r;
     }
 
 	/**
@@ -544,5 +545,5 @@ public class Decide {
 			}
 		}
 	}
-
+	
 }
