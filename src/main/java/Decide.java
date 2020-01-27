@@ -23,10 +23,11 @@ public class Decide {
 
     /**
      * Constructor
-     * @param points 2D planar point
+     *
+     * @param points     2D planar point
      * @param parameters 19 input parameters
-     * @param lcm logical connector matrix
-     * @param puv preliminary unlocking vector
+     * @param lcm        logical connector matrix
+     * @param puv        preliminary unlocking vector
      */
     public Decide(ArrayList<Point2D.Double> points, Parameters parameters, BOOLEAN_OPERATOR[][] lcm, boolean[] puv) {
         this.points = points;
@@ -128,13 +129,13 @@ public class Decide {
         }
 
         //check if there exists a qpts consecutive set of data points
-        for(int i = 0; i + parameters.qPts-1 < points.size(); i++) {
+        for (int i = 0; i + parameters.qPts - 1 < points.size(); i++) {
 
             //check if the data set contains more then quad quads
             boolean[] foundQuads = new boolean[4];
-            for(int j = 0; j < parameters.qPts; j++){
+            for (int j = 0; j < parameters.qPts; j++) {
 
-                Point2D.Double point = points.get(i+j);
+                Point2D.Double point = points.get(i + j);
 
                 //Is the point in quadrant 1
                 if (point.x >= 0 && point.y >= 0) {
@@ -161,7 +162,7 @@ public class Decide {
                 }
             }
             //if we have point in more the quads quadrants return true
-            if(numberOfquadrants > parameters.quads){
+            if (numberOfquadrants > parameters.quads) {
                 return true;
             }
         }
@@ -170,11 +171,12 @@ public class Decide {
 
     /**
      * Launch Interceptor Condition 5
+     *
      * @return true if there exists one set of two consecutive data points such that X[j]-X[j-1] < 0
      */
-    boolean lic5(){
-        for(int j = 1; j < points.size(); j++){
-            if((points.get(j).x - points.get(j-1).x) < 0){
+    boolean lic5() {
+        for (int j = 1; j < points.size(); j++) {
+            if ((points.get(j).x - points.get(j - 1).x) < 0) {
                 return true;
             }
         }
@@ -195,6 +197,7 @@ public class Decide {
 
     /**
      * Launch Interceptor Condition 7
+     *
      * @return true if there exists at least one set of two data points separated by exactly kPts consecutive
      * intervening points that are a distance greater than the length,LENGTH1, apart.
      * The condition is not met when numPoints < 3.
@@ -259,6 +262,54 @@ public class Decide {
 		return false;
 	}
 
+
+    /**
+     * Returns angle (in radians) that is formed between 3 points. 0 <= angle < 2pi.
+     * Angle is calculated counter-clockwise from vector point1 -> point0 towards
+     * vector point1 -> point2.
+     *
+     * @param point0 one point
+     * @param point1 vertex
+     * @param point2 another point
+     * @return angle (in radians) formed by point0, point1 and point2. 0 <= angle <
+     * 2pi. Angle is calculated counter-clockwise from vector point1 ->
+     * point0 towards vector point1 -> point2.
+     */
+    private double calcAngle(Point2D point0, Point2D point1, Point2D point2) {
+        // the code used here is inspired by
+        // https://medium.com/@manivannan_data/find-the-angle-between-three-points-from-2d-using-python-348c513e2cd
+
+        double point1To0_x = point0.getX() - point1.getX();
+        double point1To0_y = point0.getY() - point1.getY();
+        double point1To2_x = point2.getX() - point1.getX();
+        double point1To2_y = point2.getY() - point1.getY();
+
+        double angle = Math.atan2(point1To2_y, point1To2_x) - Math.atan2(point1To0_y, point1To0_x);
+        // if angle is negative, add 2pi to angle.
+        if (angle < 0)
+            angle = angle + 2 * Math.PI;
+
+        return angle;
+    }
+
+    /**
+     * Launch Interceptor Condition 10
+     *
+     * @return true if There exists at least one set of three data points separated by exactly E_PTS and F_PTS
+     * consecutive intervening points, respectively, that are the vertices of a triangle with area greater than AREA1
+     */
+    boolean lic10() {
+        if (points.size() < 5)
+            return false;
+        for (int i = 0; i + parameters.ePts + parameters.fPts + 2 < points.size(); i++) {
+            if (triangleArea(points.get(i), points.get(i + parameters.ePts + 1), points.get(i + parameters.ePts + parameters.fPts + 2)) > parameters.area1 ||
+                    triangleArea(points.get(i), points.get(i + parameters.fPts + 1), points.get(i + parameters.fPts + parameters.ePts + 2)) > parameters.area1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Launch Interceptor Condition 11
      *
@@ -280,32 +331,18 @@ public class Decide {
         return false;
     }
 
-	/**
-	 * Returns angle (in radians) that is formed between 3 points. 0 <= angle < 2pi.
-	 * Angle is calculated counter-clockwise from vector point1 -> point0 towards
-	 * vector point1 -> point2.
-	 *
-	 * @param point0 one point
-	 * @param point1 vertex
-	 * @param point2 another point
-	 * @return angle (in radians) formed by point0, point1 and point2. 0 <= angle <
-	 *         2pi. Angle is calculated counter-clockwise from vector point1 ->
-	 *         point0 towards vector point1 -> point2.
-	 */
-	private double calcAngle(Point2D point0, Point2D point1, Point2D point2) {
-		// the code used here is inspired by
-		// https://medium.com/@manivannan_data/find-the-angle-between-three-points-from-2d-using-python-348c513e2cd
-
-		double point1To0_x = point0.getX() - point1.getX();
-		double point1To0_y = point0.getY() - point1.getY();
-		double point1To2_x = point2.getX() - point1.getX();
-		double point1To2_y = point2.getY() - point1.getY();
-
-		double angle = Math.atan2(point1To2_y, point1To2_x) - Math.atan2(point1To0_y, point1To0_x);
-		// if angle is negative, add 2pi to angle.
-		if (angle < 0)
-			angle = angle + 2 * Math.PI;
-
-		return angle;
-	}
+    /**
+     * trianlgeArea calculates the area formed by 3 data points
+     *
+     * @param point0
+     * @param point1
+     * @param point2
+     * @return the area of the tringle formed by point0, point1 and point2
+     */
+    double triangleArea(Point2D.Double point0, Point2D.Double point1, Point2D.Double point2) {
+        return Math.abs((
+                point0.getX() * (point1.getY() - point2.getY()) +
+                        point1.getX() * (point2.getY() - point0.getY()) +
+                        point2.getX() * (point0.getY() - point1.getY())) / 2.0);
+    }
 }
