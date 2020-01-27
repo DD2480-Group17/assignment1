@@ -545,5 +545,69 @@ public class Decide {
 			}
 		}
 	}
-	
+
+	/**
+	 * Launch condition 13.
+	 * 
+	 * Assumed: 0 <= Radius1 and 0 <= Radius2.
+	 *
+	 * @return true if There exists at least one set of three data points, separated
+	 *         by exactly A_PTS and B_PTS consecutive intervening points,
+	 *         respectively, that cannot be contained within or on a circle of
+	 *         radius RADIUS1. In addition, there exists at least one set of three
+	 *         data points (which can be the same or different from the three data
+	 *         points just mentioned) separated by exactly A_PTS and B_PTS
+	 *         consecutive intervening points, respectively, that can be contained
+	 *         in or on a circle of radius RADIUS2. Both parts must be true for the
+	 *         LIC to be true. Otherwise, return false. Also, return false when
+	 *         NUMPOINTS < 5.
+	 */
+	boolean lic13() {
+		if (points.size() < 5)
+			return false;
+
+		// ------------------------------------------
+
+		// INVARIANT: for some j,
+		// ..., points[j], ..., points[j+A_PTS+1], ...,
+		// points[j+A_PTS+1+B_PTS+1] == points[j+A_PTS+B_PTS+2], ...
+
+		boolean result = false;
+
+		for (int i = parameters.aPts + parameters.bPts + 2; i < points.size(); i++) {
+			Point2D.Double point0 = points.get(i - parameters.aPts - parameters.bPts - 2);
+			Point2D.Double point1 = points.get(i - parameters.bPts - 1);
+			Point2D.Double point2 = points.get(i);
+
+			boolean notContainedInCircle = canContainPoints(point0, point1, point2, parameters.radius1);
+
+			if (notContainedInCircle) {
+				result = true;
+				break;
+			}
+		}
+
+		if (!result) {
+			// INVARIANT: first part of the condition is not satisfied.
+			return false;
+		}
+
+		// INVARIANT: First part is satisfied.
+
+		for (int i = parameters.aPts + parameters.bPts + 2; i < points.size(); i++) {
+			Point2D.Double point0 = points.get(i - parameters.aPts - parameters.bPts - 2);
+			Point2D.Double point1 = points.get(i - parameters.bPts - 1);
+			Point2D.Double point2 = points.get(i);
+
+			boolean notContainedInCircle = canContainPoints(point0, point1, point2, parameters.radius2);
+
+			if (!notContainedInCircle) {
+				// INVARIANT: both parts of the condition are satisfied.
+				return true;
+			}
+		}
+
+		// INVARIANT: the second part of the condition is not satisfied.
+		return false;
+	}
 }
