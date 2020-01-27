@@ -99,13 +99,11 @@ public class Decide {
 		// and check two steps backwards.
 		for (int i = 2; i < points.size(); i++) {
 
-			Point2D point0 = points.get(i - 2);
-			Point2D point1 = points.get(i - 1);
-			Point2D point2 = points.get(i);
+			Point2D.Double point0 = points.get(i - 2);
+			Point2D.Double point1 = points.get(i - 1);
+			Point2D.Double point2 = points.get(i);
 
-			double triangleArea = Math.abs(
-					(point0.getX() * (point1.getY() - point2.getY()) + point1.getX() * (point2.getY() - point0.getY())
-							+ point2.getX() * (point0.getY() - point1.getY())) / 2.0);
+			double triangleArea = triangleArea(point0, point1, point2);
 
 			if (triangleArea > area1)
 				return true;
