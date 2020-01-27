@@ -336,6 +336,60 @@ class DecideTest {
         assertTrue(decide.lic7());
     }
 
+    /**
+     * Tests that lic8 returns true if there exists at least one set of three data points separated by exactly A PTS and B PTS
+     * consecutive intervening points, respectively, that cannot be contained within or on a circle of
+     * radius RADIUS1. The condition is not met when NUMPOINTS < 5.
+     */
+    @Test
+    void testLic8() {
+        Decide decide = new Decide();
+        decide.parameters = new Parameters();
+
+        ArrayList<Point2D.Double> points = new ArrayList<>();
+        points.add(new Point2D.Double(1, 1));
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(-1, 1));
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(-1, -1));
+
+        decide.points = points;
+        decide.parameters.aPts = 1;
+        decide.parameters.bPts = 1;
+
+        decide.parameters.radius1 = 1.4;
+        assertTrue(decide.lic8());
+
+        decide.parameters.radius1 = Math.sqrt(2);
+        assertFalse(decide.lic8());
+    }
+
+    /**
+     * Tests that canContainPoints correctly returns true if the three points can not be contained
+     * in a circle with radius1
+     *
+     * Test case: radius1 = sqrt(2)
+     * Expected value: false
+     *
+     * Test case: radius1 = 1.4
+     * Expected value: true
+     */
+    @Test
+    void testCanContainPoints() {
+        Point2D point1 = new Point2D.Double(1, 1);
+        Point2D point2 = new Point2D.Double(-1, 1);
+        Point2D point3 = new Point2D.Double(-1, -1);
+
+        Decide decide = new Decide();
+        decide.parameters = new Parameters();
+
+        decide.parameters.radius1 = Math.sqrt(2);
+        assertFalse(decide.canContainPoints(point1, point2, point3));
+
+        decide.parameters.radius1 = 1.4;
+        assertTrue(decide.canContainPoints(point1, point2, point3));
+    }
+
 	/**
 	 * Tests that Lic9 returns true if there exists at least one set of three data
 	 * points separated by exactly C_PTS and D_PTS consecutive intervening points,
