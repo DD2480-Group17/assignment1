@@ -344,5 +344,39 @@ public class Decide {
                 point0.getX() * (point1.getY() - point2.getY()) +
                         point1.getX() * (point2.getY() - point0.getY()) +
                         point2.getX() * (point0.getY() - point1.getY())) / 2.0);
+	}
+    /**
+     * Launch Interceptor Condition 12
+     * @return true if there exists at least one set of two data points, separated by exactly kPts consecutive
+     * intervening points, which are a distance greater than the length1, apart AND there exists
+     * at least one set of two data points, separated by exactly kPts consecutive intervening points,
+     * that are a distance less than the length2, apart.
+     * The condition is not met when numPoints < 3.
+     */
+    boolean lic12() {
+
+        if (points.size() < 3) {
+            return false;
+        }
+        int count = 0;
+        for (int i = 0; i < points.size() - parameters.kPts - 1; i++) {
+            if (dist(points.get(i), points.get(i + parameters.kPts + 1)) > parameters.length1) {
+                count++;
+                break;
+            }
+        }
+
+        for (int j = 0 ; j < points.size() - parameters.kPts - 1; j++) {
+            if (dist(points.get(j), points.get(j + parameters.kPts + 1)) < parameters.length2) {
+                count++;
+                break;
+            }
+        }
+
+        if (count == 2){
+            return true;
+        }
+
+        return false;
     }
 }
