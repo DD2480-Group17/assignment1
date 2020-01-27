@@ -82,37 +82,37 @@ public class Decide {
     }
 
     /**
-	 * Returns true if there is at least one set of three consecutive data points in
-	 * points Arraylist that are the vertices of a triangle with area > AREA1 (which
-	 * is parameters.area1). Otherwise, return false.
-	 *
-	 * @return true if there is at least one set of three consecutive data points in
-	 *         points Arraylist that are the vertices of a triangle with area >
-	 *         AREA1 (which is parameters.area1). Otherwise, false.
-	 */
-	public boolean lic3() {
-		// The formula used to calculate the area of the triangle comes from
-		// https://www.mathopenref.com/coordtrianglearea.html.
+     * Returns true if there is at least one set of three consecutive data points in
+     * points Arraylist that are the vertices of a triangle with area > AREA1 (which
+     * is parameters.area1). Otherwise, return false.
+     *
+     * @return true if there is at least one set of three consecutive data points in
+     * points Arraylist that are the vertices of a triangle with area >
+     * AREA1 (which is parameters.area1). Otherwise, false.
+     */
+    public boolean lic3() {
+        // The formula used to calculate the area of the triangle comes from
+        // https://www.mathopenref.com/coordtrianglearea.html.
 
-		double area1 = parameters.area1;
-		// begin from index 2 (3rd position in points arraylist)
-		// and check two steps backwards.
-		for (int i = 2; i < points.size(); i++) {
+        double area1 = parameters.area1;
+        // begin from index 2 (3rd position in points arraylist)
+        // and check two steps backwards.
+        for (int i = 2; i < points.size(); i++) {
 
-			Point2D point0 = points.get(i - 2);
-			Point2D point1 = points.get(i - 1);
-			Point2D point2 = points.get(i);
+            Point2D point0 = points.get(i - 2);
+            Point2D point1 = points.get(i - 1);
+            Point2D point2 = points.get(i);
 
-			double triangleArea = Math.abs(
-					(point0.getX() * (point1.getY() - point2.getY()) + point1.getX() * (point2.getY() - point0.getY())
-							+ point2.getX() * (point0.getY() - point1.getY())) / 2.0);
+            double triangleArea = Math.abs(
+                    (point0.getX() * (point1.getY() - point2.getY()) + point1.getX() * (point2.getY() - point0.getY())
+                            + point2.getX() * (point0.getY() - point1.getY())) / 2.0);
 
-			if (triangleArea > area1)
-				return true;
-		}
+            if (triangleArea > area1)
+                return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
     /**
      * lic4 checks if it exists QPTS consecutive data points in more then QUADS unique quadrants, where , the data point (0,0)
@@ -306,7 +306,6 @@ public class Decide {
 		return false;
 	}
 
-
     /**
      * Returns angle (in radians) that is formed between 3 points. 0 <= angle < 2pi.
      * Angle is calculated counter-clockwise from vector point1 -> point0 towards
@@ -333,8 +332,8 @@ public class Decide {
         if (angle < 0)
             angle = angle + 2 * Math.PI;
 
-		return angle;
-	}
+        return angle;
+    }
 
     /**
      * Calculates the Preliminary Unlocking Matrix (PUM)
@@ -413,9 +412,11 @@ public class Decide {
                 point0.getX() * (point1.getY() - point2.getY()) +
                         point1.getX() * (point2.getY() - point0.getY()) +
                         point2.getX() * (point0.getY() - point1.getY())) / 2.0);
-	}
+    }
+
     /**
      * Launch Interceptor Condition 12
+     *
      * @return true if there exists at least one set of two data points, separated by exactly kPts consecutive
      * intervening points, which are a distance greater than the length1, apart AND there exists
      * at least one set of two data points, separated by exactly kPts consecutive intervening points,
@@ -435,14 +436,14 @@ public class Decide {
             }
         }
 
-        for (int j = 0 ; j < points.size() - parameters.kPts - 1; j++) {
+        for (int j = 0; j < points.size() - parameters.kPts - 1; j++) {
             if (dist(points.get(j), points.get(j + parameters.kPts + 1)) < parameters.length2) {
                 count++;
                 break;
             }
         }
 
-        if (count == 2){
+        if (count == 2) {
             return true;
         }
 
@@ -545,4 +546,75 @@ public class Decide {
 		}
 	}
 
+    /**
+     * Launch Interceptor Condition 6 returns
+     *
+     * @return true if there exists at least one set of nPts consecutive data points such that
+     * least one of the points lies a distance greater than DIST from the line between the first of these nPts points and the last.
+     * If the first and last points of these nPts are identical, then we compare the distance from that point to all
+     * The condition is not met when numPoints < 3.
+     */
+    boolean lic6() {
+
+        if (points.size() < parameters.nPts || points.size() < 3) {
+            return false;
+        }
+
+        for (int i = 0; i <= (points.size() - parameters.nPts); i++) {
+            //if the first and last points are identical, check the distance from the point to the rest of
+            //the points in the
+            if ((points.get(i).getX() == points.get(parameters.nPts - 1).getX()) && (points.get(i).getY() == points.get(parameters.nPts - 1).getY()) && i != parameters.nPts - 1) {
+
+                double sumDist = 0;
+                for (int j = 0; j < parameters.nPts - 2; j++) {
+                    double dist = dist(points.get(0), points.get(j + 1));
+                    sumDist += dist;
+                }
+
+                if (sumDist > parameters.dist) {
+                    return true;
+                }
+            } else {
+                for (int j = 1; j < parameters.nPts - 1; j++) {
+
+                    if (distPointLine(points.get(i), points.get(i + j), points.get(i + parameters.nPts - 1)) > parameters.dist) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Calculates the distance between a single point and a line with Heron's formula.
+     *
+     * @param startPoint the start point of the line
+     * @param point      the point
+     * @param endPoint   the end point of the line
+     * @return the distance between the single point and the line
+     */
+    double distPointLine(Point2D.Double startPoint, Point2D.Double point, Point2D.Double endPoint) {
+        double lineDist = dist(startPoint, endPoint);
+        double pToStart = dist(point, startPoint);
+        double pToEnd = dist(point, endPoint);
+
+        if (((2 * Math.PI) - (calcAngle(startPoint, endPoint, point))) >= (Math.PI / 2) || (calcAngle(endPoint, startPoint, point) >= (Math.PI / 2))) {
+
+            if (pToStart > pToEnd) {
+                return pToEnd;
+            } else {
+                return pToStart;
+            }
+        } else {
+            //Heron's formula to find the area of the triangle that the point,
+            //startPoint and endPoint form. The height of the triangle is equal to the distance
+            //between the point and the line.
+            double s = (0.5) * (lineDist + pToStart + pToEnd);
+            double area = Math.sqrt(s * ((s - lineDist) * (s - pToStart) * (s - pToEnd)));
+            double distPointLine = (2 * area) / lineDist;
+
+            return distPointLine;
+        }
+    }
 }
