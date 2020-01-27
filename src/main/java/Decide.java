@@ -344,7 +344,6 @@ public class Decide {
                 point0.getX() * (point1.getY() - point2.getY()) +
                         point1.getX() * (point2.getY() - point0.getY()) +
                         point2.getX() * (point0.getY() - point1.getY())) / 2.0);
-		return angle;
 	}
     /**
      * Launch Interceptor Condition 12
