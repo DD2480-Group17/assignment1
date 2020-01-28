@@ -14,8 +14,9 @@ The Launch Interceptor Program called Decide(), contains of 15 conditions (LIC) 
 
 #### Run and build the program
 The program can be executed in two ways, by entering custom parameters or three predefined test cases.
-* (Custom parameters) Edit the parameter values in XXXX.java and run the program with ` mvn -q exec:java -Dexec.mainClass="Decide" -Dexec.args="1"`
-and use TODO as argument.
+* (Custom parameters) Run and build the program with:` mvn -q exec:java -Dexec.mainClass="Decide" -Dexec.args="1"`
+The argument for the program should be the filepath of a file containing the wanted parameter.
+
 * (Predefined test cases) Run and build the program with:
 ` mvn -q exec:java -Dexec.mainClass="Decide" -Dexec.args="1"` The following arguments
 can be used, 1, 2 or 3 to decide which test should be executed. 1 = test1, 2 = test2 and 3 = test3
@@ -24,7 +25,7 @@ can be used, 1, 2 or 3 to decide which test should be executed. 1 = test1, 2 = t
 The program also has test cases for each class.
 * The tests can be executed by the following command ` mvn test`
 
-### Open Source Material
+## Open Source Material
 For this program, we have used a free software from https://www.nayuki.io/page/smallest-enclosing-circle to calculate the smallest enclosing circle for a given set of points. The license for the software is given from GNU Lesser General Public License v3.0+. We have used it for our Launch Interceptor Conditions 1, 8 and 12. A detailed description of the algorithm that are used in the software can be found here: https://www.nayuki.io/res/smallest-enclosing-circle/computational-geometry-lecture-6.pdf.
 
 ## Contributions
@@ -37,12 +38,12 @@ Edvin Ardö:
 
 Marcus Jonsson Ewerbring:
 * Code, implemented 3 LIC and test cases, refactored code
-* Pull requests, review several pull requests
+* Pull requests, reviewed several pull requests
 * Documentation, README and code documentation
 
 Johanna Iivanainen:
 * Code, implemented 3 LIC and test cases, refactored code
-* Pull request, review several pull requests
+* Pull request, reviewed several pull requests
 * Documentation, README and code documentation
 
 
