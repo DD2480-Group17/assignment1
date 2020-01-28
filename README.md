@@ -12,19 +12,19 @@ The structure of the program is illustrated bellow:
 ├── README.md
 ├── pom.xml
 ├── travis.yml
-├── src
+└── src
    ├── main
    │   └── java
    │       ├── Decide.java
    │       ├── IOHandler.java
    │       ├── Parameters.java
    │       ├── SmallestEnclosingCircle.java
+   │       ├── TestCases.java
    │       └── Utility.java
    └── test
        └── java
            ├── DecideTest.java
            ├── IOHandlerTest.java
-           ├── TestCases.java
            └── UtilityTest.java
 ```
 The main folder contains all classes used in the project, where `Decide` class contains all LIC, CMV, PUV, FUV and launch. The IOHandler is used to parse data
@@ -37,7 +37,7 @@ The main method is located in Decide.java
 ## Tutorial
 #### Required software
 * Java 11
-* Maven
+* Apache Maven 3.6.0
 * JUnit (Jupiter 5.0 or later)
 
 #### Run and build the program
@@ -52,7 +52,7 @@ The program also has test cases for each class.
 * On the terminal, first, go to the top directory of the project where the pom.xml file exists. Then, the tests can be executed by the following command ` mvn test`.
 
 ## Open Source Material
-For this program, we have used a free software from [https://www.nayuki.io/page/smallest-enclosing-circle](https://www.nayuki.io/page/smallest-enclosing-circle) to calculate the smallest enclosing circle for a given set of points. The license for the software is given from GNU Lesser General Public License v3.0+. We have used it for our Launch Interceptor Conditions 1, 8 and 12. A detailed description of the algorithm that are used in the software can be found here: https://www.nayuki.io/res/smallest-enclosing-circle/computational-geometry-lecture-6.pdf.
+For this program, we have used a free software from [https://www.nayuki.io/page/smallest-enclosing-circle](https://www.nayuki.io/page/smallest-enclosing-circle) to calculate the smallest enclosing circle for a given set of points. The license for the software is given from GNU Lesser General Public License v3.0+. We have used it for our Launch Interceptor Conditions 1, 8 and 13. A detailed description of the algorithm that are used in the software can be found [here](https://www.nayuki.io/res/smallest-enclosing-circle/computational-geometry-lecture-6.pdf).
 
 ## Contributions
 We are proud over our implementation of the program and that we used Travis for continuous integration (CI). We have learnt a lot during the lab on how a git project should be structured, by using issues, specific prefix for our commits, pull requests and testing.
@@ -60,20 +60,22 @@ We are proud over our implementation of the program and that we used Travis for 
 In this section it is specified what each person contributed to the project with.
 
 Edvin Ardö:
-
+* Code, implemented 5 LICs and IOHandler
+* Constructed 3 main test cases
+* Implemented Travis CI
 
 Marcus Jonsson Ewerbring:
-* Code, implemented 3 LIC and test cases, refactored code
+* Code, implemented 3 LICs and test cases, refactored code
 * Pull requests, reviewed several pull requests
 * Documentation and code documentation
 
 Johanna Iivanainen:
-* Code, implemented 3 LIC and test cases, refactored code
+* Code, implemented 3 LICs and test cases, refactored code
 * Pull requests, reviewed several pull requests
 * Documentation and code documentation
 
 George Rezkalla:
-* Code, implemented 4 LIC, calcCMV, launch methods, test cases, refactored code, and contributed to the implementation of calcFUV.
+* Code, implemented 4 LICs, calcCMV, launch methods, test cases, refactored code, and contributed to the implementation of calcFUV.
 * Pull requests, reviewed several pull requests.
 * Documentation and code documentation.
 
