@@ -18,7 +18,7 @@ public class Decide {
     boolean[] cmv = new boolean[15];
     boolean[][] pum = new boolean[15][15];
     boolean[] fuv = new boolean[15];
-    
+
     /**
      * Empty constructor
      */
@@ -49,7 +49,7 @@ public class Decide {
      */
     boolean lic0() {
         for (int i = 1; i < points.size(); i++) {
-            if (dist(points.get(i - 1), points.get(i)) > parameters.length1) {
+            if (Utility.dist(points.get(i - 1), points.get(i)) > parameters.length1) {
                 return true;
             }
         }
@@ -73,7 +73,7 @@ public class Decide {
             Point2D point2 = points.get(i);
 
             if (!(point0.equals(point1) || point2.equals(point1))) {
-                double angle = calcAngle(point0, point1, point2);
+                double angle = Utility.calcAngle(point0, point1, point2);
                 if (angle < Math.PI - parameters.epsilon || angle > Math.PI + parameters.epsilon)
                     return true;
             }
@@ -99,11 +99,11 @@ public class Decide {
         // and check two steps backwards.
         for (int i = 2; i < points.size(); i++) {
 
-			Point2D.Double point0 = points.get(i - 2);
-			Point2D.Double point1 = points.get(i - 1);
-			Point2D.Double point2 = points.get(i);
+            Point2D.Double point0 = points.get(i - 2);
+            Point2D.Double point1 = points.get(i - 1);
+            Point2D.Double point2 = points.get(i);
 
-			double triangleArea = triangleArea(point0, point1, point2);
+            double triangleArea = Utility.triangleArea(point0, point1, point2);
 
             if (triangleArea > area1)
                 return true;
@@ -186,17 +186,6 @@ public class Decide {
         return false;
     }
 
-    /**
-     * Calculates the distance between two points in euclidian space.
-     *
-     * @param point1 the first point
-     * @param point2 the second point
-     * @return the euclidian distance between two points
-     */
-    double dist(Point2D.Double point1, Point2D point2) {
-        return Math.sqrt(Math.pow(point1.getX() - point2.getX(), 2) + Math.pow(point1.getY() - point2.getY(), 2));
-
-    }
 
     /**
      * Launch Interceptor Condition 7
@@ -210,7 +199,7 @@ public class Decide {
             if (points.size() < 3) {
                 return false;
             }
-            if (dist(points.get(i - parameters.kPts - 1), points.get(i)) > parameters.length1) {
+            if (Utility.dist(points.get(i - parameters.kPts - 1), points.get(i)) > parameters.length1) {
                 return true;
             }
         }
@@ -218,7 +207,7 @@ public class Decide {
     }
 
     /**
-     *Launch Interceptor Condition 8
+     * Launch Interceptor Condition 8
      *
      * @return if there exists at least one set of three data points separated by exactly A PTS and B PTS
      * consecutive intervening points, respectively, that cannot be contained within or on a circle of
@@ -233,106 +222,62 @@ public class Decide {
             Point2D point1 = points.get(i - parameters.aPts - parameters.bPts - 2);
             Point2D point2 = points.get(i - parameters.bPts - 1);
             Point2D point3 = points.get(i);
-            if (canContainPoints(point1, point2, point3, parameters.radius1)) {
+            if (Utility.canNotContainPoints(point1, point2, point3, parameters.radius1)) {
                 return true;
             }
         }
         return false;
     }
 
-    /**
-     *
-     * @param point1 point 1 used in smallest enclosing circle
-     * @param point2 point 2 used in smallest enclosing circle
-     * @param point3 point 3 used in smallest enclosing circle
-     * @param r		 wanted radius of the smallest enclosing circle.
-     * @return true, if the three points can not be contained in a circle of radius r
-     */
-    public boolean canContainPoints(Point2D point1, Point2D point2, Point2D point3, double r) {
-        ArrayList<Point> tempPoints = new ArrayList<>();
-        tempPoints.add(new Point(point1));
-        tempPoints.add(new Point(point2));
-        tempPoints.add(new Point(point3));
-        double radius = SmallestEnclosingCircle.makeCircle(tempPoints).r;
-        return radius > r;
-    }
-
-	/**
-	 * Returns true if there exists at least one set of three data points separated
-	 * by exactly C_PTS and D_PTS consecutive intervening points, respectively, that
-	 * form an angle such that: angle < (PI-EPSILON) or angle > (PI+EPSILON) The
-	 * second point of the set of three points is always the vertex of the angle.
-	 *
-	 * Otherwise, returns false if either the first point or the last point (or
-	 * both) coincide with the vertex.
-	 *
-	 * Also, Lic9 returns false if NUMPOINTS < 5.
-	 *
-	 * It is assumed that 1 <= C_PTS, 1 <= D_PTS, C_PTS+D_PTS <= NUMPOINTS-3.
-	 *
-	 * @return true if there exists at least one set of three data points separated
-	 *         by exactly C_PTS and D_PTS consecutive intervening points,
-	 *         respectively, that form an angle such that: angle < (PI-EPSILON) or
-	 *         angle > (PI+EPSILON). The second point of the set of three points is
-	 *         always the vertex of the angle. Otherwise, false if either the first
-	 *         point or the last point (or both) coincide with the vertex, or if
-	 *         NUMPOINTS < 5.
-	 */
-	boolean lic9() {
-
-		if (points.size() < 5)
-			return false;
-
-		// ------------------------------------------
-
-		// INVARIANT: for some j,
-		// ..., points[j], ..., points[j+C_PTS+1] == vertex, ...,
-		// points[j+C_PTS+1+D_PTS+1] == points[j+C_PTS+D_PTS+2], ...
-
-		for (int i = parameters.cPts + parameters.dPts + 2; i < points.size(); i++) {
-			Point2D point0 = points.get(i - parameters.cPts - parameters.dPts - 2);
-			Point2D point1 = points.get(i - parameters.dPts - 1); // vertex
-			Point2D point2 = points.get(i);
-
-			if (!(point0.equals(point1) || point2.equals(point1))) {
-				double angle = calcAngle(point0, point1, point2);
-				if (angle < Math.PI - parameters.epsilon || angle > Math.PI + parameters.epsilon)
-					return true;
-			}
-
-		}
-
-		return false;
-	}
 
     /**
-     * Returns angle (in radians) that is formed between 3 points. 0 <= angle < 2pi.
-     * Angle is calculated counter-clockwise from vector point1 -> point0 towards
-     * vector point1 -> point2.
+     * Returns true if there exists at least one set of three data points separated
+     * by exactly C_PTS and D_PTS consecutive intervening points, respectively, that
+     * form an angle such that: angle < (PI-EPSILON) or angle > (PI+EPSILON) The
+     * second point of the set of three points is always the vertex of the angle.
+     * <p>
+     * Otherwise, returns false if either the first point or the last point (or
+     * both) coincide with the vertex.
+     * <p>
+     * Also, Lic9 returns false if NUMPOINTS < 5.
+     * <p>
+     * It is assumed that 1 <= C_PTS, 1 <= D_PTS, C_PTS+D_PTS <= NUMPOINTS-3.
      *
-     * @param point0 one point
-     * @param point1 vertex
-     * @param point2 another point
-     * @return angle (in radians) formed by point0, point1 and point2. 0 <= angle <
-     * 2pi. Angle is calculated counter-clockwise from vector point1 ->
-     * point0 towards vector point1 -> point2.
+     * @return true if there exists at least one set of three data points separated
+     * by exactly C_PTS and D_PTS consecutive intervening points,
+     * respectively, that form an angle such that: angle < (PI-EPSILON) or
+     * angle > (PI+EPSILON). The second point of the set of three points is
+     * always the vertex of the angle. Otherwise, false if either the first
+     * point or the last point (or both) coincide with the vertex, or if
+     * NUMPOINTS < 5.
      */
-    private double calcAngle(Point2D point0, Point2D point1, Point2D point2) {
-        // the code used here is inspired by
-        // https://medium.com/@manivannan_data/find-the-angle-between-three-points-from-2d-using-python-348c513e2cd
+    boolean lic9() {
 
-        double point1To0_x = point0.getX() - point1.getX();
-        double point1To0_y = point0.getY() - point1.getY();
-        double point1To2_x = point2.getX() - point1.getX();
-        double point1To2_y = point2.getY() - point1.getY();
+        if (points.size() < 5)
+            return false;
 
-        double angle = Math.atan2(point1To2_y, point1To2_x) - Math.atan2(point1To0_y, point1To0_x);
-        // if angle is negative, add 2pi to angle.
-        if (angle < 0)
-            angle = angle + 2 * Math.PI;
+        // ------------------------------------------
 
-        return angle;
+        // INVARIANT: for some j,
+        // ..., points[j], ..., points[j+C_PTS+1] == vertex, ...,
+        // points[j+C_PTS+1+D_PTS+1] == points[j+C_PTS+D_PTS+2], ...
+
+        for (int i = parameters.cPts + parameters.dPts + 2; i < points.size(); i++) {
+            Point2D point0 = points.get(i - parameters.cPts - parameters.dPts - 2);
+            Point2D point1 = points.get(i - parameters.dPts - 1); // vertex
+            Point2D point2 = points.get(i);
+
+            if (!(point0.equals(point1) || point2.equals(point1))) {
+                double angle = Utility.calcAngle(point0, point1, point2);
+                if (angle < Math.PI - parameters.epsilon || angle > Math.PI + parameters.epsilon)
+                    return true;
+            }
+
+        }
+
+        return false;
     }
+
 
     /**
      * Calculates the Preliminary Unlocking Matrix (PUM)
@@ -370,7 +315,7 @@ public class Decide {
         if (points.size() < 5)
             return false;
         for (int i = 0; i + parameters.ePts + parameters.fPts + 2 < points.size(); i++) {
-            if (triangleArea(points.get(i), points.get(i + parameters.ePts + 1), points.get(i + parameters.ePts + parameters.fPts + 2)) > parameters.area1) {
+            if (Utility.triangleArea(points.get(i), points.get(i + parameters.ePts + 1), points.get(i + parameters.ePts + parameters.fPts + 2)) > parameters.area1) {
                 return true;
             }
         }
@@ -398,20 +343,6 @@ public class Decide {
         return false;
     }
 
-    /**
-     * trianlgeArea calculates the area formed by 3 data points
-     *
-     * @param point0
-     * @param point1
-     * @param point2
-     * @return the area of the tringle formed by point0, point1 and point2
-     */
-    double triangleArea(Point2D.Double point0, Point2D.Double point1, Point2D.Double point2) {
-        return Math.abs((
-                point0.getX() * (point1.getY() - point2.getY()) +
-                        point1.getX() * (point2.getY() - point0.getY()) +
-                        point2.getX() * (point0.getY() - point1.getY())) / 2.0);
-    }
 
     /**
      * Launch Interceptor Condition 12
@@ -429,14 +360,14 @@ public class Decide {
         }
         int count = 0;
         for (int i = 0; i < points.size() - parameters.kPts - 1; i++) {
-            if (dist(points.get(i), points.get(i + parameters.kPts + 1)) > parameters.length1) {
+            if (Utility.dist(points.get(i), points.get(i + parameters.kPts + 1)) > parameters.length1) {
                 count++;
                 break;
             }
         }
 
         for (int j = 0; j < points.size() - parameters.kPts - 1; j++) {
-            if (dist(points.get(j), points.get(j + parameters.kPts + 1)) < parameters.length2) {
+            if (Utility.dist(points.get(j), points.get(j + parameters.kPts + 1)) < parameters.length2) {
                 count++;
                 break;
             }
@@ -448,20 +379,20 @@ public class Decide {
 
         return false;
     }
-    
+
     /**
-     * Returns true if there exists at least one set of three data points, 
+     * Returns true if there exists at least one set of three data points,
      * separated by exactly E_PTS and F_PTS consecutive
      * intervening points, respectively, that are the vertices of a triangle with area greater
      * than AREA1. In addition, there exist three data points (which can be the same or different
      * from the three data points just mentioned) separated by exactly E PTS and F PTS consecutive
      * intervening points, respectively, that are the vertices of a triangle with area less than
      * AREA2. Both parts must be true for the LIC to be true. Otherwise, return false.
-     * Also, return false when NUMPOINTS < 5. 
-     * 
+     * Also, return false when NUMPOINTS < 5.
+     * <p>
      * Assumed: 0 <= AREA2 and 0 <= AREA1
      *
-     * @return true if if there exists at least one set of three data points, 
+     * @return true if if there exists at least one set of three data points,
      * separated by exactly E_PTS and F_PTS consecutive
      * intervening points, respectively, that are the vertices of a triangle with area greater
      * than AREA1. In addition, there exist three data points (which can be the same or different
@@ -482,133 +413,133 @@ public class Decide {
         // points[j+E_PTS+1+F_PTS+1] == points[j+E_PTS+F_PTS+2], ...
 
         boolean result = false;
-        
+
         for (int i = parameters.ePts + parameters.fPts + 2; i < points.size(); i++) {
             Point2D.Double point0 = points.get(i - parameters.ePts - parameters.fPts - 2);
             Point2D.Double point1 = points.get(i - parameters.fPts - 1);
             Point2D.Double point2 = points.get(i);
 
-            double triangleArea = triangleArea(point0, point1, point2);
+            double triangleArea = Utility.triangleArea(point0, point1, point2);
 
             if (triangleArea > parameters.area1) {
-            	result = true;
-            	break;
+                result = true;
+                break;
             }
         }
 
         if (!result) {
-        	// INVARIANT: first part of the condition is not satisfied.
-        	return false;
+            // INVARIANT: first part of the condition is not satisfied.
+            return false;
         }
-        	
+
         // INVARIANT: First part is satisfied.
-        
+
         for (int i = parameters.ePts + parameters.fPts + 2; i < points.size(); i++) {
-        	Point2D.Double point0 = points.get(i - parameters.ePts - parameters.fPts - 2);
+            Point2D.Double point0 = points.get(i - parameters.ePts - parameters.fPts - 2);
             Point2D.Double point1 = points.get(i - parameters.fPts - 1);
             Point2D.Double point2 = points.get(i);
 
-            double triangleArea = triangleArea(point0, point1, point2);
+            double triangleArea = Utility.triangleArea(point0, point1, point2);
 
             if (triangleArea < parameters.area2) {
-            	// INVARIANT: both parts of the condition are satisfied. 
-            	return true;
+                // INVARIANT: both parts of the condition are satisfied.
+                return true;
             }
         }
-        
+
         // INVARIANT: the second part of the condition is not satisfied.
         return false;
     }
-    
+
     /**
-     * Calculates entries in FUV vector.for all i, FUV[i] is set to true if PUV[i] is false 
-     * (indicating that the associated LIC should not hold back launch) 
+     * Calculates entries in FUV vector.for all i, FUV[i] is set to true if PUV[i] is false
+     * (indicating that the associated LIC should not hold back launch)
      * or if for all elements i,j, i!=j, in PUM row i are true.
      */
-	void calcFUV() {
+    void calcFUV() {
 
-		for (int i = 0; i < fuv.length; i++) {
-			fuv[i] = false;
-		}
+        for (int i = 0; i < fuv.length; i++) {
+            fuv[i] = false;
+        }
 
-		for (int i = 0; i < fuv.length; i++) {
-			if (!puv[i])
-				fuv[i] = true;
-			else {
-				for (int j = 0; j < pum[i].length; j++) {
-					if (i != j && pum[i][j]) {
-						fuv[i] = true;
-						break;
-					}
-				}
-			}
-		}
-	}
+        for (int i = 0; i < fuv.length; i++) {
+            if (!puv[i])
+                fuv[i] = true;
+            else {
+                for (int j = 0; j < pum[i].length; j++) {
+                    if (i != j && pum[i][j]) {
+                        fuv[i] = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
-	/**
-	 * Launch condition 13.
-	 * 
-	 * Assumed: 0 <= Radius1 and 0 <= Radius2.
-	 *
-	 * @return true if There exists at least one set of three data points, separated
-	 *         by exactly A_PTS and B_PTS consecutive intervening points,
-	 *         respectively, that cannot be contained within or on a circle of
-	 *         radius RADIUS1. In addition, there exists at least one set of three
-	 *         data points (which can be the same or different from the three data
-	 *         points just mentioned) separated by exactly A_PTS and B_PTS
-	 *         consecutive intervening points, respectively, that can be contained
-	 *         in or on a circle of radius RADIUS2. Both parts must be true for the
-	 *         LIC to be true. Otherwise, return false. Also, return false when
-	 *         NUMPOINTS < 5.
-	 */
-	boolean lic13() {
-		if (points.size() < 5)
-			return false;
+    /**
+     * Launch condition 13.
+     * <p>
+     * Assumed: 0 <= Radius1 and 0 <= Radius2.
+     *
+     * @return true if There exists at least one set of three data points, separated
+     * by exactly A_PTS and B_PTS consecutive intervening points,
+     * respectively, that cannot be contained within or on a circle of
+     * radius RADIUS1. In addition, there exists at least one set of three
+     * data points (which can be the same or different from the three data
+     * points just mentioned) separated by exactly A_PTS and B_PTS
+     * consecutive intervening points, respectively, that can be contained
+     * in or on a circle of radius RADIUS2. Both parts must be true for the
+     * LIC to be true. Otherwise, return false. Also, return false when
+     * NUMPOINTS < 5.
+     */
+    boolean lic13() {
+        if (points.size() < 5)
+            return false;
 
-		// ------------------------------------------
+        // ------------------------------------------
 
-		// INVARIANT: for some j,
-		// ..., points[j], ..., points[j+A_PTS+1], ...,
-		// points[j+A_PTS+1+B_PTS+1] == points[j+A_PTS+B_PTS+2], ...
+        // INVARIANT: for some j,
+        // ..., points[j], ..., points[j+A_PTS+1], ...,
+        // points[j+A_PTS+1+B_PTS+1] == points[j+A_PTS+B_PTS+2], ...
 
-		boolean result = false;
+        boolean result = false;
 
-		for (int i = parameters.aPts + parameters.bPts + 2; i < points.size(); i++) {
-			Point2D.Double point0 = points.get(i - parameters.aPts - parameters.bPts - 2);
-			Point2D.Double point1 = points.get(i - parameters.bPts - 1);
-			Point2D.Double point2 = points.get(i);
+        for (int i = parameters.aPts + parameters.bPts + 2; i < points.size(); i++) {
+            Point2D.Double point0 = points.get(i - parameters.aPts - parameters.bPts - 2);
+            Point2D.Double point1 = points.get(i - parameters.bPts - 1);
+            Point2D.Double point2 = points.get(i);
 
-			boolean notContainedInCircle = canContainPoints(point0, point1, point2, parameters.radius1);
+            boolean notContainedInCircle = Utility.canNotContainPoints(point0, point1, point2, parameters.radius1);
 
-			if (notContainedInCircle) {
-				result = true;
-				break;
-			}
-		}
+            if (notContainedInCircle) {
+                result = true;
+                break;
+            }
+        }
 
-		if (!result) {
-			// INVARIANT: first part of the condition is not satisfied.
-			return false;
-		}
+        if (!result) {
+            // INVARIANT: first part of the condition is not satisfied.
+            return false;
+        }
 
-		// INVARIANT: First part is satisfied.
+        // INVARIANT: First part is satisfied.
 
-		for (int i = parameters.aPts + parameters.bPts + 2; i < points.size(); i++) {
-			Point2D.Double point0 = points.get(i - parameters.aPts - parameters.bPts - 2);
-			Point2D.Double point1 = points.get(i - parameters.bPts - 1);
-			Point2D.Double point2 = points.get(i);
+        for (int i = parameters.aPts + parameters.bPts + 2; i < points.size(); i++) {
+            Point2D.Double point0 = points.get(i - parameters.aPts - parameters.bPts - 2);
+            Point2D.Double point1 = points.get(i - parameters.bPts - 1);
+            Point2D.Double point2 = points.get(i);
 
-			boolean notContainedInCircle = canContainPoints(point0, point1, point2, parameters.radius2);
+            boolean notContainedInCircle = Utility.canNotContainPoints(point0, point1, point2, parameters.radius2);
 
-			if (!notContainedInCircle) {
-				// INVARIANT: both parts of the condition are satisfied.
-				return true;
-			}
-		}
+            if (!notContainedInCircle) {
+                // INVARIANT: both parts of the condition are satisfied.
+                return true;
+            }
+        }
 
-		// INVARIANT: the second part of the condition is not satisfied.
-		return false;
-	}
+        // INVARIANT: the second part of the condition is not satisfied.
+        return false;
+    }
 
     /**
      * Launch Interceptor Condition 6 returns
@@ -630,7 +561,7 @@ public class Decide {
             if ((points.get(i).getX() == points.get(parameters.nPts - 1).getX()) && (points.get(i).getY() == points.get(parameters.nPts - 1).getY()) && i != parameters.nPts - 1) {
 
                 for (int j = 0; j < parameters.nPts - 2; j++) {
-                    if (dist(points.get(0), points.get(j + 1)) > parameters.dist) {
+                    if (Utility.dist(points.get(0), points.get(j + 1)) > parameters.dist) {
                         return true;
                     }
                 }
@@ -639,7 +570,7 @@ public class Decide {
             } else {
                 for (int j = 1; j < parameters.nPts - 1; j++) {
 
-                    if (distPointLine(points.get(i), points.get(i + j), points.get(i + parameters.nPts - 1)) > parameters.dist) {
+                    if (Utility.distPointLine(points.get(i), points.get(i + j), points.get(i + parameters.nPts - 1)) > parameters.dist) {
                         return true;
                     }
                 }
@@ -648,46 +579,16 @@ public class Decide {
         return false;
     }
 
-    /**
-     * Calculates the distance between a single point and a line with Heron's formula.
-     *
-     * @param startPoint the start point of the line
-     * @param point      the point
-     * @param endPoint   the end point of the line
-     * @return the distance between the single point and the line
-     */
-    double distPointLine(Point2D.Double startPoint, Point2D.Double point, Point2D.Double endPoint) {
-        double lineDist = dist(startPoint, endPoint);
-        double pToStart = dist(point, startPoint);
-        double pToEnd = dist(point, endPoint);
-
-        if (((2 * Math.PI) - (calcAngle(startPoint, endPoint, point))) >= (Math.PI / 2) || (calcAngle(endPoint, startPoint, point) >= (Math.PI / 2))) {
-
-            if (pToStart > pToEnd) {
-                return pToEnd;
-            } else {
-                return pToStart;
-            }
-        } else {
-            //Heron's formula to find the area of the triangle that the point,
-            //startPoint and endPoint form. The height of the triangle is equal to the distance
-            //between the point and the line.
-            double s = (0.5) * (lineDist + pToStart + pToEnd);
-            double area = Math.sqrt(s * ((s - lineDist) * (s - pToStart) * (s - pToEnd)));
-            double distPointLine = (2 * area) / lineDist;
-
-            return distPointLine;
-        }
-    }
 
     /**
      * Launch Interceptor Condition 1
+     *
      * @return true if there exists at least one set of three consecutive data points that cannot all be contained
      * within or on a circle of radius1
      */
     boolean lic1() {
-        for (int i = 0; i < (points.size()-2); i++) {
-            if (canContainPoints(points.get(i), points.get(i+1), points.get(i+2), parameters.radius1)){
+        for (int i = 0; i < (points.size() - 2); i++) {
+            if (Utility.canNotContainPoints(points.get(i), points.get(i + 1), points.get(i + 2), parameters.radius1)) {
                 return true;
             }
         }

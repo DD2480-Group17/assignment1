@@ -62,7 +62,7 @@ class DecideTest {
      * angle < (PI − EPSILON)
      * or
      * angle > (PI + EPSILON)
-     *
+     * <p>
      * Test case:
      * Points: (1, 0), (0, 0), (cos(pi/4), sin(pi/4))
      * Epsilon: pi/2
@@ -137,40 +137,6 @@ class DecideTest {
         assertFalse(decide.lic5());
     }
 
-    /**
-     * Tests that dist returns the euclidian distance between two points.
-     * <p>
-     * Test case 1:
-     * points: (0, 0), (1, 1)
-     * Expected value: 1.414213562373095048801688724209698078569671875376948073176679
-     * <p>
-     * Test case 2:
-     * points: (0, 0), (0, 0)
-     * Expected value: 0
-     * <p>
-     * Test case 3:
-     * points: (0, 0), (0, 1)
-     * Expected value: 1
-     */
-    @Test
-    void testDist() {
-        Decide decide = new Decide();
-        Point2D.Double point1 = new Point2D.Double();
-        Point2D.Double point2 = new Point2D.Double();
-
-        point1.setLocation(0.0, 0.0);
-        point2.setLocation(1.0, 1.0);
-        assertEquals(1.414213562373095048801688724209698078569671875376948073176679, decide.dist(point1, point2));
-
-        point1.setLocation(0.0, 0.0);
-        point2.setLocation(0.0, 0.0);
-        assertEquals(0, decide.dist(point1, point2));
-
-        point1.setLocation(0.0, 0.0);
-        point2.setLocation(0.0, 1.0);
-        assertEquals(1.0, decide.dist(point1, point2));
-
-    }
 
     /**
      * Tests that LIC3 returns true given that there is at least one set of 3 consecutive
@@ -364,158 +330,133 @@ class DecideTest {
         assertFalse(decide.lic8());
     }
 
+
     /**
-     * Tests that canContainPoints correctly returns true if the three points can not be contained
-     * in a circle with radius1
-     *
-     * Test case: radius1 = sqrt(2)
-     * Expected value: false
-     *
-     * Test case: radius1 = 1.4
-     * Expected value: true
+     * Tests that Lic9 returns true if there exists at least one set of three data
+     * points separated by exactly C_PTS and D_PTS consecutive intervening points,
+     * respectively, that form an angle such that: angle < (PI-EPSILON) or angle >
+     * (PI+EPSILON). The second point of the set of three points is always the vertex
+     * of the angle.
+     * <p>
+     * It also tests that Lic9 returns false if either the first point or the last
+     * point (or both) coincide with the vertex.
+     * <p>
+     * It also tests that Lic9 returns false if NUMPOINTS < 5.
+     * <p>
+     * It is assumed that 1 <= C_PTS, 1 <= D_PTS, C_PTS+D_PTS <= NUMPOINTS-3.
      */
     @Test
-    void testCanContainPoints() {
-        Point2D point1 = new Point2D.Double(1, 1);
-        Point2D point2 = new Point2D.Double(-1, 1);
-        Point2D point3 = new Point2D.Double(-1, -1);
+    void testLic9() {
 
-        Decide decide = new Decide();
-        decide.parameters = new Parameters();
+        // test: Numpoints < 5
+        // && C_PTS == 1 && D_PTS == 2
+        // => lic9 returns false
+        Decide d = new Decide();
+        Parameters ps = new Parameters();
 
-        decide.parameters.radius1 = Math.sqrt(2);
-        assertFalse(decide.canContainPoints(point1, point2, point3, decide.parameters.radius1));
+        ps.cPts = 1;
+        ps.dPts = 2;
+        ps.epsilon = Math.PI / 2.0;
 
-        decide.parameters.radius1 = 1.4;
-        assertTrue(decide.canContainPoints(point1, point2, point3, decide.parameters.radius1));
+        ArrayList<Point2D.Double> points = new ArrayList<>();
+        points.add(new Point2D.Double(1, 0)); // first point
+        points.add(new Point2D.Double(0, 0)); // second point
+        points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), Math.sin(Math.PI / 4.0))); // third point
+
+        d.points = points;
+        d.parameters = ps;
+
+        assertFalse(d.lic9());
+
+        // --------------------------------------------
+        // test: Numpoints >= 5 && two non-vertex points coincide
+        // && C_PTS == 1 && D_PTS == 2
+        // => lic9 returns false
+        d = new Decide();
+        ps = new Parameters();
+
+        ps.cPts = 1;
+        ps.dPts = 2;
+        ps.epsilon = Math.PI / 2.0;
+
+        points = new ArrayList<>();
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(0, 0)); // first point
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(0, 0)); // second point
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), Math.sin(Math.PI / 4.0))); // third point
+        points.add(new Point2D.Double(0, 0));
+
+        d.points = points;
+        d.parameters = ps;
+
+        assertFalse(d.lic9());
+
+        // --------------------------------------------
+        // test: Numpoints >= 5 && no two non-vertex points coincide && angle == pi/4 &&
+        // epsilon == pi/2
+        // && C_PTS == 1 && D_PTS == 2
+        // => angle < pi - epsilon => lic9 returns true
+        d = new Decide();
+        ps = new Parameters();
+
+        ps.cPts = 1;
+        ps.dPts = 2;
+        ps.epsilon = Math.PI / 2.0;
+
+        points = new ArrayList<>();
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(1, 0)); // first point
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(0, 0)); // second point
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), Math.sin(Math.PI / 4.0))); // third point
+        points.add(new Point2D.Double(0, 0));
+
+        d.points = points;
+        d.parameters = ps;
+
+        assertTrue(d.lic9());
+
+        // ---------------------------------------
+        // test: Numpoints >= 5 && no two points non-vertex coincide && angle == 7pi/4
+        // && epsilon == pi/2 (which means that angle + epsilon == 3pi/2)
+        // && C_PTS == 1 && D_PTS == 2
+        // => angle > pi + epsilon => lic9 returns true
+
+        d = new Decide();
+        ps = new Parameters();
+
+        ps.cPts = 1;
+        ps.dPts = 2;
+        ps.epsilon = Math.PI / 2.0;
+
+        points = new ArrayList<>();
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(1, 0)); // first point
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(0, 0)); // second point
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(0, 0));
+        points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), -Math.sin(Math.PI / 4.0))); // third point
+        points.add(new Point2D.Double(0, 0));
+
+        d.points = points;
+        d.parameters = ps;
+
+        assertTrue(d.lic9());
     }
-
-	/**
-	 * Tests that Lic9 returns true if there exists at least one set of three data
-	 * points separated by exactly C_PTS and D_PTS consecutive intervening points,
-	 * respectively, that form an angle such that: angle < (PI-EPSILON) or angle >
-	 * (PI+EPSILON). The second point of the set of three points is always the vertex
-	 * of the angle.
-	 *
-	 * It also tests that Lic9 returns false if either the first point or the last
-	 * point (or both) coincide with the vertex.
-	 *
-	 * It also tests that Lic9 returns false if NUMPOINTS < 5.
-	 *
-	 * It is assumed that 1 <= C_PTS, 1 <= D_PTS, C_PTS+D_PTS <= NUMPOINTS-3.
-	 */
-	@Test
-	void testLic9() {
-
-		// test: Numpoints < 5
-		// && C_PTS == 1 && D_PTS == 2
-		// => lic9 returns false
-		Decide d = new Decide();
-		Parameters ps = new Parameters();
-
-		ps.cPts = 1;
-		ps.dPts = 2;
-		ps.epsilon = Math.PI / 2.0;
-
-		ArrayList<Point2D.Double> points = new ArrayList<>();
-		points.add(new Point2D.Double(1, 0)); // first point
-		points.add(new Point2D.Double(0, 0)); // second point
-		points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), Math.sin(Math.PI / 4.0))); // third point
-
-		d.points = points;
-		d.parameters = ps;
-
-		assertFalse(d.lic9());
-
-		// --------------------------------------------
-		// test: Numpoints >= 5 && two non-vertex points coincide
-		// && C_PTS == 1 && D_PTS == 2
-		// => lic9 returns false
-		d = new Decide();
-		ps = new Parameters();
-
-		ps.cPts = 1;
-		ps.dPts = 2;
-		ps.epsilon = Math.PI / 2.0;
-
-		points = new ArrayList<>();
-		points.add(new Point2D.Double(0, 0));
-		points.add(new Point2D.Double(0, 0)); // first point
-		points.add(new Point2D.Double(0, 0));
-		points.add(new Point2D.Double(0, 0)); // second point
-		points.add(new Point2D.Double(0, 0));
-		points.add(new Point2D.Double(0, 0));
-		points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), Math.sin(Math.PI / 4.0))); // third point
-		points.add(new Point2D.Double(0, 0));
-
-		d.points = points;
-		d.parameters = ps;
-
-		assertFalse(d.lic9());
-
-		// --------------------------------------------
-		// test: Numpoints >= 5 && no two non-vertex points coincide && angle == pi/4 &&
-		// epsilon == pi/2
-		// && C_PTS == 1 && D_PTS == 2
-		// => angle < pi - epsilon => lic9 returns true
-		d = new Decide();
-		ps = new Parameters();
-
-		ps.cPts = 1;
-		ps.dPts = 2;
-		ps.epsilon = Math.PI / 2.0;
-
-		points = new ArrayList<>();
-		points.add(new Point2D.Double(0, 0));
-		points.add(new Point2D.Double(1, 0)); // first point
-		points.add(new Point2D.Double(0, 0));
-		points.add(new Point2D.Double(0, 0)); // second point
-		points.add(new Point2D.Double(0, 0));
-		points.add(new Point2D.Double(0, 0));
-		points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), Math.sin(Math.PI / 4.0))); // third point
-		points.add(new Point2D.Double(0, 0));
-
-		d.points = points;
-		d.parameters = ps;
-
-		assertTrue(d.lic9());
-
-		// ---------------------------------------
-		// test: Numpoints >= 5 && no two points non-vertex coincide && angle == 7pi/4
-		// && epsilon == pi/2 (which means that angle + epsilon == 3pi/2)
-		// && C_PTS == 1 && D_PTS == 2
-		// => angle > pi + epsilon => lic9 returns true
-
-		d = new Decide();
-		ps = new Parameters();
-
-		ps.cPts = 1;
-		ps.dPts = 2;
-		ps.epsilon = Math.PI / 2.0;
-
-		points = new ArrayList<>();
-		points.add(new Point2D.Double(0, 0));
-		points.add(new Point2D.Double(1, 0)); // first point
-		points.add(new Point2D.Double(0, 0));
-		points.add(new Point2D.Double(0, 0)); // second point
-		points.add(new Point2D.Double(0, 0));
-		points.add(new Point2D.Double(0, 0));
-		points.add(new Point2D.Double(Math.cos(Math.PI / 4.0), -Math.sin(Math.PI / 4.0))); // third point
-		points.add(new Point2D.Double(0, 0));
-
-		d.points = points;
-		d.parameters = ps;
-
-		assertTrue(d.lic9());
-	}
 
     /**
      * Preliminary Unlocking Matrix calculation test
-     *
+     * <p>
      * Tests that pum[0][0] and pum[0][1] are calculated correctly, given that
      * cmv[0] is true, lcm[0][0] is ANDD and lcm[0][1] is ORR
      */
-	@Test
+    @Test
     void calcPumTest() {
         IOHandler ioHandler = new IOHandler();
         Decide decide = ioHandler.parseDecideInput(TestCases.test2);
@@ -618,28 +559,9 @@ class DecideTest {
 
     }
 
+
     /**
-     * The test checks if the function returns the correct area for a triangle, by inputing the
-     * points in different order.
-     */
-    @Test
-    void testTriangelArea() {
-        Decide decide = new Decide();
-
-        Point2D.Double a = new Point2D.Double(-1, 0);
-        Point2D.Double b = new Point2D.Double(2, 0);
-        Point2D.Double c = new Point2D.Double(0, 4);
-        Point2D.Double d = new Point2D.Double(0, -3);
-
-        assertEquals(6.0, decide.triangleArea(a, b, c));
-        assertEquals(6.0, decide.triangleArea(b, a, c));
-        assertEquals(6.0, decide.triangleArea(c, a, b));
-
-        assertEquals(4.5, decide.triangleArea(a, b, d));
-    }
-    
-    /**
-     * Tests if lic14 returns true if there exists at least one set of three data points, 
+     * Tests if lic14 returns true if there exists at least one set of three data points,
      * separated by exactly E_PTS and F_PTS consecutive
      * intervening points, respectively, that are the vertices of a triangle with area greater
      * than AREA1. In addition, there exist three data points (which can be the same or different
@@ -654,12 +576,12 @@ class DecideTest {
         // => lic14 returns false
         Decide d = new Decide();
         Parameters ps = new Parameters();
-        
+
         ps.area1 = 2;
         ps.area2 = 1;
         ps.ePts = 1;
         ps.fPts = 2;
-        
+
         ArrayList<Point2D.Double> points = new ArrayList<>();
         points.add(new Point2D.Double(1, 0)); // first point
         points.add(new Point2D.Double(0, 0)); // second point
@@ -681,9 +603,9 @@ class DecideTest {
         ps.area2 = 0;
         ps.ePts = 1;
         ps.fPts = 2;
-        
+
         points = new ArrayList<>();
-        
+
         points.add(new Point2D.Double(0, 0));
         points.add(new Point2D.Double(6, 0)); // first point
         points.add(new Point2D.Double(0, 0));
@@ -709,9 +631,9 @@ class DecideTest {
         ps.area2 = 1;
         ps.ePts = 1;
         ps.fPts = 2;
-        
+
         points = new ArrayList<>();
-        
+
         points.add(new Point2D.Double(1, 0)); // first point - less than (triangle), area == 0.5
         points.add(new Point2D.Double(6, 0)); // first point - large than (triangle), area == 3.0
         points.add(new Point2D.Double(0, 0)); // second point - less than (triangle), area == 0.5
@@ -733,14 +655,14 @@ class DecideTest {
      * apart AND there exists at least one set of two data points, separated by exactly kPts consecutive
      * intervening points, that are a distance less than the length2, apart.
      * The condition is not met when numPoints < 3.
-     *
+     * <p>
      * Test case 1:
      * points = (0, 1), (1, 0), (0, 2), (0, 0), (-1, 0), (1, 2), (2, 2)
      * length1 = 1
      * lenght2 = 1
      * kPts = 1
      * Expected value: false
-     *
+     * <p>
      * Test case 2:
      * points = (0, 1), (1, 0), (0, 2), (0, 0), (-1, 0), (1, 2), (2, 2)
      * length1 = 1
@@ -787,74 +709,75 @@ class DecideTest {
 
         assertTrue(decide2.lic12());
     }
-    
+
     /**
-     * Tests that calcFUV works correctly. i.e. for all i, FUV[i] is set to true if PUV[i] is false 
+     * Tests that calcFUV works correctly. i.e. for all i, FUV[i] is set to true if PUV[i] is false
      * or if for all elements i,j, i!=j, in PUM row i are true.
      */
     @Test
     void testFUV() {
-    	Decide d = new Decide();
-    	boolean[] puv = new boolean[15];
-    	boolean[][] pum = d.pum;
-    	
-    	d.puv = puv;
-    	
-    	// test case: puv[1] == false && for all i, pum[1][i] == false => fuv[1] = true; 
-    	puv[1] = false;
-    	d.calcFUV();
-    	assertTrue(d.fuv[1]);
-    	
-    	// test case: puv[1] == true && for all i, pum[1][i] == false => fuv[1] = false; 
-    	puv[1] = true;
-    	d.calcFUV();
-    	assertFalse(d.fuv[1]);
+        Decide d = new Decide();
+        boolean[] puv = new boolean[15];
+        boolean[][] pum = d.pum;
 
-    	// test case: puv[1] == false && for all i, pum[1][i] == true => fuv[1] = true; 
-    	puv[1] = false;
-    	pum[1][0] = true;
-    	pum[1][1] = true;
-    	pum[1][2] = true;
-    	pum[1][3] = true;
-    	pum[1][4] = true;
-    	pum[1][5] = true;
-    	pum[1][6] = true;
-    	pum[1][7] = true;
-    	pum[1][8] = true;
-    	pum[1][9] = true;
-    	pum[1][10] = true;
-    	pum[1][11] = true;
-    	pum[1][12] = true;
-    	pum[1][13] = true;
-    	pum[1][14] = true;
-    	
-    	d.calcFUV();
-    	assertTrue(d.fuv[1]);
+        d.puv = puv;
+
+        // test case: puv[1] == false && for all i, pum[1][i] == false => fuv[1] = true;
+        puv[1] = false;
+        d.calcFUV();
+        assertTrue(d.fuv[1]);
+
+        // test case: puv[1] == true && for all i, pum[1][i] == false => fuv[1] = false;
+        puv[1] = true;
+        d.calcFUV();
+        assertFalse(d.fuv[1]);
+
+        // test case: puv[1] == false && for all i, pum[1][i] == true => fuv[1] = true;
+        puv[1] = false;
+        pum[1][0] = true;
+        pum[1][1] = true;
+        pum[1][2] = true;
+        pum[1][3] = true;
+        pum[1][4] = true;
+        pum[1][5] = true;
+        pum[1][6] = true;
+        pum[1][7] = true;
+        pum[1][8] = true;
+        pum[1][9] = true;
+        pum[1][10] = true;
+        pum[1][11] = true;
+        pum[1][12] = true;
+        pum[1][13] = true;
+        pum[1][14] = true;
+
+        d.calcFUV();
+        assertTrue(d.fuv[1]);
     }
-    
-	/**
-	 * Tests if true if There exists at least one set of three data points,
-	 * separated by exactly A_PTS and B_PTS consecutive intervening points,
-	 * respectively, that cannot be contained within or on a circle of radius
-	 * RADIUS1. In addition, there exists at least one set of three data points
-	 * (which can be the same or different from the three data points just
-	 * mentioned) separated by exactly A_PTS and B_PTS consecutive intervening
-	 * points, respectively, that can be contained in or on a circle of radius
-	 * RADIUS2. Both parts must be true for the LIC to be true. Otherwise, return
-	 * false. Also, return false when NUMPOINTS < 5.
-	 */
+
+    /**
+     * Tests if true if There exists at least one set of three data points,
+     * separated by exactly A_PTS and B_PTS consecutive intervening points,
+     * respectively, that cannot be contained within or on a circle of radius
+     * RADIUS1. In addition, there exists at least one set of three data points
+     * (which can be the same or different from the three data points just
+     * mentioned) separated by exactly A_PTS and B_PTS consecutive intervening
+     * points, respectively, that can be contained in or on a circle of radius
+     * RADIUS2. Both parts must be true for the LIC to be true. Otherwise, return
+     * false. Also, return false when NUMPOINTS < 5.
+     */
+
     void testLic13() {
         // test: Numpoints < 5
         // && A_PTS == 1 && B_PTS == 2
         // => lic13 returns false
         Decide d = new Decide();
         Parameters ps = new Parameters();
-        
+
         ps.radius1 = 2;
         ps.radius2 = 1;
         ps.aPts = 1;
         ps.bPts = 2;
-        
+
         ArrayList<Point2D.Double> points = new ArrayList<>();
         points.add(new Point2D.Double(1, 0)); // first point
         points.add(new Point2D.Double(0, 0)); // second point
@@ -876,9 +799,9 @@ class DecideTest {
         ps.radius2 = 0;
         ps.aPts = 1;
         ps.bPts = 2;
-        
+
         points = new ArrayList<>();
-        
+
         points.add(new Point2D.Double(0, 0));
         points.add(new Point2D.Double(3, 0)); // first point
         points.add(new Point2D.Double(0, 0));
@@ -904,9 +827,9 @@ class DecideTest {
         ps.radius2 = 1;
         ps.aPts = 1;
         ps.bPts = 2;
-        
+
         points = new ArrayList<>();
-        
+
         points.add(new Point2D.Double(1, 0)); // first point - less than (circle), radius == 1.0
         points.add(new Point2D.Double(3, 0)); // first point - large than (circle), radius == 3.0
         points.add(new Point2D.Double(0, 0)); // second point - less than (circle), radius == 1.0
@@ -928,19 +851,19 @@ class DecideTest {
      * If the first and last points of these nPts are identical, then we compare the distance from that point to all
      * the other nPts points.
      * The condition is not met when numPoints < 3.
-     *
+     * <p>
      * Test case 1:
      * points = (-2, 2), (0, 4), (2, 0)
      * nPts = 3
      * dist = 1.0
      * Expected value: true
-     *
+     * <p>
      * Test case 2:
      * points = (-2, 2), (-2, 2), (2, 0)
      * nPts = 3
      * dist = 5.0
      * Expected value: false
-     *
+     * <p>
      * Test case 3 - Identical points:
      * points = (-2, 0), (5, 3), (0, 0), (-2, 0)
      * nPts = 4
@@ -952,7 +875,7 @@ class DecideTest {
         ArrayList<Point2D.Double> points = new ArrayList<>();
         Point2D.Double point1 = new Point2D.Double(-2, 0);
         Point2D.Double point2 = new Point2D.Double(0, 4);
-        Point2D.Double point3 = new Point2D.Double(2,0);
+        Point2D.Double point3 = new Point2D.Double(2, 0);
         Decide decide1 = new Decide();
         Parameters parameters1 = new Parameters();
         parameters1.nPts = 3;
@@ -967,9 +890,9 @@ class DecideTest {
         assertTrue(decide1.lic6());
 
         ArrayList<Point2D.Double> points2 = new ArrayList<>();
-        Point2D.Double point4 = new Point2D.Double(-2,2);
-        Point2D.Double point5 = new Point2D.Double(-2,2);
-        Point2D.Double point6 = new Point2D.Double(2,0);
+        Point2D.Double point4 = new Point2D.Double(-2, 2);
+        Point2D.Double point5 = new Point2D.Double(-2, 2);
+        Point2D.Double point6 = new Point2D.Double(2, 0);
         points2.add(point4);
         points2.add(point5);
         points2.add(point6);
@@ -985,8 +908,8 @@ class DecideTest {
         ArrayList<Point2D.Double> points3 = new ArrayList<>();
         Point2D.Double point7 = new Point2D.Double(-2, 0);
         Point2D.Double point8 = new Point2D.Double(-2, 2);
-        Point2D.Double point9 = new Point2D.Double(0,0);
-        Point2D.Double point10 = new Point2D.Double(-2,0);
+        Point2D.Double point9 = new Point2D.Double(0, 0);
+        Point2D.Double point10 = new Point2D.Double(-2, 0);
         points3.add(point7);
         points3.add(point8);
         points3.add(point9);
@@ -1002,41 +925,16 @@ class DecideTest {
         assertFalse(decide3.lic6());
     }
 
-    /**
-     * Tests that distPointLine returns the distance between a point and a line.
-     * Test case 1:
-     * points = (2, -1), (-2, 2), (-2, -1)
-     * Expected value: 3.0
-     *
-     * Test case 2:
-     * points = (-2, 0), (0, 4), (2, 0)
-     * Expected value: 4.0
-     */
-    @Test
-    void testDistPointLine() {
-        Decide decide = new Decide();
-        Point2D.Double point1 = new Point2D.Double(2, -1);
-        Point2D.Double point2 = new Point2D.Double(-2, 2);
-        Point2D.Double point3 = new Point2D.Double(-2,-1);
 
-        assertEquals(3.0, decide.distPointLine(point1, point2, point3));
-
-        Point2D.Double point4 = new Point2D.Double(-2, 0);
-        Point2D.Double point5 = new Point2D.Double(0, 4);
-        Point2D.Double point6 = new Point2D.Double(2,0);
-
-        assertEquals(4.0, decide.distPointLine(point4, point5, point6));
-    }
-    
     /**
      * Tests that lic1 returns true if there exists three consecutive
      * data points that cannot be contained in a circle with radius1.
      * cannot be contained witih
-     *
+     * <p>
      * Test case 1:
      * points = (0, 2), (0, 0), (-1, -1)
      * Expected value: true
-     *
+     * <p>
      * Test case 2:
      * points = (0, 2), (0, 0), (-1, -1)
      * Expected value: false
@@ -1053,6 +951,7 @@ class DecideTest {
         points.add(new Point2D.Double(-1, -1));
 
         decide.points = points;
+
 
         decide.parameters.radius1 = 1;
         assertTrue(decide.lic1());
