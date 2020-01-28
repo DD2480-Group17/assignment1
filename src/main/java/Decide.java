@@ -2,6 +2,45 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class Decide {
+
+    /**
+     * Runs main test case specified by args[0] and prints "YES" to standard output if
+     * @param args which main test case to run, ranges from 1 to 3
+     */
+    public static void main(String[] args) {
+        int testCase;
+        if (args.length < 1) {
+            testCase = 1;
+        } else {
+            testCase = Integer.parseInt(args[0]);
+        }
+
+        IOHandler ioHandler = new IOHandler();
+        Decide decide;
+
+        switch (testCase) {
+            default:
+                decide = ioHandler.parseDecideInput(TestCases.mainTestCase1);
+                break;
+            case 2:
+               decide = ioHandler.parseDecideInput(TestCases.mainTestCase2);
+               break;
+            case 3:
+               decide = ioHandler.parseDecideInput(TestCases.mainTestCase3);
+               break;
+        }
+
+        decide.calcCmv();
+        decide.calcPum();
+        decide.calcFUV();
+
+        if (decide.launch()) {
+            System.out.println("YES");
+        } else {
+            System.out.println("NO");
+        }
+    }
+
     enum BOOLEAN_OPERATOR {
         ANDD,
         ORR,
