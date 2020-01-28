@@ -148,7 +148,7 @@ class DecideTest {
      * area1 = 3.0
      * Expected value: true
      *
-     * Test case 1:
+     * Test case 2:
      * points = (0, 0), (0, 4), (2, 0)
      * area1 = 4.0
      * Expected value: false
