@@ -1,7 +1,57 @@
 import java.awt.geom.Point2D;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Decide {
+
+    /**
+     * Runs main test case specified by args[0] and prints "YES" to standard output if test case is true, otherwise "NO"
+     *
+     * @param args either which main test case to run, ranges from 1 to 3, or filepath to the the test file to run
+     */
+    public static void main(String[] args) {
+        int testCase = 1;
+        IOHandler ioHandler = new IOHandler();
+        Decide decide = null;
+
+        if (args.length >= 1) {
+            try {
+                testCase = Integer.parseInt(args[0]);
+            } catch (NumberFormatException ignored) {
+                try {
+                    decide = ioHandler.readFile(args[0]);
+                } catch (IOException e) {
+                    System.err.println("Could not open file: " + args[0]);
+                    return;
+                }
+            }
+        }
+
+        if (decide == null) {
+            switch (testCase) {
+                default:
+                    decide = ioHandler.parseDecideInput(TestCases.mainTestCase1);
+                    break;
+                case 2:
+                    decide = ioHandler.parseDecideInput(TestCases.mainTestCase2);
+                    break;
+                case 3:
+                    decide = ioHandler.parseDecideInput(TestCases.mainTestCase3);
+                    break;
+            }
+        }
+
+        decide.calcCmv();
+        decide.calcPum();
+        decide.calcFUV();
+
+        if (decide.launch()) {
+            System.out.println("YES");
+        } else {
+            System.out.println("NO");
+        }
+    }
+
     enum BOOLEAN_OPERATOR {
         ANDD,
         ORR,
