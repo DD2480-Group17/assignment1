@@ -7,7 +7,7 @@ public class Utility {
      * @param point1 point 1 used in smallest enclosing circle.
      * @param point2 point 2 used in smallest enclosing circle.
      * @param point3 point 3 used in smallest enclosing circle.
-     * @param r wanted radius of the smallest enclosing circle.
+     * @param r      wanted radius of the smallest enclosing circle.
      * @return true, if the three points can not be contained in a circle of radius r.
      */
     public static boolean canNotContainPoints(Point2D point1, Point2D point2, Point2D point3, double r) {
@@ -67,8 +67,8 @@ public class Utility {
      * Calculates the distance between a single point and a line.
      *
      * @param startPoint the start point of the line
-     * @param point the point
-     * @param endPoint the end point of the line
+     * @param point      the point
+     * @param endPoint   the end point of the line
      * @return the distance between the single point and the line
      */
     public static double distPointLine(Point2D.Double startPoint, Point2D.Double point, Point2D.Double endPoint) {

@@ -20,6 +20,7 @@ public class IOHandler {
 
     /**
      * Parses a String and returns a Decide object
+     *
      * @param input Decide input in String representation
      * @return a Decide object with set input parameters
      */
@@ -83,6 +84,7 @@ public class IOHandler {
 
     /**
      * Reads input from a file, stores it in a Decide object and returns it.
+     *
      * @param fileName the file name with input data
      * @return a Decide object filled with data from the file
      * @throws IOException if file does not exist

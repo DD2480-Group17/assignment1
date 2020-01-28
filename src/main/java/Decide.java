@@ -79,10 +79,10 @@ public class Decide {
     /**
      * Constructor
      *
-     * @param points 2D planar point
+     * @param points     2D planar point
      * @param parameters 19 input parameters
-     * @param lcm logical connector matrix
-     * @param puv preliminary unlocking vector
+     * @param lcm        logical connector matrix
+     * @param puv        preliminary unlocking vector
      */
     public Decide(ArrayList<Point2D.Double> points, Parameters parameters, BOOLEAN_OPERATOR[][] lcm, boolean[] puv) {
         this.points = points;
@@ -441,7 +441,7 @@ public class Decide {
      * intervening points, respectively, that are the vertices of a triangle with area less than
      * AREA2. Both parts must be true for the LIC to be true. Otherwise, return false.
      * Also, return false when NUMPOINTS < 5.
-     *
+     * <p>
      * Assumed: 0 <= AREA2 and 0 <= AREA1
      */
     boolean lic14() {
@@ -533,7 +533,7 @@ public class Decide {
      * in or on a circle of radius RADIUS2. Both parts must be true for the
      * LIC to be true. Otherwise, return false. Also, return false when
      * NUMPOINTS < 5.
-     *
+     * <p>
      * Assumed: 0 <= Radius1 and 0 <= Radius2.
      */
     boolean lic13() {
@@ -639,38 +639,38 @@ public class Decide {
         }
         return false;
     }
-    
-	/**
-	 * Calculate entries in cmv vector. This method calls all lic#, where 0 <= # <=
-	 * 14 methods and saves their results in cmv vector.
-	 */
-	void calcCmv() {
-		cmv[0] = lic0();
-		cmv[1] = lic1();
-		cmv[2] = lic2();
-		cmv[3] = lic3();
-		cmv[4] = lic4();
-		cmv[5] = lic5();
-		cmv[6] = lic6();
-		cmv[7] = lic7();
-		cmv[8] = lic8();
-		cmv[9] = lic9();
-		cmv[10] = lic10();
-		cmv[11] = lic11();
-		cmv[12] = lic12();
-		cmv[13] = lic13();
-		cmv[14] = lic14();
-	}
-	
-	/**
-	 * @return true if all entries in fuv array are true. Otherwise, false.
-	 */
-	boolean launch() {
-		for (int i = 0; i < fuv.length; i++) {
-			if (!fuv[i])
-				return false;
-		}
-		return true;
-	}
+
+    /**
+     * Calculate entries in cmv vector. This method calls all lic#, where 0 <= # <=
+     * 14 methods and saves their results in cmv vector.
+     */
+    void calcCmv() {
+        cmv[0] = lic0();
+        cmv[1] = lic1();
+        cmv[2] = lic2();
+        cmv[3] = lic3();
+        cmv[4] = lic4();
+        cmv[5] = lic5();
+        cmv[6] = lic6();
+        cmv[7] = lic7();
+        cmv[8] = lic8();
+        cmv[9] = lic9();
+        cmv[10] = lic10();
+        cmv[11] = lic11();
+        cmv[12] = lic12();
+        cmv[13] = lic13();
+        cmv[14] = lic14();
+    }
+
+    /**
+     * @return true if all entries in fuv array are true. Otherwise, false.
+     */
+    boolean launch() {
+        for (int i = 0; i < fuv.length; i++) {
+            if (!fuv[i])
+                return false;
+        }
+        return true;
+    }
 
 }
