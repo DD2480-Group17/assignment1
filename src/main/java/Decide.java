@@ -616,4 +616,18 @@ public class Decide {
 		cmv[13] = lic13();
 		cmv[14] = lic14();
 	}
+	
+	/**
+	 * Returns true if all entries in fuv array are true. Otherwise, return false.
+	 * 
+	 * @return true if all entries in fuv array are true. Otherwise, false.
+	 */
+	boolean launch() {
+		for (int i = 0; i < fuv.length; i++) {
+			if (!fuv[i])
+				return false;
+		}
+		return true;
+	}
+
 }
