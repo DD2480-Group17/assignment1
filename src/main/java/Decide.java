@@ -29,10 +29,10 @@ public class Decide {
     /**
      * Constructor
      *
-     * @param points     2D planar point
+     * @param points 2D planar point
      * @param parameters 19 input parameters
-     * @param lcm        logical connector matrix
-     * @param puv        preliminary unlocking vector
+     * @param lcm logical connector matrix
+     * @param puv preliminary unlocking vector
      */
     public Decide(ArrayList<Point2D.Double> points, Parameters parameters, BOOLEAN_OPERATOR[][] lcm, boolean[] puv) {
         this.points = points;
@@ -308,7 +308,7 @@ public class Decide {
     /**
      * Launch Interceptor Condition 10
      *
-     * @return true if There exists at least one set of three data points separated by exactly E_PTS and F_PTS
+     * @return true if there exists at least one set of three data points separated by exactly E_PTS and F_PTS
      * consecutive intervening points, respectively, that are the vertices of a triangle with area greater than AREA1
      */
     boolean lic10() {
@@ -381,16 +381,7 @@ public class Decide {
     }
 
     /**
-     * Returns true if there exists at least one set of three data points,
-     * separated by exactly E_PTS and F_PTS consecutive
-     * intervening points, respectively, that are the vertices of a triangle with area greater
-     * than AREA1. In addition, there exist three data points (which can be the same or different
-     * from the three data points just mentioned) separated by exactly E PTS and F PTS consecutive
-     * intervening points, respectively, that are the vertices of a triangle with area less than
-     * AREA2. Both parts must be true for the LIC to be true. Otherwise, return false.
-     * Also, return false when NUMPOINTS < 5.
-     * <p>
-     * Assumed: 0 <= AREA2 and 0 <= AREA1
+     * Launch Interceptor Condition 14
      *
      * @return true if if there exists at least one set of three data points,
      * separated by exactly E_PTS and F_PTS consecutive
@@ -400,6 +391,8 @@ public class Decide {
      * intervening points, respectively, that are the vertices of a triangle with area less than
      * AREA2. Both parts must be true for the LIC to be true. Otherwise, return false.
      * Also, return false when NUMPOINTS < 5.
+     *
+     * Assumed: 0 <= AREA2 and 0 <= AREA1
      */
     boolean lic14() {
 
@@ -477,9 +470,7 @@ public class Decide {
     }
 
     /**
-     * Launch condition 13.
-     * <p>
-     * Assumed: 0 <= Radius1 and 0 <= Radius2.
+     * Launch Interceptor Condition 13
      *
      * @return true if There exists at least one set of three data points, separated
      * by exactly A_PTS and B_PTS consecutive intervening points,
@@ -491,6 +482,8 @@ public class Decide {
      * in or on a circle of radius RADIUS2. Both parts must be true for the
      * LIC to be true. Otherwise, return false. Also, return false when
      * NUMPOINTS < 5.
+     *
+     * Assumed: 0 <= Radius1 and 0 <= Radius2.
      */
     boolean lic13() {
         if (points.size() < 5)
@@ -542,11 +535,12 @@ public class Decide {
     }
 
     /**
-     * Launch Interceptor Condition 6 returns
+     * Launch Interceptor Condition 6
      *
      * @return true if there exists at least one set of nPts consecutive data points such that
      * least one of the points lies a distance greater than DIST from the line between the first of these nPts points and the last.
-     * If the first and last points of these nPts are identical, then we compare the distance from that point to all
+     * If the first and last points of these nPts points are identical, then we compare the distance from that point to all other points in
+     * the nPts set.
      * The condition is not met when numPoints < 3.
      */
     boolean lic6() {
@@ -618,8 +612,6 @@ public class Decide {
 	}
 	
 	/**
-	 * Returns true if all entries in fuv array are true. Otherwise, return false.
-	 * 
 	 * @return true if all entries in fuv array are true. Otherwise, false.
 	 */
 	boolean launch() {
