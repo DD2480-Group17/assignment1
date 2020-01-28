@@ -1060,4 +1060,31 @@ class DecideTest {
         decide.parameters.radius1 = 5;
         assertFalse(decide.lic1());
     }
+
+    /**
+     * Tests that cmv calculates lic0 to lic14 in a correct way.
+     */
+    @Test
+    void testCalcCmv() {
+        IOHandler ioHandler = new IOHandler();
+        Decide d = ioHandler.parseDecideInput(TestCases.test1);
+
+        d.calcCmv();
+
+        assertTrue(d.cmv[0]);
+        assertTrue(d.cmv[1]);
+        assertTrue(d.cmv[2]);
+        assertFalse(d.cmv[3]);
+        assertFalse(d.cmv[4]);
+        assertFalse(d.cmv[5]);
+        assertFalse(d.cmv[6]);
+        assertTrue(d.cmv[7]);
+        assertFalse(d.cmv[8]);
+        assertFalse(d.cmv[9]);
+        assertFalse(d.cmv[10]);
+        assertFalse(d.cmv[11]);
+        assertFalse(d.cmv[12]);
+        assertFalse(d.cmv[13]);
+        assertFalse(d.cmv[14]);
+    }
 }
