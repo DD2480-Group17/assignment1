@@ -506,8 +506,9 @@ public class Decide {
                 fuv[i] = true;
             else {
                 for (int j = 0; j < pum[i].length; j++) {
-                    if (i != j && pum[i][j]) {
-                        fuv[i] = true;
+                    fuv[i] = true;
+                    if (i != j && !pum[i][j]) {
+                        fuv[i] = false;
                         break;
                     }
                 }
