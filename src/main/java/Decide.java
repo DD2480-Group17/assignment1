@@ -222,7 +222,7 @@ public class Decide {
             Point2D point1 = points.get(i - parameters.aPts - parameters.bPts - 2);
             Point2D point2 = points.get(i - parameters.bPts - 1);
             Point2D point3 = points.get(i);
-            if (Utility.canContainPoints(point1, point2, point3, parameters.radius1)) {
+            if (Utility.canNotContainPoints(point1, point2, point3, parameters.radius1)) {
                 return true;
             }
         }
@@ -509,7 +509,7 @@ public class Decide {
             Point2D.Double point1 = points.get(i - parameters.bPts - 1);
             Point2D.Double point2 = points.get(i);
 
-            boolean notContainedInCircle = Utility.canContainPoints(point0, point1, point2, parameters.radius1);
+            boolean notContainedInCircle = Utility.canNotContainPoints(point0, point1, point2, parameters.radius1);
 
             if (notContainedInCircle) {
                 result = true;
@@ -529,7 +529,7 @@ public class Decide {
             Point2D.Double point1 = points.get(i - parameters.bPts - 1);
             Point2D.Double point2 = points.get(i);
 
-            boolean notContainedInCircle = Utility.canContainPoints(point0, point1, point2, parameters.radius2);
+            boolean notContainedInCircle = Utility.canNotContainPoints(point0, point1, point2, parameters.radius2);
 
             if (!notContainedInCircle) {
                 // INVARIANT: both parts of the condition are satisfied.
@@ -588,7 +588,7 @@ public class Decide {
      */
     boolean lic1() {
         for (int i = 0; i < (points.size() - 2); i++) {
-            if (Utility.canContainPoints(points.get(i), points.get(i + 1), points.get(i + 2), parameters.radius1)) {
+            if (Utility.canNotContainPoints(points.get(i), points.get(i + 1), points.get(i + 2), parameters.radius1)) {
                 return true;
             }
         }

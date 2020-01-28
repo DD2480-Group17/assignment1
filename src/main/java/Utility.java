@@ -9,7 +9,7 @@ public class Utility {
      * @param r      wanted radius of the smallest enclosing circle.
      * @return true, if the three points can not be contained in a circle of radius r
      */
-    public static boolean canContainPoints(Point2D point1, Point2D point2, Point2D point3, double r) {
+    public static boolean canNotContainPoints(Point2D point1, Point2D point2, Point2D point3, double r) {
         ArrayList<Point> tempPoints = new ArrayList<>();
         tempPoints.add(new Point(point1));
         tempPoints.add(new Point(point2));
