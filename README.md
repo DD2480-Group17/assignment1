@@ -25,36 +25,23 @@ or UtilityTest.java.
 
 
 ## Contributions
-We are dividing the contributions in 5 categories, how much code the person has made, how many pull-request the preson has reviewed,
-how much the person participated in discussions, documentation and overall contribution. All these criteria are graded between 0 and 10.
+We are proud over our implementation of the program and that we used Travis for continues integration. We have learnt a lot
+during the lab on how a git project should be structured, by using issues, pull requests and testing.
+ 
+In this section it is specified what each person contributed to the project with.
 
 Edevin Ardö:
-* Code 10
-* Pull-requests 10
-* Discussion 10
-* Documentation
-* Overall contribution 10
+
 
 Marcus Jonsson Ewerbring:
-* Code 8
-* Pull-requests
-* Discussion 
-* Documentation 10
-* Overall contribution
-
+* Code, implemented 3 LIC and test cases, refactored code
+* Pull requests, review several pull requests
+* Documentation, README and code documentation
 Johanna Iivanainen:
-* Code 8
-* Pull-requests
-* Discussion 
-* Documentation 10
-* Overall contribution
+
 
 George Rezkalla:
-* Code 8
-* Pull-requests
-* Discussion 
-* Documentation
-* Overall contribution
+
 
 ## TO DO BEFORE WE COMMIT TO REPO:
 * Create a test case for the function we have created.
