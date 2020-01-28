@@ -142,6 +142,16 @@ class DecideTest {
      * Tests that LIC3 returns true given that there is at least one set of 3 consecutive
      * points that constitute a triangle with area > area1. And that LIC3 returns false when
      * there is no such set.
+     *
+     * Test case 1:
+     * points = (0, 0), (0, 4), (2, 0)
+     * area1 = 3.0
+     * Expected value: true
+     *
+     * Test case 1:
+     * points = (0, 0), (0, 4), (2, 0)
+     * area1 = 4.0
+     * Expected value: false
      */
     @Test
     void testLic3() {
@@ -765,7 +775,6 @@ class DecideTest {
      * RADIUS2. Both parts must be true for the LIC to be true. Otherwise, return
      * false. Also, return false when NUMPOINTS < 5.
      */
-
     void testLic13() {
         // test: Numpoints < 5
         // && A_PTS == 1 && B_PTS == 2
@@ -929,7 +938,6 @@ class DecideTest {
     /**
      * Tests that lic1 returns true if there exists three consecutive
      * data points that cannot be contained in a circle with radius1.
-     * cannot be contained witih
      * <p>
      * Test case 1:
      * points = (0, 2), (0, 0), (-1, -1)
