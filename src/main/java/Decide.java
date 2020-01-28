@@ -358,7 +358,7 @@ public class Decide {
     /**
      * Launch Interceptor Condition 10
      *
-     * @return true if There exists at least one set of three data points separated by exactly E_PTS and F_PTS
+     * @return true if there exists at least one set of three data points separated by exactly E_PTS and F_PTS
      * consecutive intervening points, respectively, that are the vertices of a triangle with area greater than AREA1
      */
     boolean lic10() {
@@ -431,16 +431,7 @@ public class Decide {
     }
 
     /**
-     * Returns true if there exists at least one set of three data points,
-     * separated by exactly E_PTS and F_PTS consecutive
-     * intervening points, respectively, that are the vertices of a triangle with area greater
-     * than AREA1. In addition, there exist three data points (which can be the same or different
-     * from the three data points just mentioned) separated by exactly E PTS and F PTS consecutive
-     * intervening points, respectively, that are the vertices of a triangle with area less than
-     * AREA2. Both parts must be true for the LIC to be true. Otherwise, return false.
-     * Also, return false when NUMPOINTS < 5.
-     * <p>
-     * Assumed: 0 <= AREA2 and 0 <= AREA1
+     * Launch Interceptor Condition 14
      *
      * @return true if if there exists at least one set of three data points,
      * separated by exactly E_PTS and F_PTS consecutive
@@ -450,6 +441,8 @@ public class Decide {
      * intervening points, respectively, that are the vertices of a triangle with area less than
      * AREA2. Both parts must be true for the LIC to be true. Otherwise, return false.
      * Also, return false when NUMPOINTS < 5.
+     * <p>
+     * Assumed: 0 <= AREA2 and 0 <= AREA1
      */
     boolean lic14() {
 
@@ -528,9 +521,7 @@ public class Decide {
     }
 
     /**
-     * Launch condition 13.
-     * <p>
-     * Assumed: 0 <= Radius1 and 0 <= Radius2.
+     * Launch Interceptor Condition 13
      *
      * @return true if There exists at least one set of three data points, separated
      * by exactly A_PTS and B_PTS consecutive intervening points,
@@ -542,6 +533,8 @@ public class Decide {
      * in or on a circle of radius RADIUS2. Both parts must be true for the
      * LIC to be true. Otherwise, return false. Also, return false when
      * NUMPOINTS < 5.
+     * <p>
+     * Assumed: 0 <= Radius1 and 0 <= Radius2.
      */
     boolean lic13() {
         if (points.size() < 5)
@@ -593,11 +586,12 @@ public class Decide {
     }
 
     /**
-     * Launch Interceptor Condition 6 returns
+     * Launch Interceptor Condition 6
      *
      * @return true if there exists at least one set of nPts consecutive data points such that
      * least one of the points lies a distance greater than DIST from the line between the first of these nPts points and the last.
-     * If the first and last points of these nPts are identical, then we compare the distance from that point to all
+     * If the first and last points of these nPts points are identical, then we compare the distance from that point to all other points in
+     * the nPts set.
      * The condition is not met when numPoints < 3.
      */
     boolean lic6() {
@@ -645,40 +639,38 @@ public class Decide {
         }
         return false;
     }
-    
-	/**
-	 * Calculate entries in cmv vector. This method calls all lic#, where 0 <= # <=
-	 * 14 methods and saves their results in cmv vector.
-	 */
-	void calcCmv() {
-		cmv[0] = lic0();
-		cmv[1] = lic1();
-		cmv[2] = lic2();
-		cmv[3] = lic3();
-		cmv[4] = lic4();
-		cmv[5] = lic5();
-		cmv[6] = lic6();
-		cmv[7] = lic7();
-		cmv[8] = lic8();
-		cmv[9] = lic9();
-		cmv[10] = lic10();
-		cmv[11] = lic11();
-		cmv[12] = lic12();
-		cmv[13] = lic13();
-		cmv[14] = lic14();
-	}
-	
-	/**
-	 * Returns true if all entries in fuv array are true. Otherwise, return false.
-	 * 
-	 * @return true if all entries in fuv array are true. Otherwise, false.
-	 */
-	boolean launch() {
-		for (int i = 0; i < fuv.length; i++) {
-			if (!fuv[i])
-				return false;
-		}
-		return true;
-	}
+
+    /**
+     * Calculate entries in cmv vector. This method calls all lic#, where 0 <= # <=
+     * 14 methods and saves their results in cmv vector.
+     */
+    void calcCmv() {
+        cmv[0] = lic0();
+        cmv[1] = lic1();
+        cmv[2] = lic2();
+        cmv[3] = lic3();
+        cmv[4] = lic4();
+        cmv[5] = lic5();
+        cmv[6] = lic6();
+        cmv[7] = lic7();
+        cmv[8] = lic8();
+        cmv[9] = lic9();
+        cmv[10] = lic10();
+        cmv[11] = lic11();
+        cmv[12] = lic12();
+        cmv[13] = lic13();
+        cmv[14] = lic14();
+    }
+
+    /**
+     * @return true if all entries in fuv array are true. Otherwise, false.
+     */
+    boolean launch() {
+        for (int i = 0; i < fuv.length; i++) {
+            if (!fuv[i])
+                return false;
+        }
+        return true;
+    }
 
 }

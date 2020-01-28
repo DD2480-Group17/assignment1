@@ -142,6 +142,16 @@ class DecideTest {
      * Tests that LIC3 returns true given that there is at least one set of 3 consecutive
      * points that constitute a triangle with area > area1. And that LIC3 returns false when
      * there is no such set.
+     * <p>
+     * Test case 1:
+     * points = (0, 0), (0, 4), (2, 0)
+     * area1 = 3.0
+     * Expected value: true
+     * <p>
+     * Test case 2:
+     * points = (0, 0), (0, 4), (2, 0)
+     * area1 = 4.0
+     * Expected value: false
      */
     @Test
     void testLic3() {
@@ -765,7 +775,6 @@ class DecideTest {
      * RADIUS2. Both parts must be true for the LIC to be true. Otherwise, return
      * false. Also, return false when NUMPOINTS < 5.
      */
-
     void testLic13() {
         // test: Numpoints < 5
         // && A_PTS == 1 && B_PTS == 2
@@ -929,7 +938,6 @@ class DecideTest {
     /**
      * Tests that lic1 returns true if there exists three consecutive
      * data points that cannot be contained in a circle with radius1.
-     * cannot be contained witih
      * <p>
      * Test case 1:
      * points = (0, 2), (0, 0), (-1, -1)
@@ -986,38 +994,38 @@ class DecideTest {
         assertFalse(d.cmv[13]);
         assertFalse(d.cmv[14]);
     }
-    
-	/**
-	 * Tests that launch method returns true if all entries in fuv array are true.
-	 * Otherwise, return false.
-	 */
-	@Test
-	void testLaunch() {
-		Decide d = new Decide();
 
-		assertFalse(d.launch());
+    /**
+     * Tests that launch method returns true if all entries in fuv array are true.
+     * Otherwise, return false.
+     */
+    @Test
+    void testLaunch() {
+        Decide d = new Decide();
 
-		d.fuv[0] = true;
+        assertFalse(d.launch());
 
-		assertFalse(d.launch());
+        d.fuv[0] = true;
 
-		d.fuv[0] = true;
-		d.fuv[1] = true;
-		d.fuv[2] = true;
-		d.fuv[3] = true;
-		d.fuv[4] = true;
-		d.fuv[5] = true;
-		d.fuv[6] = true;
-		d.fuv[7] = true;
-		d.fuv[8] = true;
-		d.fuv[9] = true;
-		d.fuv[10] = true;
-		d.fuv[11] = true;
-		d.fuv[12] = true;
-		d.fuv[13] = true;
-		d.fuv[14] = true;
+        assertFalse(d.launch());
 
-		assertTrue(d.launch());
-	}
+        d.fuv[0] = true;
+        d.fuv[1] = true;
+        d.fuv[2] = true;
+        d.fuv[3] = true;
+        d.fuv[4] = true;
+        d.fuv[5] = true;
+        d.fuv[6] = true;
+        d.fuv[7] = true;
+        d.fuv[8] = true;
+        d.fuv[9] = true;
+        d.fuv[10] = true;
+        d.fuv[11] = true;
+        d.fuv[12] = true;
+        d.fuv[13] = true;
+        d.fuv[14] = true;
+
+        assertTrue(d.launch());
+    }
 
 }
