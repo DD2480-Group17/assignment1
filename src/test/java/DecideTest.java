@@ -986,4 +986,38 @@ class DecideTest {
         assertFalse(d.cmv[13]);
         assertFalse(d.cmv[14]);
     }
+    
+	/**
+	 * Tests that launch method returns true if all entries in fuv array are true.
+	 * Otherwise, return false.
+	 */
+	@Test
+	void testLaunch() {
+		Decide d = new Decide();
+
+		assertFalse(d.launch());
+
+		d.fuv[0] = true;
+
+		assertFalse(d.launch());
+
+		d.fuv[0] = true;
+		d.fuv[1] = true;
+		d.fuv[2] = true;
+		d.fuv[3] = true;
+		d.fuv[4] = true;
+		d.fuv[5] = true;
+		d.fuv[6] = true;
+		d.fuv[7] = true;
+		d.fuv[8] = true;
+		d.fuv[9] = true;
+		d.fuv[10] = true;
+		d.fuv[11] = true;
+		d.fuv[12] = true;
+		d.fuv[13] = true;
+		d.fuv[14] = true;
+
+		assertTrue(d.launch());
+	}
+
 }
