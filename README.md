@@ -9,19 +9,19 @@ The Launch Interceptor Program called Decide(), contains of 15 conditions (LIC) 
 #### Required software
 * Java 11
 * Maven
-#### Build
-* Run the script XXXX
-#### Run the program
-The program can be executed by following these steps:
-* Edit the parameter values in XXXX.java
-* Run Decide.java
-#### Run Test Cases
-The program has 3 main test cases that tests the full functionality of the program. The program also has test cases for each 
-class.
-* To run the three main tests cases, run XXXX.java
-* Class specific tests can be runned by executing DecideTest.java, IOHandlerTest.java
-or UtilityTest.java.
+* JUnit (Jupiter 5.0 or later)
 
+#### Run and build the program
+The program can be executed in two ways, by entering custom parameters or three predefined test cases.
+* (Custom parameters) Edit the parameter values in XXXX.java and run the program with ` mvn -q exec:java -Dexec.mainClass="Decide" -Dexec.args="1"`
+and use TODO as argument.
+* (Predefined test cases) Run and build the program with: 
+` mvn -q exec:java -Dexec.mainClass="Decide" -Dexec.args="1"` The following arguments
+can be used, 1, 2 or 3 to decide which test should be executed. 1 = test1, 2 = test2 and 3 = test3
+ 
+#### Run Test Cases
+The program also has test cases for each class.
+* The tests can be executed by the following command ` mvn test`
 
 
 ## Contributions
@@ -37,6 +37,7 @@ Marcus Jonsson Ewerbring:
 * Code, implemented 3 LIC and test cases, refactored code
 * Pull requests, review several pull requests
 * Documentation, README and code documentation
+
 Johanna Iivanainen:
 
 
